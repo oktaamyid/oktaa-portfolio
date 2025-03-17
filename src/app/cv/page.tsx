@@ -4,172 +4,177 @@ import { useEffect, useState } from "react";
 import Image from 'next/image';
 import { db } from "@/lib/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import { MY_NAME, MY_LOCATION, SOCIAL_MEDIA } from '@/lib/constants';
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
-import ProjectCard from '@/components/ui/ProjectCard';
-
-interface Education {
-     id: string;
-     school: string;
-     degree: string;
-     year: string;
-}
+import { MY_NAME } from '@/lib/constants';
+import { MdOutlineArrowOutward } from "react-icons/md";
+import SidebarSocials from '@/components/sidebarSocials';
 
 interface Experience {
      id: string;
      company: string;
-     duration: number;
      role: string;
      year: string;
-     type: string;
+     description: string;
      logo: string;
+     link: string;
+     techStack: string[];
 }
 
 interface Project {
      id: string;
      title: string;
      image: string;
-     technology: string[];
      description: string;
      link: string;
+     technology: string[];
 }
 
-export default function CV() {
-     const [education, setEducation] = useState<Education[]>([]);
+export default function Portfolio() {
      const [experience, setExperience] = useState<Experience[]>([]);
      const [projects, setProjects] = useState<Project[]>([]);
 
      useEffect(() => {
           const fetchData = async <T,>(collectionName: string, setter: (data: T[]) => void) => {
-               const querySnapshot = await getDocs(collection(db, collectionName));
-               const data = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-               })) as T[];
-               setter(data);
+               try {
+                    const querySnapshot = await getDocs(collection(db, collectionName));
+                    const data = querySnapshot.docs.map((doc) => ({
+                         id: doc.id,
+                         ...doc.data(),
+                    })) as T[];
+                    setter(data);
+               } catch (error) {
+                    console.error(`Error fetching ${collectionName}:`, error);
+               }
           };
-     
-          fetchData<Education>("education", setEducation);
+
           fetchData<Experience>("experience", setExperience);
           fetchData<Project>("projects", setProjects);
      }, []);
-     
 
      return (
-          <div className="container mx-auto px-6 py-12 space-y-12">
-               <main className="mt-24 max-w-3xl w-full p-6 mx-auto space-y-12">
-                    {/* About Me */}
-                    <section className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-6">
+          <div className="max-w-5xl mx-auto px-6 py-12 space-y-16 mt-16">
 
-                         <div className="md:w-2/3">
-                              <h1 className="text-3xl font-bold">{MY_NAME}</h1>
-                              <p className="my-2 text-gray-600">
-                                   Saya adalah seorang pengembang web dan software dengan minat dalam teknologi modern.
-                              </p>
-                              <a className="mt-2 text-blue-500 hover:underline" href="https://maps.app.goo.gl/oEwg1oEqSMaLQCJZ7">{MY_LOCATION}</a>
-                              <div className="mt-4 flex gap-4 justify-center md:justify-start text-gray-600">
-                                   <a href={SOCIAL_MEDIA.github} target="_blank" className="hover:text-black">
-                                        <FaGithub size={28} />
-                                   </a>
-                                   <a href={SOCIAL_MEDIA.linkedin} target="_blank" className="hover:text-blue-700">
-                                        <FaLinkedin size={28} />
-                                   </a>
-                                   <a href="https://twitter.com/" target="_blank" className="hover:text-blue-500">
-                                        <FaTwitter size={28} />
-                                   </a>
-                              </div>
-                         </div>
-                         <div className="md:w-1/3 flex justify-center">
-                              <Image src="/images/profile.jpg" alt="Profile" width={128} height={128} className="rounded-full shadow-lg object-cover" />
-                         </div>
-                    </section>
+               {/* Sidebar Socials */}
+               <SidebarSocials />
 
-                    {/* Education */}
-                    <section>
-                         <h2 className="text-2xl font-bold mb-4">Education</h2>
-                         <div className="space-y-4">
-                              {education.map((edu) => (
-                                   <div key={edu.id}>
-                                        <div className="flex justify-between">
-                                             <h3 className="text-xl font-semibold">{edu.school}</h3>
-                                             <p className="text-gray-400">{edu.year}</p>
+               {/* About Section */}
+               <section className="flex flex-col items-center text-center space-y-5 p-10 max-w-3xl mx-auto">
+                    <h1 className="text-5xl font-extrabold text-white tracking-tight">
+                         {MY_NAME}
+                    </h1>
+                    <span className="bg-gray-800 bg-opacity-40 px-4 py-2 rounded-full text-sm text-gray-300">
+                         Web & Software Developer
+                    </span>
+                    <p className="text-gray-300 text-lg max-w-xl">
+                         I specialize in creating responsive, accessible, and visually stunning digital experiences. Focused on performance and scalability, I build future-proof solutions while exploring advancements in web frameworks, cloud computing, and AI. My user-centric design ensures intuitive, engaging, and impactful interfaces that drive meaningful results.
+                    </p>
+               </section>
+
+
+               {/* Experience Section */}
+               <section>
+                    {experience.length > 0 ? (
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              {experience.map((exp) => (
+                                   <div
+                                        key={exp.id}
+                                        className="p-5 rounded-lg shadow-md hover:bg-gray-800 hover:text-white group transition"
+                                   >
+                                        {/* Header: Logo + Company Name */}
+                                        <div className="flex items-center gap-4">
+                                             <Image
+                                                  src={exp.logo}
+                                                  alt={`${exp.company} Logo`}
+                                                  width={25}
+                                                  height={25}
+                                                  className="w-10 h-10 rounded-full border border-gray-600"
+                                                  unoptimized={true}
+                                             />
+                                             <div>
+                                                  <a href={exp.link} className="text-xl font-semibold transition group-hover:text-blue-400">
+                                                       <div className="flex items-center gap-2">
+                                                            {exp.company}
+                                                            <span className="transition transform translate-x-0 translate-y-0 group-hover:translate-x-1 group-hover:-translate-y-1">
+                                                                 <MdOutlineArrowOutward size={24} className="w-5 h-5" />
+                                                            </span>
+
+                                                       </div>
+                                                  </a>
+                                                  <p className="text-gray-400 text-sm">{exp.role} • {exp.year}</p>
+                                             </div>
                                         </div>
-                                        <p className="text-gray-500">{edu.degree}</p>
+
+                                        {/* Description */}
+                                        <p className="text-gray-300 mt-3 transition">{exp.description}</p>
+
+                                        {/* Tech Stack */}
+                                        <div className="flex flex-wrap gap-2 mt-4">
+                                             {exp.techStack.map((tech) => (
+                                                  <span
+                                                       key={tech}
+                                                       className="inline-flex items-center px-3 py-2 bg-blue-600/30 backdrop-blur-md text-white text-xs font-medium rounded-full shadow-md"
+                                                  >
+                                                       {tech}
+                                                  </span>
+                                             ))}
+                                        </div>
                                    </div>
                               ))}
                          </div>
-                    </section>
+                    ) : (
+                         <p className="text-gray-500">No experience data available.</p>
+                    )}
+               </section>
 
-                    {/* Experience */}
-                    <section>
-                         <h2 className="text-2xl font-bold mb-4">Experience</h2>
-                         <div className="space-y-4">
-                              {experience.map((exp) => {
-                                   // Hitung durasi dalam bulan/tahun
-                                   const categorizeDuration = (duration: number) => {
-                                        return duration >= 12 ? `${duration / 12} tahun` : `${duration} bulan`;
-                                   };
 
-                                   return (
-                                        <div key={exp.id} className="border p-4 rounded-lg border-gray-600 text-white">
-                                             <div className="flex items-center gap-4">
-                                                  {/* Logo Perusahaan */}
-                                                  {exp.logo && (
-                                                       <Image
-                                                            src={exp.logo}
-                                                            alt={exp.company}
-                                                            className="w-12 h-12 rounded-full object-cover border border-gray-500"
-                                                            width={48}
-                                                            height={48}
-                                                       />
-                                                  )}
 
-                                                  {/* Detail Pekerjaan */}
-                                                  <div className="flex-1">
-                                                       <div className="flex justify-between items-center">
-                                                            <h3 className="text-xl font-semibold">{exp.company}</h3>
-                                                            <p className="text-gray-400">{exp.year}</p>
-                                                       </div>
-                                                       <p className="text-gray-300">{exp.role}</p>
-                                                       <p className="text-gray-400 text-sm"><span className="">{exp.type}</span> • {categorizeDuration(exp.duration)}</p>
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   );
-                              })}
-                         </div>
-                    </section>
-
-                    {/* Tech Stack */}
-                    <section>
-                         <h2 className="text-2xl font-bold mb-4">Tech Stack</h2>
-                         <div className="flex flex-wrap gap-4">
-                              {["JavaScript", "TypeScript", "React", "Next.js", "Firebase", "Tailwind CSS"].map((tech) => (
-                                   <span key={tech} className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md">
-                                        {tech}
-                                   </span>
-                              ))}
-                         </div>
-                    </section>
-
-                    {/* Projects */}
-                    <section id="portofilo">
-                         <h2 className="text-2xl font-bold mb-6">Projects</h2>
-                         <div className="grid gap-6">
+               {/* Projects Section */}
+               <section>
+                    {projects.length > 0 ? (
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                               {projects.map((project) => (
-                                   <ProjectCard
+                                   <div
                                         key={project.id}
-                                        title={project.title}
-                                        description={project.description}
-                                        image={project.image}
-                                        technology={project.technology}
-                                        link={project.link}
-                                   />
+                                        className="p-4 rounded-lg shadow-md hover:bg-gray-800 hover:text-white group"
+                                   >
+                                        <a href={project.link} target="_blank" rel="noreferrer">
+                                             <Image
+                                                  src={project.image}
+                                                  alt={project.title}
+                                                  width={320}
+                                                  height={180}
+                                                  className="rounded-md"
+                                             />
+                                             <h3 className="text-xl font-semibold mt-4 transition group-hover:text-blue-400">
+                                                  <div className="flex items-center gap-2">
+                                                       {project.title}
+                                                       <span className="transition transform translate-x-0 translate-y-0 group-hover:translate-x-1 group-hover:-translate-y-1">
+                                                            <MdOutlineArrowOutward size={24} className="w-5 h-5" />
+                                                       </span>
+                                                  </div>
+                                             </h3>
+                                             <p className="text-gray-400 mt-2 transition">
+                                                  {project.description}
+                                             </p>
+                                             <div className="flex flex-wrap gap-2 mt-4">
+                                                  {project.technology.map((tech) => (
+                                                       <span
+                                                            key={tech}
+                                                            className="inline-flex items-center px-3 py-2 bg-blue-600/30 backdrop-blur-md text-white text-xs font-medium rounded-full shadow-md"
+                                                       >
+                                                            {tech}
+                                                       </span>
+                                                  ))}
+                                             </div>
+
+                                        </a>
+                                   </div>
                               ))}
                          </div>
-                    </section>
-               </main>
+                    ) : (
+                         <p className="text-gray-500">No projects available.</p>
+                    )}
+               </section>
+
           </div>
      );
 }
-

@@ -5,5 +5,5 @@ export const SOCIAL_MEDIA = {
      linkedin: "https://linkedin.com/in/firtiansyahokta",
      twitter: "https://twitter.com/username",
      instagram: "https://instagram.com/kyonezet_",
-     email: "tianresama@gmail.com"
+     email: "mailto:tianresama@gmail.com"
 };

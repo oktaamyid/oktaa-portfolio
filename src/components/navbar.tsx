@@ -6,7 +6,6 @@ import Link from "next/link";
 const sections = [
      { name: "Home", path: "/" },
      { name: "View CV", path: "/cv" },
-     { name: "Portfolio", path: "/cv#portofilo" },
 ] as const;
 
 export default function Navbar() {
@@ -18,7 +17,7 @@ export default function Navbar() {
                     <Link
                          key={path}
                          href={path}
-                         className={`text-md capitalize ${
+                         className={`text-md capitalize hover:text-white hover:underline ${
                               pathname === path ? "text-blue-400" : "text-gray-400"
                          }`}
                     >
