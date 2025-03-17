@@ -125,8 +125,6 @@ export default function Portfolio() {
                     )}
                </section>
 
-
-
                {/* Projects Section */}
                <section>
                     {projects.length > 0 ? (
