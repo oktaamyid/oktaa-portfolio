@@ -69,7 +69,6 @@ export default function Portfolio() {
                     </p>
                </section>
 
-
                {/* Experience Section */}
                <section>
                     {experience.length > 0 ? (
