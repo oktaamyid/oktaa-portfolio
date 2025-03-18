@@ -7,6 +7,8 @@ import SidebarSocials from '@/components/sidebarSocials';
 export default function Home() {
     return (
         <div className="text-white flex items-center justify-center h-screen font-sans relative">
+
+            {/* Sidebar Socials */}
             <SidebarSocials />
 
             <main className="text-center">

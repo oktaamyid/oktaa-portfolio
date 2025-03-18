@@ -7,7 +7,6 @@ import { collection, getDocs } from "firebase/firestore";
 import { MY_NAME } from '@/lib/constants';
 import { MdOutlineArrowOutward } from "react-icons/md";
 import SidebarSocials from '@/components/sidebarSocials';
-
 interface Experience {
      id: string;
      company: string;
@@ -46,6 +45,8 @@ export default function Portfolio() {
                }
           };
 
+          document.title = "CV. Oktaa~";
+
           fetchData<Experience>("experience", setExperience);
           fetchData<Project>("projects", setProjects);
      }, []);
@@ -65,9 +66,9 @@ export default function Portfolio() {
                          Web & Software Developer
                     </span>
                     <p className="text-gray-300 text-lg max-w-xl">
-                          Passionate about web development, programming, and staying ahead in the latest technology trends. 
-                          I specialize in crafting dynamic, interactive, and user-friendly websites while continuously expanding my expertise in modern frameworks, tools, and best practices. 
-                          Dedicated to delivering innovative solutions, I thrive on learning and adapting to emerging technologies to create impactful digital experiences.
+                         Passionate about web development, programming, and staying ahead in the latest technology trends.
+                         I specialize in crafting dynamic, interactive, and user-friendly websites while continuously expanding my expertise in modern frameworks, tools, and best practices.
+                         Dedicated to delivering innovative solutions, I thrive on learning and adapting to emerging technologies to create impactful digital experiences.
                     </p>
                </section>
 
