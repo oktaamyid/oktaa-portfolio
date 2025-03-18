@@ -65,7 +65,9 @@ export default function Portfolio() {
                          Web & Software Developer
                     </span>
                     <p className="text-gray-300 text-lg max-w-xl">
-                         I specialize in creating responsive, accessible, and visually stunning digital experiences. Focused on performance and scalability, I build future-proof solutions while exploring advancements in web frameworks, cloud computing, and AI. My user-centric design ensures intuitive, engaging, and impactful interfaces that drive meaningful results.
+                          Passionate about web development, programming, and staying ahead in the latest technology trends. 
+                          I specialize in crafting dynamic, interactive, and user-friendly websites while continuously expanding my expertise in modern frameworks, tools, and best practices. 
+                          Dedicated to delivering innovative solutions, I thrive on learning and adapting to emerging technologies to create impactful digital experiences.
                     </p>
                </section>
 
