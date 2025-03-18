@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const greetings = [
      "Halo", 
@@ -27,19 +28,24 @@ const greetings = [
 const greetingIntervalMs = 3000;
 
 export default function DynamicTitle() {
+     const pathname = usePathname();
      const [greetingIndex, setGreetingIndex] = useState(0);
 
      useEffect(() => {
+          if (pathname !== "/") return;
+
           const interval = setInterval(() => {
                setGreetingIndex((prevIndex) => (prevIndex + 1) % greetings.length);
           }, greetingIntervalMs);
 
           return () => clearInterval(interval);
-     }, []);
+     }, [pathname]);
 
      useEffect(() => {
-          document.title = `${greetings[greetingIndex]}. Oktaa~`;
-     }, [greetingIndex]);
+          if (pathname === "/") {
+               document.title = `${greetings[greetingIndex]}. Oktaa~`;
+          }
+     }, [greetingIndex, pathname]);
 
      return null;
 }
