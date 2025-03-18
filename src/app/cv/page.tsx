@@ -31,7 +31,7 @@ interface Project {
 export default function Portfolio() {
      const [experience, setExperience] = useState<Experience[]>([]);
      const [projects, setProjects] = useState<Project[]>([]);
-     const [loading, setLoading] = useState(true); 
+     const [loading, setLoading] = useState(true);
 
      useEffect(() => {
           const fetchData = async <T,>(collectionName: string, setter: (data: T[]) => void) => {
@@ -63,17 +63,20 @@ export default function Portfolio() {
                <SidebarSocials />
 
                {/* About Section */}
-               <section className="flex flex-col items-center text-center space-y-5 p-10 max-w-3xl mx-auto">
-                    <h1 className="text-5xl font-extrabold text-white tracking-tight">{MY_NAME}</h1>
-                    <span className="bg-gray-800 bg-opacity-40 px-4 py-2 rounded-full text-sm text-gray-300">
+               <section className="flex flex-col items-center text-center space-y-4 px-6 py-10 sm:px-10 md:px-16 lg:px-20 max-w-3xl mx-auto">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">{MY_NAME}</h1>
+
+                    <span className="bg-gray-800 bg-opacity-40 px-4 py-2 rounded-full text-xs sm:text-sm text-gray-300">
                          Web & Software Developer
                     </span>
-                    <p className="text-gray-300 text-lg max-w-xl">
+
+                    <p className="text-gray-300 text-base sm:text-lg md:text-xl max-w-xl leading-relaxed">
                          Passionate about web development, programming, and staying ahead in the latest technology trends.
                          I specialize in crafting dynamic, interactive, and user-friendly websites while continuously expanding my expertise in modern frameworks, tools, and best practices.
                          Dedicated to delivering innovative solutions, I thrive on learning and adapting to emerging technologies to create impactful digital experiences.
                     </p>
                </section>
+
 
                {/* Loading Indicator */}
                {loading ? (
