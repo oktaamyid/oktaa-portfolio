@@ -4,6 +4,7 @@ import "./globals.css";
 import { Metadata } from "next";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react"
+import DynamicTitle from '@/components/dynamicTitle';
 
 const geistSans = Geist({
      variable: "--font-geist-sans",
@@ -55,6 +56,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
      return (
+          <>
+          <DynamicTitle />
           <html lang="en-US">
                <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-gray-900 to-black text-white min-h-screen`}>
                     <Analytics />
@@ -64,5 +67,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </main>
                </body>
           </html>
+          </>
      );
 }
