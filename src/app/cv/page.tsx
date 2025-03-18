@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from 'next/image';
+import Image from "next/image";
 import { db } from "@/lib/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import { MY_NAME } from '@/lib/constants';
-import { MdOutlineArrowOutward } from "react-icons/md";
-import SidebarSocials from '@/components/sidebarSocials';
+import { MY_NAME } from "@/lib/constants";
+import { MdOutlineArrowOutward, MdHourglassEmpty } from "react-icons/md";
+import SidebarSocials from "@/components/sidebarSocials";
+
 interface Experience {
      id: string;
      company: string;
@@ -30,6 +31,7 @@ interface Project {
 export default function Portfolio() {
      const [experience, setExperience] = useState<Experience[]>([]);
      const [projects, setProjects] = useState<Project[]>([]);
+     const [loading, setLoading] = useState(true); 
 
      useEffect(() => {
           const fetchData = async <T,>(collectionName: string, setter: (data: T[]) => void) => {
@@ -45,21 +47,24 @@ export default function Portfolio() {
                }
           };
 
-          fetchData<Experience>("experience", setExperience);
-          fetchData<Project>("projects", setProjects);
+          const loadAllData = async () => {
+               await Promise.all([
+                    fetchData<Experience>("experience", setExperience),
+                    fetchData<Project>("projects", setProjects),
+               ]);
+               setLoading(false);
+          };
+
+          loadAllData();
      }, []);
 
      return (
           <div className="max-w-5xl mx-auto px-6 py-12 space-y-16 mt-16">
-
-               {/* Sidebar Socials */}
                <SidebarSocials />
 
                {/* About Section */}
                <section className="flex flex-col items-center text-center space-y-5 p-10 max-w-3xl mx-auto">
-                    <h1 className="text-5xl font-extrabold text-white tracking-tight">
-                         {MY_NAME}
-                    </h1>
+                    <h1 className="text-5xl font-extrabold text-white tracking-tight">{MY_NAME}</h1>
                     <span className="bg-gray-800 bg-opacity-40 px-4 py-2 rounded-full text-sm text-gray-300">
                          Web & Software Developer
                     </span>
@@ -70,109 +75,118 @@ export default function Portfolio() {
                     </p>
                </section>
 
-               {/* Experience Section */}
-               <section>
-                    {experience.length > 0 ? (
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              {experience.map((exp) => (
-                                   <div
-                                        key={exp.id}
-                                        className="p-5 rounded-lg shadow-md hover:bg-gray-800 hover:text-white group transition"
-                                   >
-                                        {/* Header: Logo + Company Name */}
-                                        <div className="flex items-center gap-4">
-                                             <Image
-                                                  src={exp.logo}
-                                                  alt={`${exp.company} Logo`}
-                                                  width={25}
-                                                  height={25}
-                                                  className="w-10 h-10 rounded-full border border-gray-600"
-                                                  unoptimized={true}
-                                             />
-                                             <div>
-                                                  <a href={exp.link} className="text-xl font-semibold transition group-hover:text-blue-400">
-                                                       <div className="flex items-center gap-2">
-                                                            {exp.company}
-                                                            <span className="transition transform translate-x-0 translate-y-0 group-hover:translate-x-1 group-hover:-translate-y-1">
-                                                                 <MdOutlineArrowOutward size={24} className="w-5 h-5" />
-                                                            </span>
+               {/* Loading Indicator */}
+               {loading ? (
+                    <div className="flex flex-col justify-center items-center h-32 animate-fadeIn">
+                         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-opacity-70"></div>
+                         <p className="text-gray-400 text-lg mt-3 flex items-center gap-2">
+                              <MdHourglassEmpty className="text-blue-400 text-2xl animate-pulse" />
+                              Loading...
+                         </p>
+                    </div>
 
+               ) : (
+                    <>
+                         {/* Experience Section */}
+                         <section>
+                              {experience.length > 0 ? (
+                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {experience.map((exp) => (
+                                             <div
+                                                  key={exp.id}
+                                                  className="p-5 rounded-lg shadow-md hover:bg-gray-800 hover:text-white group transition"
+                                             >
+                                                  {/* Header: Logo + Company Name */}
+                                                  <div className="flex items-center gap-4">
+                                                       <Image
+                                                            src={exp.logo}
+                                                            alt={`${exp.company} Logo`}
+                                                            width={25}
+                                                            height={25}
+                                                            className="w-10 h-10 rounded-full border border-gray-600"
+                                                            unoptimized={true}
+                                                       />
+                                                       <div>
+                                                            <a href={exp.link} className="text-xl font-semibold transition group-hover:text-blue-400">
+                                                                 <div className="flex items-center gap-2">
+                                                                      {exp.company}
+                                                                      <span className="transition transform translate-x-0 translate-y-0 group-hover:translate-x-1 group-hover:-translate-y-1">
+                                                                           <MdOutlineArrowOutward size={24} className="w-5 h-5" />
+                                                                      </span>
+                                                                 </div>
+                                                            </a>
+                                                            <p className="text-gray-400 text-sm">{exp.role} • {exp.year}</p>
+                                                       </div>
+                                                  </div>
+
+                                                  {/* Description */}
+                                                  <p className="text-gray-300 mt-3 transition">{exp.description}</p>
+
+                                                  {/* Tech Stack */}
+                                                  <div className="flex flex-wrap gap-2 mt-4">
+                                                       {exp.techStack.map((tech) => (
+                                                            <span
+                                                                 key={tech}
+                                                                 className="inline-flex items-center px-3 py-2 bg-blue-600/30 backdrop-blur-md text-white text-xs font-medium rounded-full shadow-md"
+                                                            >
+                                                                 {tech}
+                                                            </span>
+                                                       ))}
+                                                  </div>
+                                             </div>
+                                        ))}
+                                   </div>
+                              ) : (
+                                   <p className="text-gray-500">No experience data available.</p>
+                              )}
+                         </section>
+
+                         {/* Projects Section */}
+                         <section>
+                              {projects.length > 0 ? (
+                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {projects.map((project) => (
+                                             <div
+                                                  key={project.id}
+                                                  className="p-4 rounded-lg shadow-md hover:bg-gray-800 hover:text-white group"
+                                             >
+                                                  <a href={project.link} target="_blank" rel="noreferrer">
+                                                       <Image
+                                                            src={project.image}
+                                                            alt={project.title}
+                                                            width={320}
+                                                            height={180}
+                                                            className="rounded-md"
+                                                       />
+                                                       <h3 className="text-xl font-semibold mt-4 transition group-hover:text-blue-400">
+                                                            <div className="flex items-center gap-2">
+                                                                 {project.title}
+                                                                 <span className="transition transform translate-x-0 translate-y-0 group-hover:translate-x-1 group-hover:-translate-y-1">
+                                                                      <MdOutlineArrowOutward size={24} className="w-5 h-5" />
+                                                                 </span>
+                                                            </div>
+                                                       </h3>
+                                                       <p className="text-gray-400 mt-2 transition">{project.description}</p>
+                                                       <div className="flex flex-wrap gap-2 mt-4">
+                                                            {project.technology.map((tech) => (
+                                                                 <span
+                                                                      key={tech}
+                                                                      className="inline-flex items-center px-3 py-2 bg-blue-600/30 backdrop-blur-md text-white text-xs font-medium rounded-full shadow-md"
+                                                                 >
+                                                                      {tech}
+                                                                 </span>
+                                                            ))}
                                                        </div>
                                                   </a>
-                                                  <p className="text-gray-400 text-sm">{exp.role} • {exp.year}</p>
                                              </div>
-                                        </div>
-
-                                        {/* Description */}
-                                        <p className="text-gray-300 mt-3 transition">{exp.description}</p>
-
-                                        {/* Tech Stack */}
-                                        <div className="flex flex-wrap gap-2 mt-4">
-                                             {exp.techStack.map((tech) => (
-                                                  <span
-                                                       key={tech}
-                                                       className="inline-flex items-center px-3 py-2 bg-blue-600/30 backdrop-blur-md text-white text-xs font-medium rounded-full shadow-md"
-                                                  >
-                                                       {tech}
-                                                  </span>
-                                             ))}
-                                        </div>
+                                        ))}
                                    </div>
-                              ))}
-                         </div>
-                    ) : (
-                         <p className="text-gray-500">No experience data available.</p>
-                    )}
-               </section>
-
-               {/* Projects Section */}
-               <section>
-                    {projects.length > 0 ? (
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              {projects.map((project) => (
-                                   <div
-                                        key={project.id}
-                                        className="p-4 rounded-lg shadow-md hover:bg-gray-800 hover:text-white group"
-                                   >
-                                        <a href={project.link} target="_blank" rel="noreferrer">
-                                             <Image
-                                                  src={project.image}
-                                                  alt={project.title}
-                                                  width={320}
-                                                  height={180}
-                                                  className="rounded-md"
-                                             />
-                                             <h3 className="text-xl font-semibold mt-4 transition group-hover:text-blue-400">
-                                                  <div className="flex items-center gap-2">
-                                                       {project.title}
-                                                       <span className="transition transform translate-x-0 translate-y-0 group-hover:translate-x-1 group-hover:-translate-y-1">
-                                                            <MdOutlineArrowOutward size={24} className="w-5 h-5" />
-                                                       </span>
-                                                  </div>
-                                             </h3>
-                                             <p className="text-gray-400 mt-2 transition">
-                                                  {project.description}
-                                             </p>
-                                             <div className="flex flex-wrap gap-2 mt-4">
-                                                  {project.technology.map((tech) => (
-                                                       <span
-                                                            key={tech}
-                                                            className="inline-flex items-center px-3 py-2 bg-blue-600/30 backdrop-blur-md text-white text-xs font-medium rounded-full shadow-md"
-                                                       >
-                                                            {tech}
-                                                       </span>
-                                                  ))}
-                                             </div>
-
-                                        </a>
-                                   </div>
-                              ))}
-                         </div>
-                    ) : (
-                         <p className="text-gray-500">No projects available.</p>
-                    )}
-               </section>
-
+                              ) : (
+                                   <p className="text-gray-500">No projects available.</p>
+                              )}
+                         </section>
+                    </>
+               )}
           </div>
      );
 }
