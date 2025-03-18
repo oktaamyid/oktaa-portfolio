@@ -3,6 +3,7 @@ import Navbar from "@/components/navbar";
 import "./globals.css";
 import { Metadata } from "next";
 import React from "react";
+import { Analytics } from "@vercel/analytics/react"
 
 const geistSans = Geist({
      variable: "--font-geist-sans",
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
      return (
           <html lang="en-US">
                <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-gray-900 to-black text-white min-h-screen`}>
+                    <Analytics />
                     <Navbar />
                     <main className="container mx-auto px-4">
                          {children}
