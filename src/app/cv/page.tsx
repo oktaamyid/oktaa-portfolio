@@ -45,8 +45,6 @@ export default function Portfolio() {
                }
           };
 
-          document.title = "CV. Oktaa~";
-
           fetchData<Experience>("experience", setExperience);
           fetchData<Project>("projects", setProjects);
      }, []);
