@@ -112,7 +112,8 @@ export default function Portfolio() {
                ) : (
                     <>
                          {/* Experience Section */}
-                         <section>
+                         <section id="experience">
+                              <h2 className="text-3xl font-bold text-white text-start my-4">Experience</h2>
                               {experience.length > 0 ? (
                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {experience.map((exp) => (
@@ -166,7 +167,8 @@ export default function Portfolio() {
                          </section>
 
                          {/* Projects Section */}
-                         <section>
+                         <section id="portfolio">
+                              <h2 className="text-3xl font-semibold text-white text-start my-4">Projects</h2>
                               {projects.length > 0 ? (
                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {projects.map((project) => (
