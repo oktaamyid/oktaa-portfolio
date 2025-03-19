@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react"
 import DynamicTitle from '@/components/dynamicTitle';
+import CursorGlow from '@/components/cursorGlow';
 
 const geistSans = Geist({
      variable: "--font-geist-sans",
@@ -62,7 +63,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-gray-900 to-black text-white min-h-screen`}>
                     <Analytics />
                     <Navbar />
-                    <main className="container mx-auto px-4">
+                    <CursorGlow />
+                    <main className="container mx-auto text-center max-w-4xl">
                          {children}
                     </main>
                </body>
