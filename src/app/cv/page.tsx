@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { db } from "@/lib/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import { MY_NAME } from "@/lib/constants";
+import { MY_NAME, SOCIAL_MEDIA } from "@/lib/constants";
 import { MdOutlineArrowOutward, MdHourglassEmpty } from "react-icons/md";
-import SidebarSocials from "@/components/sidebarSocials";
+import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { IoIosMail } from "react-icons/io";
 
 interface Experience {
      id: string;
@@ -59,8 +61,7 @@ export default function Portfolio() {
      }, []);
 
      return (
-          <div className="max-w-5xl mx-auto px-6 py-12 space-y-16 mt-16">
-               <SidebarSocials />
+          <div className="max-w-5xl mx-auto px-4 py-12 space-y-16 mt-5 md:mt-8">
 
                {/* About Section */}
                <section className="flex flex-col items-center text-center space-y-4 px-6 py-10 sm:px-10 md:px-16 lg:px-20 max-w-3xl mx-auto">
@@ -75,7 +76,27 @@ export default function Portfolio() {
                          I specialize in crafting dynamic, interactive, and user-friendly websites while continuously expanding my expertise in modern frameworks, tools, and best practices.
                          Dedicated to delivering innovative solutions, I thrive on learning and adapting to emerging technologies to create impactful digital experiences.
                     </p>
+
+                    {/* Social Media Icons */}
+                    <div className="flex space-x-4 mt-4 text-gray-400 text-2xl">
+                         <a href={SOCIAL_MEDIA.github} target="_blank" className="hover:text-white transition">
+                              <FaGithub />
+                         </a>
+                         <a href={SOCIAL_MEDIA.linkedin} target="_blank" className="hover:text-blue-400 transition">
+                              <FaLinkedin />
+                         </a>
+                         <a href={SOCIAL_MEDIA.twitter} target="_blank" className="hover:text-blue-500 transition">
+                              <FaXTwitter />
+                         </a>
+                         <a href={SOCIAL_MEDIA.instagram} target="_blank" className="hover:text-pink-400 transition">
+                              <FaInstagram />
+                         </a>
+                         <a href={SOCIAL_MEDIA.email} className="hover:text-red-400 transition">
+                              <IoIosMail />
+                         </a>
+                    </div>
                </section>
+
 
 
                {/* Loading Indicator */}
@@ -157,7 +178,7 @@ export default function Portfolio() {
                                                        <Image
                                                             src={project.image}
                                                             alt={project.title}
-                                                            width={320}
+                                                            width={400}
                                                             height={180}
                                                             className="rounded-md"
                                                        />
