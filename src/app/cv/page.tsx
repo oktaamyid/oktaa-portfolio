@@ -113,13 +113,13 @@ export default function Portfolio() {
                     <>
                          {/* Experience Section */}
                          <section id="experience">
-                              <h2 className="text-3xl font-bold text-white text-start my-4">Experience</h2>
+                              <h2 className="text-3xl font-bold text-white text-start my-4 md:text-center">Experience</h2>
                               {experience.length > 0 ? (
-                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                   <div className={`${experience.length === 1 ? 'flex justify-center' : 'grid grid-cols-1 md:grid-cols-2'} gap-6`}>
                                         {experience.map((exp) => (
                                              <div
                                                   key={exp.id}
-                                                  className="p-5 rounded-lg shadow-md hover:bg-gray-800 hover:text-white group transition"
+                                                  className={`p-5 rounded-lg shadow-md hover:bg-gray-800 hover:text-white group transition ${experience.length === 1 ? 'w-full md:w-2/3 lg:w-1/2' : ''}`}
                                              >
                                                   {/* Header: Logo + Company Name */}
                                                   <div className="flex items-center gap-4">
@@ -168,7 +168,7 @@ export default function Portfolio() {
 
                          {/* Projects Section */}
                          <section id="portfolio">
-                              <h2 className="text-3xl font-semibold text-white text-start my-4">Projects</h2>
+                              <h2 className="text-3xl font-semibold text-white text-start my-4 md:text-center">Projects</h2>
                               {projects.length > 0 ? (
                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {projects.map((project) => (
@@ -185,7 +185,7 @@ export default function Portfolio() {
                                                             className="rounded-md"
                                                        />
                                                        <h3 className="text-xl font-semibold mt-4 transition group-hover:text-blue-400">
-                                                            <div className="flex items-center gap-2">
+                                                            <div className="flex items-center justify-center gap-2">
                                                                  {project.title}
                                                                  <span className="transition transform translate-x-0 translate-y-0 group-hover:translate-x-1 group-hover:-translate-y-1">
                                                                       <MdOutlineArrowOutward size={24} className="w-5 h-5" />
@@ -193,7 +193,7 @@ export default function Portfolio() {
                                                             </div>
                                                        </h3>
                                                        <p className="text-gray-400 mt-2 transition">{project.description}</p>
-                                                       <div className="flex flex-wrap gap-2 mt-4">
+                                                       <div className="flex flex-wrap gap-2 mt-4 justify-center">
                                                             {project.technology.map((tech) => (
                                                                  <span
                                                                       key={tech}
