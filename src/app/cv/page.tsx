@@ -168,7 +168,7 @@ export default function Portfolio() {
 
                          {/* Projects Section */}
                          <section id="portfolio">
-                              <h2 className="text-3xl font-semibold text-white text-start my-4 md:text-center">Projects</h2>
+                              <h2 className="text-3xl font-semibold text-white text-start my-4 md:text-center">Project Highlights</h2>
                               {projects.length > 0 ? (
                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {projects.map((project) => (

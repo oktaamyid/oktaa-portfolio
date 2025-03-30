@@ -6,6 +6,7 @@ import Link from "next/link";
 const sections = [
      { name: "Home", path: "/" },
      { name: "View CV", path: "/cv" },
+     { name: "Links", path: "https://oktaa.my.id/portal"}
 ] as const;
 
 export default function Navbar() {
