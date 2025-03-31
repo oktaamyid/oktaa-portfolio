@@ -1,11 +1,11 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/layouts/navbar";
 import "./globals.css";
 import { Metadata } from "next";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react"
-import DynamicTitle from '@/components/dynamicTitle';
-import CursorGlow from '@/components/cursorGlow';
+import DynamicTitle from '@/components/ui/dynamicTitle';
+import CursorGlow from '@/components/ui/cursorGlow';
 
 const geistSans = Geist({
      variable: "--font-geist-sans",

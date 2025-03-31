@@ -2,7 +2,7 @@
 
 import { ReactTyped } from "react-typed";
 import Link from "next/link";
-import SidebarSocials from "@/components/sidebarSocials";
+import SidebarSocials from "@/components/layouts/sidebarSocials";
 
 export default function Home() {
     return (
