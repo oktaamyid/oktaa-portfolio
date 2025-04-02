@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'api.screenshotone.com',
         pathname: '**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.scdn.co',
+        pathname: '**'
       }
     ]
   },
