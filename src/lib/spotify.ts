@@ -12,8 +12,13 @@ export interface SpotifyTrack {
      artists: { name: string }[];
      album: {
           images: { url: string }[];
+          name: string;
      };
      type: 'track';
+     duration_ms: number;
+     external_urls: {
+          spotify: string;
+     };
 }
 
 interface SpotifyNowPlayingResponse {
@@ -42,7 +47,7 @@ export async function getNowPlaying(): Promise<SpotifyTrack | null> {
 export async function getTopTracks(): Promise<SpotifyTrack[]> {
      try {
           await refreshAccessToken();
-          const response = await spotifyApi.getMyTopTracks({ limit: 10 });
+          const response = await spotifyApi.getMyTopTracks({ limit: 8 });
           return response.body.items.filter((item: SpotifyTrack) => item.type === 'track');
      } catch (error) {
           console.error('Error getting top tracks:', error);

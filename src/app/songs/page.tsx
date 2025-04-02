@@ -11,14 +11,16 @@ export default async function SongsPage() {
      ]);
 
      return (
-          <div className="min-h-screen bg-gray-900 text-white p-4">
-               <div className="max-w-4xl mx-auto">
-                    <h1 className="text-2xl font-bold mb-6">My Spotify</h1>
+          <div className="max-w-5xl mx-auto px-4 py-12 space-y-16 mt-14">
+               <h1 className="text-3xl font-bold text-center">My Songs Journey</h1>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         <NowPlaying track={nowPlaying} />
-                         <TopTracks tracks={topTracks} />
-                    </div>
+               <div className="flex justify-center">
+                    <NowPlaying track={nowPlaying} />
+               </div>
+
+               <div className="space-y-8">
+                    <h2 className="text-2xl font-bold text-center">Top Tracks That Define Me</h2>
+                    <TopTracks tracks={topTracks} />
                </div>
           </div>
      );
