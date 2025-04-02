@@ -1,64 +1,126 @@
+'use client';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
+import { FaPlay, FaPause } from 'react-icons/fa';
 import { SpotifyTrack } from '@/lib/spotify';
-import { FaPlay } from 'react-icons/fa';
+import SidebarSocials from '@/components/layouts/sidebarSocials';
 
 interface NowPlayingProps {
-     track: SpotifyTrack | null;
+     track: SpotifyTrack;
 }
 
 export default function NowPlaying({ track }: NowPlayingProps) {
+     const [isPlaying, setIsPlaying] = useState(false);
+     const [progress, setProgress] = useState(0);
+     const animationRef = useRef<number | null>(null);
+     const duration = track?.duration_ms || 0;
+
+     const togglePlay = () => {
+          setIsPlaying(!isPlaying);
+     };
+
+     useEffect(() => {
+          if (!isPlaying) {
+               cancelAnimationFrame(animationRef.current!);
+               return;
+          }
+
+          const startTime = Date.now() - progress;
+          const durationMs = duration;
+
+          const updateProgress = () => {
+               const elapsed = Date.now() - startTime;
+               const newProgress = Math.min(elapsed, durationMs);
+               setProgress(newProgress);
+
+               if (newProgress < durationMs) {
+                    animationRef.current = requestAnimationFrame(updateProgress);
+               } else {
+                    setIsPlaying(false);
+                    setProgress(0);
+               }
+          };
+
+          animationRef.current = requestAnimationFrame(updateProgress);
+
+          return () => {
+               cancelAnimationFrame(animationRef.current!);
+          };
+     }, [isPlaying, duration, progress]);
+
+     useEffect(() => {
+          // Reset progress when track changes
+          setProgress(0);
+          setIsPlaying(true);
+     }, [track]);
+
      if (!track) {
           return (
-               <div className="bg-gray-800/50 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gray-700 w-full max-w-2xl mx-auto">
-                    <h2 className="text-xl font-semibold text-center">Now Playing</h2>
-                    <p className="text-center text-gray-400">No track currently playing</p>
+               <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border-2 border-dashed border-gray-600 aspect-square w-full max-w-xs flex flex-col items-center justify-center p-6 text-center mx-auto">
+                    <h2 className="text-xl font-bold text-white mb-2">Now Playing</h2>
+                    <p className="text-gray-400">No active track</p>
                </div>
           );
      }
 
+     // Format milliseconds to minutes:seconds
+     const formatTime = (ms: number) => {
+          const seconds = Math.floor(ms / 1000);
+          const mins = Math.floor(seconds / 60);
+          const secs = seconds % 60;
+          return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+     };
+
      return (
-          <div className="bg-gray-800/50 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gray-700 w-full max-w-2xl mx-auto">
-               <h2 className="text-xl font-semibold mb-4 text-center sm:text-left">Now Playing</h2>
-               <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-                    <div className="relative flex-shrink-0">
-                         <Image
-                              src={track.album.images[0].url}
-                              alt={track.name}
-                              width={120}
-                              height={120}
-                              className="rounded-lg shadow-lg w-24 h-24 sm:w-32 sm:h-32"
-                              priority
-                         />
-                         <a
-                              href={track.external_urls.spotify}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="absolute bottom-2 right-2 bg-green-600 hover:bg-green-500 text-white rounded-full p-2 transition-all transform hover:scale-110"
-                              aria-label="Play on Spotify"
-                         >
-                              <FaPlay className="w-3 h-3 sm:w-4 sm:h-4" />
-                         </a>
+          <div className="relative aspect-square w-full max-w-xs mx-auto overflow-hidden rounded-lg bg-gray-900">
+               <SidebarSocials/>
+               {/* Album art */}
+               <div className="relative w-full h-full">
+                    <Image
+                         src={track?.album?.images[0]?.url || '/default-album.png'}
+                         alt={track?.name || 'Unknown Track'}
+                         fill
+                         className="object-cover"
+                         priority
+                    />
+               </div>
+
+               {/* Overlay and info */}
+               <div className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
+                    <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                         {isPlaying ? 'PLAYING' : 'PAUSED'}
                     </div>
 
-                    <div className="flex-1 min-w-0 text-center sm:text-left">
-                         <h3 className="font-bold text-lg sm:text-xl line-clamp-2">{track.name}</h3>
-                         <p className="text-gray-400 mt-1 line-clamp-1">
-                              {track.artists.map(artist => artist.name).join(', ')}
+                    <div className="transform transition-transform duration-300 group-hover:-translate-y-1">
+                         <h3 className="text-white font-bold text-lg line-clamp-1">{track?.name || 'Unknown Track'}</h3>
+                         <p className="text-gray-300 text-sm line-clamp-1">
+                              {track?.artists?.map((artist: { name: string }) => artist.name).join(', ') || 'Unknown Artist'}
                          </p>
-                         <p className="text-sm text-gray-500 mt-2 line-clamp-1">{track.album.name}</p>
-
-                         <div className="mt-3 sm:mt-4">
-                              <a
-                                   href={track.external_urls.spotify}
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   className="inline-flex items-center gap-2 text-green-500 hover:text-green-400 transition-colors"
-                              >
-                                   <span className="text-sm sm:text-base">Play on Spotify</span>
-                                   <FaPlay className="w-3 h-3" />
-                              </a>
-                         </div>
                     </div>
+
+                    {/* Progress bar and time */}
+                    <div className="mt-2 flex items-center gap-2">
+                         <span className="text-xs text-gray-400">
+                              {formatTime(progress)}
+                         </span>
+                         <div className="flex-1 bg-gray-700 rounded-full h-1">
+                              <div
+                                   className="bg-green-500 h-1 rounded-full"
+                                   style={{ width: `${duration ? (progress / duration) * 100 : 0}%` }}
+                              />
+                         </div>
+                         <span className="text-xs text-gray-400">
+                              {formatTime(duration)}
+                         </span>
+                    </div>
+
+                    {/* Play/Pause button */}
+                    <button
+                         onClick={togglePlay}
+                         className="absolute right-3 bottom-3 bg-green-600 hover:bg-green-500 text-white rounded-full p-3 transition-all transform hover:scale-110"
+                    >
+                         {isPlaying ? <FaPause className="w-3 h-3" /> : <FaPlay className="w-3 h-3" />}
+                    </button>
                </div>
           </div>
      );
