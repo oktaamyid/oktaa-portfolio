@@ -7,7 +7,7 @@ const sections = [
      { name: "Home", path: "/" },
      { name: "View CV", path: "/cv" },
      { name: "Portal", path: "https://oktaa.my.id/portal"},
-     { name: "Song", path: ""}
+     { name: "Song", path: "/songs"}
 ] as const;
 
 export default function Navbar() {
