@@ -2,7 +2,7 @@ import { getNowPlaying, getTopTracks } from '@/lib/spotify';
 import NowPlaying from '@/components/features/songs/nowPlaying';
 import TopTracks from '@/components/features/songs/topTrack';
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 3600;
 
 export default async function SongsPage() {
      const [nowPlaying, topTracks] = await Promise.all([
