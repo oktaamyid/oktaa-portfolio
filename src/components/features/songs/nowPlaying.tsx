@@ -55,7 +55,7 @@ export default function NowPlaying({ track }: NowPlayingProps) {
 
      if (!track) {
           return (
-               <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border-2 border-dashed border-gray-600 aspect-square w-full max-w-xs flex flex-col items-center justify-center p-6 text-center mx-auto">
+               <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border-2 border-dashed border-gray-600 aspect-video w-full max-w-xs flex flex-col items-center justify-center p-6 text-center mx-auto">
                     <h2 className="text-xl font-bold text-white mb-2">Now Playing</h2>
                     <p className="text-gray-400">No active track</p>
                </div>
