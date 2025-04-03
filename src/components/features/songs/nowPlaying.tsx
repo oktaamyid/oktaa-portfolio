@@ -3,17 +3,16 @@ import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import { SpotifyTrack } from '@/lib/spotify';
-import SidebarSocials from '@/components/layouts/sidebarSocials';
 
 interface NowPlayingProps {
-     track: SpotifyTrack;
+     track: SpotifyTrack | null;
 }
 
 export default function NowPlaying({ track }: NowPlayingProps) {
      const [isPlaying, setIsPlaying] = useState(false);
      const [progress, setProgress] = useState(0);
      const animationRef = useRef<number | null>(null);
-     const duration = track?.duration_ms || 0;
+     const duration = track?.duration_ms ?? 0;
 
      const togglePlay = () => {
           setIsPlaying(!isPlaying);
@@ -73,12 +72,11 @@ export default function NowPlaying({ track }: NowPlayingProps) {
 
      return (
           <div className="relative aspect-square w-full max-w-xs mx-auto overflow-hidden rounded-lg bg-gray-900">
-               <SidebarSocials/>
                {/* Album art */}
                <div className="relative w-full h-full">
                     <Image
-                         src={track?.album?.images[0]?.url || '/default-album.png'}
-                         alt={track?.name || 'Unknown Track'}
+                         src={track?.album?.images?.[0]?.url ?? '/default-album.png'}
+                         alt={track?.name ?? 'Unknown Track'}
                          fill
                          className="object-cover"
                          priority
@@ -94,7 +92,7 @@ export default function NowPlaying({ track }: NowPlayingProps) {
                     <div className="transform transition-transform duration-300 group-hover:-translate-y-1">
                          <h3 className="text-white font-bold text-lg line-clamp-1">{track?.name || 'Unknown Track'}</h3>
                          <p className="text-gray-300 text-sm line-clamp-1">
-                              {track?.artists?.map((artist: { name: string }) => artist.name).join(', ') || 'Unknown Artist'}
+                              {track?.artists?.map((artist: { name: string }) => artist.name).join(', ') ?? 'Unknown Artist'}
                          </p>
                     </div>
 

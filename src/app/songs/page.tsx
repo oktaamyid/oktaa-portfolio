@@ -18,7 +18,7 @@ export default async function SongsPage() {
                <h1 className="text-3xl font-bold text-center">My Songs Journey</h1>
 
                <div className="flex justify-center">
-                    {nowPlaying && <NowPlaying track={nowPlaying} />}
+                    <NowPlaying track={nowPlaying} />
                </div>
 
                <div className="space-y-8">
