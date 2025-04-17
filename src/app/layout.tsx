@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 export async function generateMetadata(): Promise<Metadata> {
      return {
           metadataBase: new URL("https:/firtiansyah.oktaa.my.id"),
-          title: "Halo. Oktaa~",
+          title: "Halo. Oktaa~ | Firtiansyah Okta",
           icons: "/logo-oktaa.svg",
           description: "Firtiansyah Okta Resama, a Web Developer and Full-stack Engineer from Indonesia. Explore my portfolio and projects.",
           keywords: [
