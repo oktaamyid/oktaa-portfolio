@@ -22,18 +22,24 @@ export async function generateMetadata(): Promise<Metadata> {
           metadataBase: new URL("https:/firtiansyah.oktaa.my.id"),
           title: "Halo. Oktaa~",
           icons: "/logo-oktaa.svg",
-          description: "Firtiansyah Okta Resama, a Web Developer and Full-stack Engineer from Indonesia.",
+          description: "Firtiansyah Okta Resama, a Web Developer and Full-stack Engineer from Indonesia. Explore my portfolio and projects.",
           keywords: [
                "Firtiansyah Okta Resama",
                "Web Developer",
                "Programmer",
                "Full-stack Engineer",
-               "Indonesia"
+               "Indonesia",
+               "Firtiansyah",
+               "Oktaa",
+               "Siapa Firtiansyah Okta Resama",
+               "tian",
+               "Firtiansyah adalah"
           ],
           authors: [{ name: "Firtiansyah Okta Resama", url: "https:/firtiansyah.oktaa.my.id" }],
+          
           openGraph: {
                title: "Firtiansyah Okta Resama - Web Developer",
-               description: "Portfolio of Firtiansyah Okta Resama - Web Developer & Programmer",
+               description: "Portfolio of Firtiansyah Okta Resama - Web Developer & Programmer. Explore my work and skills.",
                url: "https:/firtiansyah.oktaa.my.id",
                siteName: "Firtiansyah Okta Resama",
                images: [
@@ -49,7 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
           twitter: {
                card: "summary_large_image",
                title: "Firtiansyah Okta Resama - Web Developer",
-               description: "Portfolio of Firtiansyah Okta Resama - Web Developer & Programmer",
+               description: "Portfolio of Firtiansyah Okta Resama - Web Developer & Programmer. Explore my work and skills.",
                images: ["/banner.png"],
           },
      };
