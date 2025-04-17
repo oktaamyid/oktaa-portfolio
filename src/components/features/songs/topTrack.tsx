@@ -21,7 +21,7 @@ export default function TopTracks({ tracks }: TopTracksProps) {
                          {track.album.images[0]?.url ? (
                               <Image
                                    src={track.album.images[0].url}
-                                   alt={track.name}
+                                   alt={`Album art for ${track.name} by ${track.artists.map(artist => artist.name).join(', ')}`}
                                    fill
                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                                    quality={50}

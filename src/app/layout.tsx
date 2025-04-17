@@ -49,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
                          height: 630,
                          alt: "Firtiansyah Okta Resama Portfolio",
                     },
-               ],
+          ],
                type: "website",
           },
           twitter: {
@@ -57,6 +57,13 @@ export async function generateMetadata(): Promise<Metadata> {
                title: "Firtiansyah Okta Resama - Web Developer",
                description: "Portfolio of Firtiansyah Okta Resama - Web Developer & Programmer. Explore my work and skills.",
                images: ["/banner.png"],
+          },
+          robots: {
+               index: true,
+               follow: true,
+          },
+          alternates: {
+               canonical: "https:/firtiansyah.oktaa.my.id",
           },
      };
 }

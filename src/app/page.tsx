@@ -24,6 +24,7 @@ export default function Home() {
                             />
                         </span>
                     </h1>
+                    <h2 className="text-2xl font-semibold mt-4">Web Developer & Tech Enthusiast</h2>
                     <p className="text-gray-400 mt-4 text-sm sm:text-base md:text-lg max-w-xs sm:max-w-2xl mx-auto">
                         Passionate about web development, programming, and exploring the latest technology trends.
                         I specialize in creating dynamic and interactive websites while continuously learning new technologies.
