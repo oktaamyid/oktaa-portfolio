@@ -33,7 +33,9 @@ export async function generateMetadata(): Promise<Metadata> {
                "Oktaa",
                "Siapa Firtiansyah Okta Resama",
                "tian",
-               "Firtiansyah adalah"
+               "Firtiansyah adalah",
+               "Firtiansyah Okta Portfolio Website",
+               "Firtiansyah Website"
           ],
           authors: [{ name: "Firtiansyah Okta Resama", url: "https:/firtiansyah.oktaa.my.id" }],
           
