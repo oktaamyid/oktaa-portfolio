@@ -43,7 +43,7 @@ export default function DynamicTitle() {
 
      useEffect(() => {
           if (pathname === "/") {
-               document.title = `${greetings[greetingIndex]}. Oktaa~`;
+               document.title = `${greetings[greetingIndex]}. Firtiansyah Oktaa~ | Full-stack Engineer & Tech Enthusiast`;
           }
      }, [greetingIndex, pathname]);
 
