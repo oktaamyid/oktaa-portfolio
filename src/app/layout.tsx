@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
      const description = "Firtiansyah Okta Resama, Web Developer & Programmer from Indonesia. Passionate about creating impactful websites and staying ahead in tech trends";
      return {
           metadataBase: new URL("https:/firtiansyah.oktaa.my.id"),
-          title: "Halo. Oktaa~ | Firtiansyah Okta | Full-stack Engineer & Tech Enthusiast",
+          title: "Halo. Firtiansyah Oktaa~ | Full-stack Engineer & Tech Enthusiast",
           icons: "https://oktaa.my.id/oktaa-black.png",
           description,
           keywords: [
