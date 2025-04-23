@@ -18,11 +18,12 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
+     const description = "Firtiansyah Okta Resama, Web Developer & Programmer from Indonesia. Passionate about creating impactful websites and staying ahead in tech trends";
      return {
           metadataBase: new URL("https:/firtiansyah.oktaa.my.id"),
-          title: "Halo. Oktaa~ | Firtiansyah Okta",
+          title: "Halo. Oktaa~ | Firtiansyah Okta | Full-stack Engineer & Tech Enthusiast",
           icons: "https://oktaa.my.id/oktaa-black.png",
-          description: "Firtiansyah Okta Resama, a Web Developer and Full-stack Engineer from Indonesia. Explore my portfolio and projects. Passionate about web development, programming, and staying ahead in the latest technology trends.",
+          description,
           keywords: [
                "Firtiansyah Okta Resama",
                "Web Developer",
@@ -41,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
           
           openGraph: {
                title: "Firtiansyah Okta Resama - Web Developer",
-               description: "Portfolio of Firtiansyah Okta Resama - Web Developer & Programmer. Explore my work and skills.",
+               description,
                url: "https:/firtiansyah.oktaa.my.id",
                siteName: "Firtiansyah Okta Resama",
                images: [
@@ -57,7 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
           twitter: {
                card: "summary_large_image",
                title: "Firtiansyah Okta Resama - Web Developer",
-               description: "Portfolio of Firtiansyah Okta Resama - Web Developer & Programmer. Explore my work and skills.",
+               description,
                images: ["/banner.png"],
           },
           robots: {
