@@ -22,7 +22,10 @@ export async function generateMetadata(): Promise<Metadata> {
      return {
           metadataBase: new URL("https:/firtiansyah.oktaa.my.id"),
           title: "Halo. Firtiansyah Oktaa~ | Full-stack Engineer & Tech Enthusiast",
-          icons: "https://oktaa.my.id/favicon.ico",
+          icons: {
+               icon: "https://cdn.oktaa.my.id/favicon.ico",
+               apple: "https://cdn.oktaa.my.id/apple-touch-icon.png"
+          },
           description,
           keywords: [
                "Firtiansyah Okta Resama",
@@ -39,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
                "Firtiansyah Website"
           ],
           authors: [{ name: "Firtiansyah Okta Resama", url: "https:/firtiansyah.oktaa.my.id" }],
-          
+
           openGraph: {
                title: "Firtiansyah Okta Resama - Web Developer",
                description,
@@ -47,19 +50,19 @@ export async function generateMetadata(): Promise<Metadata> {
                siteName: "Firtiansyah Okta Resama",
                images: [
                     {
-                         url: "/banner.png",
+                         url: "https://cdn.oktaa.my.id/banner.png",
                          width: 1200,
                          height: 630,
                          alt: "Firtiansyah Okta Resama Portfolio",
                     },
-          ],
+               ],
                type: "website",
           },
           twitter: {
                card: "summary_large_image",
                title: "Firtiansyah Okta Resama - Web Developer",
                description,
-               images: ["/banner.png"],
+               images: ["https://cdn.oktaa.my.id/banner.png"],
           },
           robots: {
                index: true,
@@ -74,17 +77,17 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
      return (
           <>
-          <DynamicTitle />
-          <html lang="en-US">
-               <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-gray-900 to-black text-white min-h-screen`}>
-                    <Analytics />
-                    <Navbar />
-                    <CursorGlow />
-                    <main className="container mx-auto text-center max-w-4xl">
-                         {children}
-                    </main>
-               </body>
-          </html>
+               <DynamicTitle />
+               <html lang="en-US">
+                    <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-gray-900 to-black text-white min-h-screen`}>
+                         <Analytics />
+                         <Navbar />
+                         <CursorGlow />
+                         <main className="container mx-auto text-center max-w-4xl">
+                              {children}
+                         </main>
+                    </body>
+               </html>
           </>
      );
 }
