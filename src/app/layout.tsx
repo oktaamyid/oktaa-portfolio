@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
      return {
           metadataBase: new URL("https:/firtiansyah.oktaa.my.id"),
           title: "Halo. Firtiansyah Oktaa~ | Full-stack Engineer & Tech Enthusiast",
-          icons: "https://oktaa.my.id/oktaa-black.png",
+          icons: "https://oktaa.my.id/favicon.ico",
           description,
           keywords: [
                "Firtiansyah Okta Resama",
