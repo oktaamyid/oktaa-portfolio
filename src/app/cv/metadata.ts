@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-     title: "CV. Oktaa~",
+     title: "CV. Firtiansyah Oktaa~ | Full-stack Engineer & Tech Enthusiast",
      description: "Curriculum Vitae of Firtiansyah Okta Resama - Full-stack Engineer & Tech Enthusiast",
      openGraph: {
           title: "CV. Oktaa~",
