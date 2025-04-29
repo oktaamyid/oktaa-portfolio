@@ -19,4 +19,26 @@ export const metadata: Metadata = {
           description: "Discover Firtiansyah Okta's musical journey - a curated collection of songs, stories, and inspiration.",
           images: ["https://cdn.oktaa.my.id/banner.png"],
      },
+     robots: {
+          index: true,
+          follow: true,
+     },
+     alternates: {
+          canonical: "https://firtiansyah.oktaa.my.id/songs",
+     },
+     icons: {
+          icon: "https://cdn.oktaa.my.id/favicon.ico",
+          apple: "https://cdn.oktaa.my.id/apple-touch-icon.png",
+     },
+     keywords: [
+          "Firtiansyah Okta Resama",
+          "Songs",
+          "Music",
+          "Firtiansyah Okta",
+          "Oktaa",
+          "Firtiansyah",
+          "Firtiansyah Okta Songs",
+          "Firtiansyah Okta Music",
+     ],
+     authors: [{ name: "Firtiansyah Okta Resama", url: "https://firtiansyah.oktaa.my.id" }],
 };

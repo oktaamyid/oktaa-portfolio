@@ -17,6 +17,7 @@ export default function Navbar() {
           <nav className="absolute top-10 md:top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 shadow-md rounded-full px-4 py-2     flex space-x-4 md:space-x-6 lg:space-x-8 items-center z-50 backdrop-blur-lg bg-opacity-80 w-max max-w-[90%]">
                {sections.map(({ name, path }) => (
                     <Link
+                         rel="canonical"
                          key={path}
                          href={path}
                          className={`text-xs md:text-sm lg:text-base capitalize hover:text-gray-200 hover:underline ${
