@@ -35,30 +35,41 @@ export default function Portfolio() {
      const [projects, setProjects] = useState<Project[]>([]);
      const [loading, setLoading] = useState(true);
 
-     useEffect(() => {
-          const fetchData = async <T,>(collectionName: string, setter: (data: T[]) => void) => {
-               try {
-                    const querySnapshot = await getDocs(collection(db, collectionName));
-                    const data = querySnapshot.docs.map((doc) => ({
-                         id: doc.id,
-                         ...doc.data(),
-                    })) as T[];
-                    setter(data);
-               } catch (error) {
-                    console.error(`Error fetching ${collectionName}:`, error);
-               }
-          };
+    useEffect(() => {
+        const fetchData = async <T,>(collectionName: string, setter: (data: T[]) => void) => {
+            try {
+                const querySnapshot = await getDocs(collection(db, collectionName));
+                let data = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                })) as T[];
 
-          const loadAllData = async () => {
-               await Promise.all([
-                    fetchData<Experience>("experience", setExperience),
-                    fetchData<Project>("projects", setProjects),
-               ]);
-               setLoading(false);
-          };
+                // Jika collectionName adalah "projects", tambahkan screenshotUrl
+                if (collectionName === "projects") {
+                    data = await Promise.all(
+                        (data as Project[]).map(async (project) => {
+                            const screenshotUrl = `https://api.screenshotmachine.com?key=ae018e&url=${encodeURIComponent(project.link)}&dimension=1280x800`;
+                            return { ...project, image: screenshotUrl };
+                        })
+                    ) as T[];
+                }
 
-          loadAllData();
-     }, []);
+                setter(data);
+            } catch (error) {
+                console.error(`Error fetching ${collectionName}:`, error);
+            }
+        };
+
+        const loadAllData = async () => {
+            await Promise.all([
+                fetchData<Experience>("experience", setExperience),
+                fetchData<Project>("projects", setProjects),
+            ]);
+            setLoading(false);
+        };
+
+        loadAllData();
+    }, []);
 
      return (
           <div className="max-w-5xl mx-auto px-4 py-12 space-y-16 mt-5 md:mt-8">
@@ -183,6 +194,7 @@ export default function Portfolio() {
                                                             width={400}
                                                             height={180}
                                                             className="rounded-md"
+                                                            unoptimized
                                                        />
                                                        <h3 className="text-xl font-semibold mt-4 transition group-hover:text-blue-400">
                                                             <div className="flex items-center justify-center gap-2">
