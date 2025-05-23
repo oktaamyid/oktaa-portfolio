@@ -87,14 +87,14 @@ export default function Footer() {
                   <div className="mx-auto w-full relative z-10 flex justify-center items-center md:pt-20 -bottom-2 backdrop-blur-lg">
                          {resolvedTheme === 'dark' ? (
                                <img
-                                     src="https://cdn.oktaa.my.id/banner-footer-dark.svg"
-                                     alt="Banner Footer Dark"
+                                     src="https://cdn.oktaa.my.id/banner-footer-light.svg"
+                                     alt="Banner Footer Light"
                                      className="w-full"
                                />
                          ) : (
                                <img
-                                     src="https://cdn.oktaa.my.id/banner-footer-light.svg"
-                                     alt="Banner Footer Light"
+                                     src="https://cdn.oktaa.my.id/banner-footer-dark.svg"
+                                     alt="Banner Footer Dark"
                                      className="w-full"
                                />
                          )}
