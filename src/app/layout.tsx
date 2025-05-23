@@ -1,20 +1,17 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "@/components/layouts/navbar";
+import { Poppins } from "next/font/google";
+import Navbar from "@/components/layouts/Navbar";
 import "./globals.css";
 import { Metadata } from "next";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react"
-import DynamicTitle from '@/components/ui/dynamicTitle';
-import CursorGlow from '@/components/ui/cursorGlow';
+import Footer from "@/components/layouts/Footer";
+import { ThemeProvider } from 'next-themes';
+// import CircleCursor from "@/components/ui/CircleCursor";
 
-const geistSans = Geist({
-     variable: "--font-geist-sans",
+const poppins = Poppins({
+     variable: "--font-poppins",
      subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-     variable: "--font-geist-mono",
-     subsets: ["latin"],
+     weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -76,18 +73,18 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
      return (
-          <>
-               <DynamicTitle />
-               <html lang="en-US">
-                    <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-gray-900 to-black text-white min-h-screen`}>
+          <html lang="en-US" suppressHydrationWarning>
+               <body className={`${poppins.variable} bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 default-pattern`}>
+                    {/* <CircleCursor bigSize={30} smallSize={10} blendMode="difference" /> */}
+                    <ThemeProvider attribute="class" enableSystem={true} defaultTheme="dark">
                          <Analytics />
                          <Navbar />
-                         <CursorGlow />
-                         <main className="container mx-auto text-center max-w-4xl">
+                         <main>
                               {children}
                          </main>
-                    </body>
-               </html>
-          </>
+                         <Footer />
+                    </ThemeProvider>
+               </body>
+          </html>
      );
 }
