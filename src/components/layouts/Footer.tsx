@@ -7,7 +7,7 @@ import { Profile } from '@/lib/types';
 import { db } from "@/lib/firebaseConfig";
 import { collection, QueryDocumentSnapshot, DocumentData, getDocs } from 'firebase/firestore';
 export default function Footer() {
-     const { resolvedTheme } = useTheme();
+     const { theme } = useTheme();
      const [profile, setProfile] = useState<Profile[]>([]);
 
      useEffect(() => {
@@ -35,7 +35,7 @@ export default function Footer() {
           loadAllData();
      }, []);
      return (
-          <footer className="bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 from-1% backdrop-blur-2xl relative overflow-hidden default-pattern">
+          <footer className="bg-gradient-to-b from-gray-100 via-gray-300 to-gray-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 from-1% backdrop-blur-2xl relative overflow-hidden default-pattern">
                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10 mb-5 md:mb-0">
                     <div className="flex flex-col items-start p-2 md:p-8 space-y-5 md:space-y-0 md:flex-row md:justify-between">
                          <div className="flex flex-col items-start md:space-y-0 md:flex-row md:items-center md:space-x-6">
@@ -85,7 +85,7 @@ export default function Footer() {
                     </div>
                </div>
                   <div className="mx-auto w-full relative z-10 flex justify-center items-center md:pt-20 -bottom-2 backdrop-blur-lg">
-                         {resolvedTheme === 'dark' ? (
+                         {theme === 'light' ? (
                                <img
                                      src="https://cdn.oktaa.my.id/banner-footer-light.svg"
                                      alt="Banner Footer Light"

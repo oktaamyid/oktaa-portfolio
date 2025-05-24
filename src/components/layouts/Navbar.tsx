@@ -11,7 +11,7 @@ import {
      DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun } from 'lucide-react';
+import { Menu, Moon, Sun } from 'lucide-react';
 
 const sections = [
      { name: "Home", path: "/" },
@@ -62,12 +62,39 @@ export default function Navbar() {
                                         </DropdownMenuItem>
                                    </DropdownMenuContent>
                               </DropdownMenu>
-                              <button
+                                <div className="md:hidden">
+                                      <DropdownMenu>
+                                             <DropdownMenuTrigger asChild>
+                                                   <Button variant="outline" size="icon">
+                                                         <Menu className="h-full w-full" />
+                                                         <span className="sr-only">Menu</span>
+                                                   </Button>
+                                             </DropdownMenuTrigger>
+                                             <DropdownMenuContent align="end" className="w-[100px] mt-3">
+                                                   {sections.map(({ name, path }) => (
+                                                         <DropdownMenuItem key={path} asChild>
+                                                               <Link
+                                                                      href={path}
+                                                                      rel={path.startsWith("http") ? "noopener noreferrer" : "canonical"}
+                                                                      target={path.startsWith("http") ? "_blank" : undefined}
+                                                                      className={`px-4 py-4 text-md font-semibold ${
+                                                                            pathname === path 
+                                                                                  ? "text-cyan-500 dark:text-cyan-400" 
+                                                                                  : "text-gray-600 dark:text-gray-400"
+                                                                      }`}
+                                                               >
+                                                                      {name}
+                                                               </Link>
+                                                         </DropdownMenuItem>
+                                                   ))}
+                                             </DropdownMenuContent>
+                                      </DropdownMenu>
+                                </div>
+                              {/* <button
                                    type="button"
                                    id="mobile-menu-button"
                                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                   className="md:hidden text-gray-600 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400"
-                              >
+                                   className="md:hidden text-gray-600 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400">
                                    <svg
                                         className="w-6 h-6"
                                         fill="none"
@@ -81,7 +108,7 @@ export default function Navbar() {
                                              d="M4 6h16M4 12h16M4 18h16"
                                         />
                                    </svg>
-                              </button>
+                              </button> */}
                               <div className="hidden md:flex items-center space-x-8">
                                    {sections.map(({ name, path }) => (
                                         <Link

@@ -308,7 +308,7 @@ export default function Home() {
                                 >
                                     <motion.div 
                                         initial="rest"
-                                        whileHover={"hover"}
+                                        whileHover="hover"
                                         className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden relative group shadow-md hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out">
                                         {/* Image Container */}
                                         <div className="relative h-40 overflow-hidden">
@@ -318,7 +318,17 @@ export default function Home() {
                                                 className="w-full h-full object-cover"
                                             />
                                             {/* Gradient Overlay - appears on hover */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out"></div>
+                                            <motion.div 
+                                                variants={{
+                                                    rest: { opacity: 0 },
+                                                    hover: { opacity: 1 }
+                                                }}
+                                                transition={{ 
+                                                    duration: 0.6, 
+                                                    ease: [0.4, 0, 0.2, 1] 
+                                                }}
+                                                className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+                                            />
                                         </div>
 
                                         {/* Content Container */}
