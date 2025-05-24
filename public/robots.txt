@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 Disallow: /cgi-bin/
-Sitemap: https://firtiansyah.oktaa.my.id/sitemap.xml
+Sitemap: https://hi.oktaa.my.id/sitemap.xml
