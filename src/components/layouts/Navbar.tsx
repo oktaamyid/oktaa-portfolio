@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useTheme } from 'next-themes';
@@ -20,8 +20,6 @@ const sections = [
 ] as const;
 
 export default function Navbar() {
-     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-     const mobileMenuRef = useRef<HTMLDivElement>(null);
      const pathname = usePathname();
      const [mounted, setMounted] = useState(false);
      const { setTheme } = useTheme();
@@ -62,53 +60,33 @@ export default function Navbar() {
                                         </DropdownMenuItem>
                                    </DropdownMenuContent>
                               </DropdownMenu>
-                                <div className="md:hidden">
-                                      <DropdownMenu>
-                                             <DropdownMenuTrigger asChild>
-                                                   <Button variant="outline" size="icon">
-                                                         <Menu className="h-full w-full" />
-                                                         <span className="sr-only">Menu</span>
-                                                   </Button>
-                                             </DropdownMenuTrigger>
-                                             <DropdownMenuContent align="end" className="w-[100px] mt-3">
-                                                   {sections.map(({ name, path }) => (
-                                                         <DropdownMenuItem key={path} asChild>
-                                                               <Link
-                                                                      href={path}
-                                                                      rel={path.startsWith("http") ? "noopener noreferrer" : "canonical"}
-                                                                      target={path.startsWith("http") ? "_blank" : undefined}
-                                                                      className={`px-4 py-4 text-md font-semibold ${
-                                                                            pathname === path 
-                                                                                  ? "text-cyan-500 dark:text-cyan-400" 
-                                                                                  : "text-gray-600 dark:text-gray-400"
-                                                                      }`}
-                                                               >
-                                                                      {name}
-                                                               </Link>
-                                                         </DropdownMenuItem>
-                                                   ))}
-                                             </DropdownMenuContent>
-                                      </DropdownMenu>
-                                </div>
-                              {/* <button
-                                   type="button"
-                                   id="mobile-menu-button"
-                                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                   className="md:hidden text-gray-600 dark:text-gray-300 hover:text-cyan-500 dark:hover:text-cyan-400">
-                                   <svg
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                   >
-                                        <path
-                                             strokeLinecap="round"
-                                             strokeLinejoin="round"
-                                             strokeWidth={2}
-                                             d="M4 6h16M4 12h16M4 18h16"
-                                        />
-                                   </svg>
-                              </button> */}
+                              <div className="md:hidden">
+                                   <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                             <Button variant="outline" size="icon">
+                                                  <Menu className="h-full w-full" />
+                                                  <span className="sr-only">Menu</span>
+                                             </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="w-[100px] mt-3">
+                                             {sections.map(({ name, path }) => (
+                                                  <DropdownMenuItem key={path} asChild>
+                                                       <Link
+                                                            href={path}
+                                                            rel={path.startsWith("http") ? "noopener noreferrer" : "canonical"}
+                                                            target={path.startsWith("http") ? "_blank" : undefined}
+                                                            className={`px-4 py-4 text-md font-semibold ${pathname === path
+                                                                      ? "text-cyan-500 dark:text-cyan-400"
+                                                                      : "text-gray-600 dark:text-gray-400"
+                                                                 }`}
+                                                       >
+                                                            {name}
+                                                       </Link>
+                                                  </DropdownMenuItem>
+                                             ))}
+                                        </DropdownMenuContent>
+                                   </DropdownMenu>
+                              </div>
                               <div className="hidden md:flex items-center space-x-8">
                                    {sections.map(({ name, path }) => (
                                         <Link
@@ -123,27 +101,6 @@ export default function Navbar() {
                                         </Link>
                                    ))}
                               </div>
-                         </div>
-                    </div>
-                    <div
-                         ref={mobileMenuRef}
-                         className={`md:hidden ${isMobileMenuOpen ? "" : "hidden"}`}
-                         id="mobile-menu"
-                    >
-                         <div className="px-2 pt-2 pb-3 space-y-1">
-                              {sections.map(({ name, path }) => (
-                                   <Link
-                                        key={path}
-                                        href={path}
-                                        rel={path.startsWith("http") ? "noopener noreferrer" : "canonical"}
-                                        target={path.startsWith("http") ? "_blank" : undefined}
-                                        className={`block px-3 py-2 text-xs capitalize hover:text-gray-200 hover:underline ${pathname === path ? "text-blue-400" : "text-gray-400"
-                                             }`}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                   >
-                                        {name}
-                                   </Link>
-                              ))}
                          </div>
                     </div>
                </div>
