@@ -75,7 +75,7 @@ export default function Navbar() {
                                                             href={path}
                                                             rel={path.startsWith("http") ? "noopener noreferrer" : "canonical"}
                                                             target={path.startsWith("http") ? "_blank" : undefined}
-                                                            className={`px-4 py-4 text-md font-semibold ${pathname === path
+                                                            className={`px-4 py-3 text-md font-semibold ${pathname === path
                                                                       ? "text-cyan-500 dark:text-cyan-400"
                                                                       : "text-gray-600 dark:text-gray-400"
                                                                  }`}
