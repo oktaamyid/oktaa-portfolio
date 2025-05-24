@@ -24,7 +24,7 @@ export const metadata: Metadata = {
           follow: true,
      },
      alternates: {
-          canonical: "https://firtiansyah.oktaa.my.id/songs",
+          canonical: "https://hi.oktaa.my.id/songs",
      },
      icons: {
           icon: "https://cdn.oktaa.my.id/favicon.ico",
@@ -40,5 +40,5 @@ export const metadata: Metadata = {
           "Firtiansyah Okta Songs",
           "Firtiansyah Okta Music",
      ],
-     authors: [{ name: "Firtiansyah Okta Resama", url: "https://firtiansyah.oktaa.my.id" }],
+     authors: [{ name: "Firtiansyah Okta Resama", url: "https://hi.oktaa.my.id" }],
 };

@@ -17,7 +17,7 @@ const poppins = Poppins({
 export async function generateMetadata(): Promise<Metadata> {
      const description = "Firtiansyah Okta Resama, Web Developer & Programmer from Indonesia. Passionate about creating impactful websites and staying ahead in tech trends";
      return {
-          metadataBase: new URL("https:/firtiansyah.oktaa.my.id"),
+          metadataBase: new URL("https:/hi.oktaa.my.id"),
           title: "Halo. Firtiansyah Oktaa~ | Full-stack Engineer & Tech Enthusiast",
           icons: {
                icon: "https://cdn.oktaa.my.id/favicon.ico",
@@ -38,12 +38,12 @@ export async function generateMetadata(): Promise<Metadata> {
                "Firtiansyah Okta Portfolio Website",
                "Firtiansyah Website"
           ],
-          authors: [{ name: "Firtiansyah Okta Resama", url: "https:/firtiansyah.oktaa.my.id" }],
+          authors: [{ name: "Firtiansyah Okta Resama", url: "https:/hi.oktaa.my.id" }],
 
           openGraph: {
                title: "Firtiansyah Okta Resama - Web Developer",
                description,
-               url: "https:/firtiansyah.oktaa.my.id",
+               url: "https:/hi.oktaa.my.id",
                siteName: "Firtiansyah Okta Resama",
                images: [
                     {
@@ -66,7 +66,7 @@ export async function generateMetadata(): Promise<Metadata> {
                follow: true,
           },
           alternates: {
-               canonical: "https:/firtiansyah.oktaa.my.id",
+               canonical: "https:/hi.oktaa.my.id",
           },
      };
 }
