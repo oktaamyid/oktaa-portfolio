@@ -15,10 +15,11 @@ const poppins = Poppins({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
+     const baseUrl = "https://hi.oktaa.my.id";
      const description = "Firtiansyah Okta Resama, Web Developer & Programmer from Indonesia. Passionate about creating impactful websites and staying ahead in tech trends";
      return {
-          metadataBase: new URL("https:/hi.oktaa.my.id"),
-          title: "Halo. Firtiansyah Oktaa~ | Full-stack Engineer & Tech Enthusiast",
+          metadataBase: new URL(baseUrl),
+          title: "Halo. OKTAA~ | Full-stack Engineer & Tech Enthusiast",
           icons: {
                icon: "https://cdn.oktaa.my.id/favicon.ico",
                apple: "https://cdn.oktaa.my.id/apple-touch-icon.png"
@@ -38,35 +39,36 @@ export async function generateMetadata(): Promise<Metadata> {
                "Firtiansyah Okta Portfolio Website",
                "Firtiansyah Website"
           ],
-          authors: [{ name: "Firtiansyah Okta Resama", url: "https:/hi.oktaa.my.id" }],
+          authors: [{ name: "Firtiansyah Okta Resama", url: baseUrl }],
 
           openGraph: {
-               title: "Firtiansyah Okta Resama - Web Developer",
+               title: "Halo. OKTAA~ | Full-stack Engineer & Tech Enthusiast",
                description,
-               url: "https:/hi.oktaa.my.id",
+               url: baseUrl,
                siteName: "Firtiansyah Okta Resama",
                images: [
                     {
-                         url: "https://cdn.oktaa.my.id/banner.png",
+                         url: "https://cdn.oktaa.my.id/banner.svg",
                          width: 1200,
                          height: 630,
                          alt: "Firtiansyah Okta Resama Portfolio",
                     },
                ],
                type: "website",
+               
           },
           twitter: {
                card: "summary_large_image",
-               title: "Firtiansyah Okta Resama - Web Developer",
+               title: "Halo. OKTAA~ | Full-stack Engineer & Tech Enthusiast",
                description,
-               images: ["https://cdn.oktaa.my.id/banner.png"],
+               images: ["https://cdn.oktaa.my.id/banner.svg"],
           },
           robots: {
                index: true,
                follow: true,
           },
           alternates: {
-               canonical: "https:/hi.oktaa.my.id",
+               canonical: baseUrl,
           },
      };
 }
