@@ -234,14 +234,14 @@ export default function Home() {
 
                     <motion.h1
                         variants={heroAnimation}
-                        className="text-5xl md:text-7xl font-extrabold font-poppins text-gray-900 dark:text-white mb-6"
+                        className="text-5xl md:text-7xl font-extrabold font-poppins text-start md:text-center text-gray-900 dark:text-white mb-6"
                     >
                         Hi, I&apos;m <span className="text-cyan-500 dark:text-cyan-400 bg-clip-text bg-gradient-to-r from-cyan-500 to-gray-500 dark:from-cyan-400 dark:to-gray-400">OKTAA</span>
                     </motion.h1>
 
                     <motion.p
                         variants={heroDelayAnimation}
-                        className="text-xl md:text-2xl text-gray-600 dark:text-gray-200 mb-8 max-w-2xl mx-auto"
+                        className="text-xl md:text-2xl text-gray-600 dark:text-gray-200 mb-8 max-w-2xl mx-auto text-start md:text-center"
                     >
                         I&apos;m a <span className="text-cyan-500 dark:text-cyan-400">Full Stack Developer</span> passionate about crafting web solutions
                     </motion.p>
@@ -257,7 +257,7 @@ export default function Home() {
                 id="more-about"
                 className="border border-gray-300 bg-gray-200/50 dark:border-gray-800 dark:bg-gray-900 relative z-10"
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:text-center">
                     <motion.p
                         variants={animateOnScroll}
                         className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto"

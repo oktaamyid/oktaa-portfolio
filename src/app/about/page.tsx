@@ -117,11 +117,11 @@ export default function About() {
                                    </motion.h2>
                                    <motion.div variants={staggerContainer} className="space-y-1">
                                         {skillsData.map((skill, index) => (
-                                             <motion.div key={index} variants={fadeInUp} className="flex flex-row gap-1">
+                                             <motion.div key={index} variants={fadeInUp} className="flex flex-col md:flex-row gap-1">
                                                   <motion.h3 variants={fadeInUp} className="text-base font-semibold text-gray-900 dark:text-gray-500">
                                                        {skill.category}:
                                                   </motion.h3>
-                                                  <p className="text-gray-600 dark:text-gray-200 w-3/4">{skill.skills}</p>
+                                                  <p className="text-gray-600 dark:text-gray-200 md:w-3/4">{skill.skills}</p>
                                              </motion.div>
                                         ))}
                                    </motion.div>
@@ -141,7 +141,7 @@ export default function About() {
                                                        className="relative"
                                                   >
                                                        {/* Company and Role */}
-                                                       <div className="flex items-start justify-between">
+                                                       <div className="flex items-start flex-col-reverse md:flex-row md:justify-between">
                                                             <div>
                                                                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                                                                       {experience.link ? (
