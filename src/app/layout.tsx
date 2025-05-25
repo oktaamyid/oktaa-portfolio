@@ -48,7 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
                siteName: "Firtiansyah Okta Resama",
                images: [
                     {
-                         url: "https://cdn.oktaa.my.id/banner.svg",
+                         url: "https://cdn.oktaa.my.id/og-banner.png",
                          width: 1200,
                          height: 630,
                          alt: "Firtiansyah Okta Resama Portfolio",
@@ -61,7 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
                card: "summary_large_image",
                title: "Halo. OKTAA~ | Full-stack Engineer & Tech Enthusiast",
                description,
-               images: ["https://cdn.oktaa.my.id/banner.svg"],
+               images: ["https://cdn.oktaa.my.id/og-banner.png"],
           },
           robots: {
                index: true,
