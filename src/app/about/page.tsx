@@ -7,6 +7,7 @@ import { skillsData } from '@/lib/constants';
 import { Education, Experience } from '@/lib/types';
 import { db } from "@/lib/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import { ReactTyped } from 'react-typed';
 
 export default function About() {
      const refSkills = useRef(null);
@@ -76,10 +77,20 @@ export default function About() {
                     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-4">
                          <div className="text-start px-4 z-10 relative">
                               <motion.h1 variants={fadeInUp} className="text-5xl md:text-6xl font-extrabold font-poppins text-gray-900 dark:text-white mb-6">
-                                     I&apos;m{" "}
-                                     <span className="text-cyan-500 dark:text-cyan-400 bg-clip-text bg-gradient-to-r from-cyan-500 to-gray-500 dark:from-cyan-400 dark:to-gray-400">
-                                              OKTAA
-                                     </span>
+                                   I&apos;m{" "}
+                                   <span className="text-cyan-500 dark:text-cyan-400 bg-clip-text bg-gradient-to-r from-cyan-500 to-gray-500 dark:from-cyan-400 dark:to-gray-400">
+                                        <ReactTyped
+                                             strings={[
+                                                  "OKTAA",
+                                                  "Firtiansyah Okta Resama",
+                                                  "Full Stack Developer"
+                                             ]}
+                                             typeSpeed={150}
+                                             backDelay={75}
+                                             loop
+                                        >
+                                        </ReactTyped>
+                                   </span>
                               </motion.h1>
                               <motion.p variants={fadeInUp} className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-8 max-w-4xl">
                                    A passionate Full-Stack Developer crafting{" "}
