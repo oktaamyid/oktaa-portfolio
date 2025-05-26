@@ -174,7 +174,7 @@ export default function Home() {
                 animate="visible"
                 variants={staggerContainer}
                 id="home"
-                className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 relative overflow-hidden default-pattern"
+                className="py-12 md:min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 relative overflow-hidden default-pattern"
             >
                 <StarBackground/>
                 <div className="text-center px-4 z-10 relative">
