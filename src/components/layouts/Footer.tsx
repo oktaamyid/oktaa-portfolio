@@ -35,26 +35,24 @@ export default function Footer() {
           loadAllData();
      }, []);
      return (
-          <footer className="bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 from-1% backdrop-blur-2xl relative overflow-hidden default-pattern">
+          <footer className="bg-gradient-to-b from-gray-100 via-gray-300 to-gray-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 from-1% backdrop-blur-2xl relative overflow-hidden default-pattern">
                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10 mb-5 md:mb-0">
                     <div className="flex flex-col items-start p-2 md:p-8 space-y-5 md:space-y-0 md:flex-row md:justify-between">
                          <div className="flex flex-col items-start md:space-y-0 md:flex-row md:items-center md:space-x-6">
                               <div className="flex items-start justify-start md:items-center md:justify-center text-lg gap-4 md:gap-6 flex-wrap">
                                    <div className="flex flex-row gap-2">
-                                        <div className="relative inline-flex mt-1 md:mb-2 md:mt-1">
+                                        <div className="relative inline-flex md:mb-2 md:mt-1">
                                              <div className="w-6 h-6 bg-emerald-400 rounded-full" />
                                              <div className="w-6 h-6 bg-emerald-400/50 rounded-full absolute top-0 left-0 animate-ping" />
                                              <div className="w-6 h-6 bg-emerald-400/70 rounded-full absolute top-0 left-0 animate-pulse" />
                                         </div>
                                         <div className="flex flex-wrap md:flex-row items-center gap-2 md:gap-4">
-                                             <h3 className="text-xl md:text-2xl mb-1 md:mb-2 font-semibold font-poppins bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
+                                             <h3 className="text-lg md:text-2xl md:mb-2 font-semibold font-poppins bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
                                                   Follow My Journey
                                              </h3>
-                                             <span className="text-md md:text-xl text-gray-600 dark:text-gray-300 font-light font-poppins">Stay in Touch</span>
+                                             <span className="text-sm md:text-lg text-gray-600 dark:text-gray-300 font-light font-poppins">Stay in Touch</span>
                                         </div>
                                    </div>
-                                   <div className="flex flex-row gap-4">
-
                                    {profile[0]?.socialMedia?.linkedin && (
                                         <a href={profile[0].socialMedia.linkedin} target="_blank" rel="noopener noreferrer" className="social-link group relative overflow-hidden">
                                              <span className="text-gray-600 font-semibold dark:text-gray-300 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-all duration-300 group-hover:-translate-y-1 inline-block">LinkedIn</span>
@@ -79,7 +77,6 @@ export default function Footer() {
                                              <span className="block h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-400 dark:to-blue-500 transition-all duration-300 absolute bottom-0 left-0" />
                                         </a>
                                    )}
-                                   </div>
                               </div>
                          </div>
                          <div className="flex items-start justify-center text left md:mt-2">
