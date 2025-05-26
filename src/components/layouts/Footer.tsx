@@ -35,7 +35,7 @@ export default function Footer() {
           loadAllData();
      }, []);
      return (
-          <footer className="bg-gradient-to-b from-gray-100 via-gray-300 to-gray-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 from-1% backdrop-blur-2xl relative overflow-hidden default-pattern">
+          <footer className="bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 from-1% backdrop-blur-2xl relative overflow-hidden default-pattern">
                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10 mb-5 md:mb-0">
                     <div className="flex flex-col items-start p-2 md:p-8 space-y-5 md:space-y-0 md:flex-row md:justify-between">
                          <div className="flex flex-col items-start md:space-y-0 md:flex-row md:items-center md:space-x-6">
