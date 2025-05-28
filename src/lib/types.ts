@@ -44,3 +44,42 @@ export interface Profile {
      bio?: string;
      website?: string;
 }
+
+export interface Link {
+     id: string;
+     originalUrl: string;
+     shortUrl?: string;
+     multipleUrls?: { 
+          url: string; name?: string 
+     }[]; 
+     useMultipleUrls?: boolean;
+     createdAt?: string;
+     updatedAt?: string;
+     clicks?: number;
+     showToPortal?: boolean;
+     nameUrl?: string;
+     category?: string;
+     description?: string;
+     price?: number; 
+
+     // Statistik
+     deviceStats?: {
+          desktop?: number;
+          mobile?: number;
+          tablet?: number;
+     };
+     browserStats?: {
+          [key: string]: number;
+     }
+     geoStats?: {
+          [key: string]: number;
+     };
+     refererStats?: {
+          [key: string]: number;
+     };
+
+     showConfirmationPage?: boolean;
+     confirmationPageSettings?: {
+          customMessage?: string;
+     };
+}
