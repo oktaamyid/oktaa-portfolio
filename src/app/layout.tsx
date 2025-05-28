@@ -1,10 +1,8 @@
 import { Poppins } from "next/font/google";
-import Navbar from "@/components/layouts/Navbar";
 import "./globals.css";
 import { Metadata } from "next";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react"
-import Footer from "@/components/layouts/Footer";
 import { ThemeProvider } from 'next-themes';
 // import CircleCursor from "@/components/ui/CircleCursor";
 
@@ -78,13 +76,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <html lang="en-US" suppressHydrationWarning>
                <body className={`${poppins.variable} bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 default-pattern`}>
                     {/* <CircleCursor bigSize={30} smallSize={10} blendMode="difference" /> */}
-                    <ThemeProvider attribute="class" enableSystem={true} defaultTheme="dark">
+                    <ThemeProvider attribute="class" enableSystem={true} defaultTheme="system">
                          <Analytics />
-                         <Navbar />
-                         <main>
-                              {children}
-                         </main>
-                         <Footer />
+                         {children}
                     </ThemeProvider>
                </body>
           </html>
