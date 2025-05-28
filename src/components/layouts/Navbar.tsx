@@ -16,7 +16,7 @@ import { Menu, Moon, Sun } from 'lucide-react';
 const sections = [
      { name: "Home", path: "/" },
      { name: "About", path: "/about" },
-     { name: "Portal", path: "https://oktaa.my.id/portal" },
+     { name: "Portal", path: "/portal" },
 ] as const;
 
 export default function Navbar() {
