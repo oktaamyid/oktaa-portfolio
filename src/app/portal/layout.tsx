@@ -45,12 +45,16 @@ export async function generateMetadata(): Promise<Metadata> {
                     "Firtiansyah Okta Profile",
                     "Firtiansyah Okta Links",
                     "Firtiansyah Okta Social Media",
+                    "Firtiansyah Okta Website",
                     "Okta Website"
                ],
                authors: [{ name: 'Oktaa', url: 'https://hi.oktaa.my.id' }],
                robots: {
-                    index: false,
-                    follow: false
+                    index: true,
+                    follow: true
+               },
+               alternates: {
+                    canonical: 'https://hi.oktaa.my.id/portal',
                }
           };
      } catch (error) {
