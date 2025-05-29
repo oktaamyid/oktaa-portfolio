@@ -245,6 +245,10 @@ export default function PortalPage() {
 
      return (
           <div className="flex flex-col min-h-screen items-center justify-center">
+
+               <h1 className="sr-only">
+                    {profile?.name ? `Tautan Penting Milik ${profile.name}` : (profile?.username ? `Tautan Penting Milik @${profile.username}` : 'Kumpulan Tautan Penting')}
+               </h1>
                <div className="w-full md:max-w-xl overflow-hidden shadow-lg flex flex-col flex-grow mx-auto">
                     <div className="relative h-40 bg-cover object-cover bg-center bg-[url('https://cdn.oktaa.my.id/banner-1200-160.svg')] flex items-center justify-center">
                          {profile?.profilePicture && (
