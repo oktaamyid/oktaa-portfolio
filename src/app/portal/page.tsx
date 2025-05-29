@@ -247,6 +247,7 @@ export default function PortalPage() {
           <div className="flex flex-col min-h-screen items-center justify-center">
 
                <h1 className="sr-only">
+                    Tautan penting milik Firtiansyah Okta | OKTAA~ Portal | Discover links to connect with Firtiansyah Okta.
                     {profile?.name ? `Tautan Penting Milik ${profile.name}` : (profile?.username ? `Tautan Penting Milik @${profile.username}` : 'Kumpulan Tautan Penting')}
                </h1>
                <div className="w-full md:max-w-xl overflow-hidden shadow-lg flex flex-col flex-grow mx-auto">
