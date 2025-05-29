@@ -81,8 +81,11 @@ export default function Home() {
                 if (collectionName === "projects") {
                     data = await Promise.all(
                         (data as Project[]).map(async (project) => {
-                            const screenshotUrl = `https://api.screenshotmachine.com?key=ae018e&url=${encodeURIComponent(project.link)}&dimension=1280x800`;
-                            return { ...project, image: screenshotUrl };
+                            if (project.link && project.link !== "-") {
+                                const screenshotUrl = `https://api.screenshotmachine.com?key=ae018e&url=${encodeURIComponent(project.link)}&dimension=1280x800`;
+                                return { ...project, image: screenshotUrl };
+                            }
+                            return project; 
                         })
                     ) as T[];
                 }
@@ -241,8 +244,8 @@ export default function Home() {
                                     <motion.div
                                         key={project.id}
                                         variants={animateOnScroll}
-                                        onClick={() => window.open(project.link, "_blank")}
-                                        className="cursor-pointer"
+                                        onClick={() => project.link ? window.open(project.link, "_blank") : null}
+                                        className={`${project.link ? 'cursor-pointer' : ''}`}
                                     >
                                         <motion.div
                                             initial="rest"
@@ -300,14 +303,12 @@ export default function Home() {
                                                         className="flex flex-wrap gap-2"
                                                     >
                                                         {project.technology.map((tech, index) => (
-                                                            <motion.span
+                                                            <span
                                                                 key={index}
                                                                 className="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
-                                                                whileHover={{ scale: 1.5 }} // Menggantikan hover:scale-105
-                                                                transition={{ duration: 0.5 }}
                                                             >
                                                                 {tech}
-                                                            </motion.span>
+                                                            </span>
                                                         ))}
                                                     </motion.div>
                                                 </motion.div>
