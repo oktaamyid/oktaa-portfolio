@@ -7,13 +7,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
           if (!profile) {
                return {
-                    title: 'Oktaa Portal',
+                    title: 'Portal. OKTAA~ | Full-stack Engineer & Tech Enthusiast',
                     description: 'Personal Link Sharing Platform, a place to share my links and connect with others.'
                };
           }
 
           return {
-               title: `@${profile.username} | Oktaa Portal`,
+               title: `@${profile.username} | Portal. OKTAA~`,
                description: profile.bio || 'Personal Link Sharing Platform, a place to share my links and connect with others.',
                icons: profile.profilePicture ? [{ url: profile.profilePicture }] : [],
                openGraph: {
@@ -60,8 +60,8 @@ export async function generateMetadata(): Promise<Metadata> {
      } catch (error) {
           console.error('Gagal mengambil metadata:', error);
           return {
-               title: 'Oktaa Portal',
-               description: 'Personal Link Sharing Platform'
+               title: 'Portal. OKTAA~ | Full-stack Engineer & Tech Enthusiast',
+               description: 'Personal Link Sharing Platform, a place to share my links and connect with others.'
           };
      }
 }
