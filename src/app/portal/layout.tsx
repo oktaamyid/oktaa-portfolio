@@ -2,23 +2,26 @@ import { getProfile } from "@/lib/service";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
+
+     const description = 'Explore the personal link sharing platform to discover and connect with Firtiansyah Okta or OKTAA~.'
+     
      try {
           const profile = await getProfile();
 
           if (!profile) {
                return {
                     title: 'Portal. OKTAA~ | Full-stack Engineer & Tech Enthusiast',
-                    description: 'Personal Link Sharing Platform, a place to share my links and connect with others.'
+                    description: description
                };
           }
 
           return {
                title: `@${profile.username} | Portal. OKTAA~`,
-               description: profile.bio || 'Personal Link Sharing Platform, a place to share my links and connect with others.',
+               description: description,
                icons: profile.profilePicture ? [{ url: profile.profilePicture }] : [],
                openGraph: {
                     title: `@${profile.username} | OKTAA~ Portal.`,
-                    description: profile.bio || 'Personal Link Sharing Platform, a place to share my links and connect with others.',
+                    description: description,
                     images: [
                          {
                               url: 'https://cdn.oktaa.my.id/og-banner.png',
@@ -29,22 +32,18 @@ export async function generateMetadata(): Promise<Metadata> {
                twitter: {
                     card: 'summary_large_image',
                     title: `@${profile.username} | Oktaa Portal`,
-                    description: profile.bio || 'Personal Link Sharing Platform, a place to share my links and connect with others.',
+                    description: description,
                     images: ['https://cdn.oktaa.my.id/og-banner.png'],
                },
                keywords: [
                     "Firtiansyah Okta Portfolio Website",
                     "Firtiansyah Website",
-                    "OKTAA Portal",
                     "Firtiansyah Portal",
                     "Portal Firtiansyah Okta",
-                    "Firtiansyah",
-                    "Oktaa",
                     "Firtiansyah Okta",
                     "Firtiansyah Okta Resama",
                     "Firtiansyah Okta Profile",
                     "Firtiansyah Okta Links",
-                    "Firtiansyah Okta Social Media",
                     "Firtiansyah Okta Website",
                     "Okta Website"
                ],
@@ -61,7 +60,7 @@ export async function generateMetadata(): Promise<Metadata> {
           console.error('Gagal mengambil metadata:', error);
           return {
                title: 'Portal. OKTAA~ | Full-stack Engineer & Tech Enthusiast',
-               description: 'Personal Link Sharing Platform, a place to share my links and connect with others.'
+               description: description
           };
      }
 }
