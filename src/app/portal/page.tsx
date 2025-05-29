@@ -312,7 +312,7 @@ export default function PortalPage() {
                                                   initial={{ opacity: 0, x: -20, scale: 0.95 }}
                                                   animate={{ opacity: 1, x: 0, scale: 1 }}
                                                   transition={{ delay: 0.1 + index * 0.1, type: "spring", stiffness: 100 }}
-                                                  className="relative border border-gray-700 rounded-lg px-4 py-3 md:py-5 transition-all duration-200 group overflow-hidden shimmer-effect"
+                                                  className="relative border border-gray-700 rounded-lg px-4 py-3 md:py-5 hover:shadow-md hover:border-gray-500 transition-all duration-300 group overflow-hidden shimmer-effect"
                                                   role="button"
                                                   tabIndex={0}
                                                   onKeyDown={(e) => {
