@@ -25,10 +25,9 @@ export async function generateMetadata(): Promise<Metadata> {
           description,
           keywords: [
                "Firtiansyah Okta Resama",
-               "Web Developer",
+               "Firtiansyah Okta Website",
                "Programmer",
                "Full-stack Engineer",
-               "Indonesia",
                "Firtiansyah",
                "Oktaa",
                "Siapa Firtiansyah Okta Resama",

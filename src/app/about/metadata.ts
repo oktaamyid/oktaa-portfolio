@@ -32,15 +32,7 @@ export const metadata: Metadata = {
      },
      keywords: [
           "Firtiansyah Okta Resama",
-          "Web Developer",
-          "Programmer",
-          "Full-stack Engineer",
-          "Indonesia",
-          "Firtiansyah",
-          "Oktaa",
           "Siapa Firtiansyah Okta Resama",
-          "tian",
-          "Firtiansyah adalah",
           "Firtiansyah Okta Portfolio Website",
           "Firtiansyah Website",
           "About Firtiansyah Okta",
@@ -48,7 +40,7 @@ export const metadata: Metadata = {
           "Firtiansyah Okta Journey",
           "Add About Firtiansyah",
           "Tian Website",
-          "Okta Website"
+          "Firtiansyah Okta Website"
      ],
      authors: [{ name: 'Firtiansyah Okta Resama', url: 'https://hi.oktaa.my.id' }],
 }
