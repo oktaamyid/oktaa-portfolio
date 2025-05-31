@@ -26,15 +26,14 @@ export async function generateMetadata(): Promise<Metadata> {
           keywords: [
                "Firtiansyah Okta Resama",
                "Firtiansyah Okta Website",
-               "Programmer",
-               "Full-stack Engineer",
                "Firtiansyah",
-               "Oktaa",
                "Siapa Firtiansyah Okta Resama",
-               "tian",
+               "Tian Website",
                "Firtiansyah adalah",
                "Firtiansyah Okta Portfolio Website",
-               "Firtiansyah Website"
+               "Firtiansyah Website",
+               "Firtiansyah Okta",
+               "Portfolio Firtiansyah Okta"
           ],
           authors: [{ name: "Firtiansyah Okta Resama", url: baseUrl }],
 
