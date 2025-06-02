@@ -17,6 +17,34 @@ interface Category {
      name: string;
 }
 
+const sortLinks = (links: Link[], sortSettings?: { type?: "field" | "manual"; field?: string; direction?: "asc" | "desc"; order?: string[] }): Link[] => {
+     if (!sortSettings || sortSettings.type === "manual" || !sortSettings.field) {
+          return links; // Manual sort belum diimplementasikan
+     }
+
+     return [...links].sort((a, b) => {
+          const { field, direction } = sortSettings;
+          let valueA = a[field as keyof Link];
+          let valueB = b[field as keyof Link];
+
+          if (field === "price" || field === "clicks") {
+               valueA = valueA ?? 0;
+               valueB = valueB ?? 0;
+               return direction === "asc" ? (valueA as number) - (valueB as number) : (valueB as number) - (valueA as number);
+          } else if (field === "createdAt" || field === "updatedAt") {
+               valueA = new Date(valueA as string).getTime() || 0;
+               valueB = new Date(valueB as string).getTime() || 0;
+               return direction === "asc" ? valueA - valueB : valueB - valueA;
+          } else {
+               valueA = (valueA as string)?.toLowerCase() || "";
+               valueB = (valueB as string)?.toLowerCase() || "";
+               return direction === "asc"
+                    ? valueA.localeCompare(valueB)
+                    : valueB.localeCompare(valueA);
+          }
+     });
+};
+
 export default function PortalPage() {
      const [links, setLinks] = useState<Link[]>([]);
      const [profile, setProfile] = useState<Profile | null>(null);
@@ -27,13 +55,17 @@ export default function PortalPage() {
      const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
      const filterLinksByCategory = useCallback((category: string, linksList = links) => {
+          let filtered: Link[] = [];
           if (category === 'all') {
-               setFilteredLinks(linksList);
+               filtered = linksList;
           } else {
-               const filtered = linksList.filter(link => link.category && link.category.toLowerCase().replace(/\s+/g, '-') === category);
-               setFilteredLinks(filtered);
+               filtered = linksList.filter(link => link.category && link.category.toLowerCase().replace(/\s+/g, '-') === category);
           }
-     }, [links]);
+          const sortSettings = category === 'all'
+               ? profile?.sortSettings
+               : profile?.categorySortSettings?.[category] || profile?.sortSettings || { field: "createdAt", direction: "desc" };
+          setFilteredLinks(sortLinks(filtered, sortSettings));
+     }, [links, profile?.sortSettings, profile?.categorySortSettings]);
 
      useEffect(() => {
           const fetchData = async () => {
@@ -45,8 +77,9 @@ export default function PortalPage() {
 
                     setProfile(profileData);
                     const portalLinks = linksData.filter(link => link.showToPortal);
-                    setLinks(portalLinks);
-                    setFilteredLinks(portalLinks);
+                    const sortedLinks = sortLinks(portalLinks, profileData?.sortSettings);
+                    setLinks(sortedLinks);
+                    setFilteredLinks(sortedLinks);
 
                     const uniqueCategories = Array.from(
                          new Set(portalLinks.map(link => link.category).filter(category => category))
@@ -259,7 +292,7 @@ export default function PortalPage() {
                                    <div className="flex relative w-20 h-20 rounded-full border-4 items-center justify-center border-gray-700 overflow-hidden">
                                         <Image
                                              src={profile.profilePicture}
-                                             alt={profile.name || "Profile"}    
+                                             alt={profile.name || "Profile"}
                                              width={80}
                                              height={80}
                                              className="object-cover rounded-full"
@@ -382,9 +415,9 @@ export default function PortalPage() {
                                                                       <p className="text-gray-300 text-sm mb-3 px-2">{link.description}</p>
                                                                  )}
                                                                  {link.price !== undefined && link.price > 0 && (
-                                                                        <p className="text-white font-normal mb-3 px-2">
-                                                                              Harga: <span className='font-bold'>Rp {link.price.toLocaleString('id-ID')}</span>
-                                                                        </p>
+                                                                      <p className="text-white font-normal mb-3 px-2">
+                                                                           Harga: <span className='font-bold'>Rp {link.price.toLocaleString('id-ID')}</span>
+                                                                      </p>
                                                                  )}
                                                                  {link.multipleUrls && link.multipleUrls.length > 0 && (
                                                                       <div className="space-y-2 px-2">
@@ -457,5 +490,5 @@ export default function PortalPage() {
                     </div>
                </div>
           </div>
-     );   
+     );
 }
