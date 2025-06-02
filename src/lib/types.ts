@@ -43,6 +43,15 @@ export interface Profile {
      }
      bio?: string;
      website?: string;
+     sortSettings?: { field: string; direction: "asc" | "desc" };
+     categorySortSettings?: {
+          [categoryId: string]: {
+               type?: "field" | "manual";
+               field?: string; 
+               direction?: "asc" | "desc"; 
+               order?: string[]; 
+          };
+     };
 }
 
 export interface Link {
