@@ -4,7 +4,7 @@ import { Metadata } from "next";
 export async function generateMetadata(): Promise<Metadata> {
 
      const description = 'Explore the personal link sharing platform to discover and connect with Firtiansyah Okta or OKTAA~.'
-     
+
      try {
           const profile = await getProfile();
 
