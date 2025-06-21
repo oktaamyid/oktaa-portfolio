@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { FiExternalLink, FiGithub, FiLinkedin, FiInstagram, FiMail, FiGlobe, FiChevronDown, FiChevronUp, FiShare2 } from 'react-icons/fi';
 import { FaSpotify, FaTiktok } from 'react-icons/fa';
+import { TbPinned } from 'react-icons/tb';
 import { Profile, Link } from '@/lib/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { onSnapshot, collection } from 'firebase/firestore';
@@ -22,10 +23,25 @@ interface PortalClientProps {
 
 const sortLinks = (links: Link[], sortSettings?: { type?: "field" | "manual"; field?: string; direction?: "asc" | "desc"; order?: string[] }): Link[] => {
      if (!sortSettings || sortSettings.type === "manual" || !sortSettings.field) {
-          return links;
+          // Sort by pinned first, then by creation date
+          return [...links].sort((a, b) => {
+               // Pinned links always come first
+               if (a.isPinned && !b.isPinned) return -1;
+               if (!a.isPinned && b.isPinned) return 1;
+
+               // If both are pinned or both are not pinned, sort by creation date (newest first)
+               const dateA = new Date(a.createdAt || '').getTime() || 0;
+               const dateB = new Date(b.createdAt || '').getTime() || 0;
+               return dateB - dateA;
+          });
      }
 
      return [...links].sort((a, b) => {
+          // Always prioritize pinned links first
+          if (a.isPinned && !b.isPinned) return -1;
+          if (!a.isPinned && b.isPinned) return 1;
+
+          // Then apply custom sorting
           const { field, direction } = sortSettings;
           let valueA = a[field as keyof Link];
           let valueB = b[field as keyof Link];
@@ -258,58 +274,69 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
                          </div>
 
                          <div className="space-y-3 mb-6 min-h-56 px-3">
-                              {filteredLinks.length > 0 ? (
-                                   filteredLinks.map((link, index) => (
-                                        <motion.div
-                                             key={link.id}
-                                             initial={{ opacity: 0, x: -20, scale: 0.95 }}
-                                             animate={{ opacity: 1, x: 0, scale: 1 }}
-                                             transition={{ delay: index * 0.05, type: "spring", stiffness: 100 }}
-                                             className="relative border border-gray-700 rounded-lg px-4 py-3 md:py-5 hover:shadow-md hover:border-gray-500 transition-all duration-300 group overflow-hidden shimmer-effect"
-                                             role="button"
-                                             tabIndex={0}
-                                             onKeyDown={(e) => {
-                                                  if (e.key === 'Enter' || e.key === ' ') {
-                                                       e.preventDefault();
-                                                       if (link.useMultipleUrls) {
-                                                            toggleCard(link.id);
-                                                       } else {
-                                                            window.open(link.originalUrl, '_blank', 'noopener,noreferrer');
-                                                       }
+                              {filteredLinks.length > 0 ? (filteredLinks.map((link, index) => (
+                                   <motion.div
+                                        key={link.id}
+                                        initial={{ opacity: 0, x: -20, scale: 0.95 }}
+                                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                                        transition={{ delay: index * 0.05, type: "spring", stiffness: 100 }}
+                                        className="relative border border-gray-700 rounded-lg px-4 py-3 md:py-5 hover:shadow-md hover:border-gray-500 transition-all duration-300 group overflow-hidden shimmer-effect"
+                                        role="button"
+                                        tabIndex={0}
+                                        onKeyDown={(e) => {
+                                             if (e.key === 'Enter' || e.key === ' ') {
+                                                  e.preventDefault();
+                                                  if (link.useMultipleUrls) {
+                                                       toggleCard(link.id);
+                                                  } else {
+                                                       window.open(link.originalUrl, '_blank', 'noopener,noreferrer');
                                                   }
-                                             }}
-                                        >
-                                             {link.useMultipleUrls ? (
-                                                  <div
-                                                       className="flex items-center justify-between relative z-10 cursor-pointer"
-                                                       onClick={() => toggleCard(link.id)}
-                                                       aria-expanded={expandedCard === link.id}
-                                                       aria-label={`Expand ${link.nameUrl || link.shortUrl} details`}
-                                                  >
+                                             }
+                                        }}                                   >
+                                        {link.useMultipleUrls ? (
+                                             <div
+                                                  className="flex items-center justify-between relative z-10 cursor-pointer"
+                                                  onClick={() => toggleCard(link.id)}
+                                                  aria-expanded={expandedCard === link.id}
+                                                  aria-label={`Expand ${link.nameUrl || link.shortUrl} details`}
+                                             >
+                                                  <div className="flex items-center gap-2">
+                                                       {link.isPinned && (
+                                                            <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-full p-1 backdrop-blur-sm">
+                                                                 <TbPinned className="w-3 h-3 text-yellow-400" />
+                                                            </div>
+                                                       )}
                                                        <div className="flex flex-col">
                                                             <span className="text-white text-base font-medium truncate">
                                                                  {link.nameUrl || link.shortUrl}
                                                             </span>
                                                        </div>
-                                                       <motion.div
-                                                            animate={{ rotate: expandedCard === link.id ? 180 : 0 }}
-                                                            transition={{ duration: 0.3 }}
-                                                       >
-                                                            {expandedCard === link.id ? (
-                                                                 <FiChevronUp className="text-gray-400 group-hover:text-white w-5 h-5" />
-                                                            ) : (
-                                                                 <FiChevronDown className="text-gray-400 group-hover:text-white w-5 h-5" />
-                                                            )}
-                                                       </motion.div>
                                                   </div>
-                                             ) : (
-                                                  <a
-                                                       href={link.originalUrl}
-                                                       target="_blank"
-                                                       rel="noopener noreferrer"
-                                                       className="flex items-center justify-between relative z-10"
-                                                       aria-label={`Visit ${link.nameUrl || link.shortUrl}`}
+                                                  <motion.div
+                                                       animate={{ rotate: expandedCard === link.id ? 180 : 0 }}
+                                                       transition={{ duration: 0.3 }}
                                                   >
+                                                       {expandedCard === link.id ? (
+                                                            <FiChevronUp className="text-gray-400 group-hover:text-white w-5 h-5" />
+                                                       ) : (
+                                                            <FiChevronDown className="text-gray-400 group-hover:text-white w-5 h-5" />
+                                                       )}
+                                                  </motion.div>
+                                             </div>
+                                        ) : (
+                                             <a
+                                                  href={link.originalUrl}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="flex items-center justify-between relative z-10"
+                                                  aria-label={`Visit ${link.nameUrl || link.shortUrl}`}
+                                             >
+                                                  <div className="flex items-center gap-2">
+                                                       {link.isPinned && (
+                                                            <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-full p-1 backdrop-blur-sm rotate-45">
+                                                                 <TbPinned className="w-3 h-3 text-yellow-400" />
+                                                            </div>
+                                                       )}
                                                        <div className="flex flex-col">
                                                             <span className="text-white text-base font-medium truncate">
                                                                  {link.nameUrl || link.shortUrl}
@@ -318,48 +345,49 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
                                                                  {link.description || ""}
                                                             </span>
                                                        </div>
-                                                       <FiExternalLink className="text-gray-400 group-hover:text-white w-5 h-5" />
-                                                  </a>
+                                                  </div>
+                                                  <FiExternalLink className="text-gray-400 group-hover:text-white w-5 h-5" />
+                                             </a>
+                                        )}
+                                        <AnimatePresence>
+                                             {expandedCard === link.id && link.useMultipleUrls && (
+                                                  <motion.div
+                                                       initial={{ height: 0, opacity: 0 }}
+                                                       animate={{ height: "auto", opacity: 1 }}
+                                                       exit={{ height: 0, opacity: 0 }}
+                                                       transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                       className="mt-3 border-t border-gray-600/50 pt-3"
+                                                  >
+                                                       {link.description && (
+                                                            <p className="text-gray-300 text-sm mb-3 px-2">{link.description}</p>
+                                                       )}
+                                                       {link.price !== undefined && link.price > 0 && (
+                                                            <p className="text-white font-normal mb-3 px-2">
+                                                                 Harga: <span className='font-bold'>Rp {link.price.toLocaleString('id-ID')}</span>
+                                                            </p>
+                                                       )}
+                                                       {link.multipleUrls && link.multipleUrls.length > 0 && (
+                                                            <div className="space-y-2 px-2">
+                                                                 {link.multipleUrls.map((urlObj, idx) => (
+                                                                      <a
+                                                                           key={idx}
+                                                                           href={urlObj.url}
+                                                                           target="_blank"
+                                                                           rel="noopener noreferrer"
+                                                                           className="flex items-center text-cyan-500 hover:text-cyan-600 text-sm transition-colors"
+                                                                           aria-label={`Visit ${urlObj.name || urlObj.url}`}
+                                                                      >
+                                                                           <FiExternalLink className="mr-2 w-4 h-4" />
+                                                                           <span className="truncate">{urlObj.name || urlObj.url}</span>
+                                                                      </a>
+                                                                 ))}
+                                                            </div>
+                                                       )}
+                                                  </motion.div>
                                              )}
-                                             <AnimatePresence>
-                                                  {expandedCard === link.id && link.useMultipleUrls && (
-                                                       <motion.div
-                                                            initial={{ height: 0, opacity: 0 }}
-                                                            animate={{ height: "auto", opacity: 1 }}
-                                                            exit={{ height: 0, opacity: 0 }}
-                                                            transition={{ duration: 0.3, ease: "easeInOut" }}
-                                                            className="mt-3 border-t border-gray-600/50 pt-3"
-                                                       >
-                                                            {link.description && (
-                                                                 <p className="text-gray-300 text-sm mb-3 px-2">{link.description}</p>
-                                                            )}
-                                                            {link.price !== undefined && link.price > 0 && (
-                                                                 <p className="text-white font-normal mb-3 px-2">
-                                                                      Harga: <span className='font-bold'>Rp {link.price.toLocaleString('id-ID')}</span>
-                                                                 </p>
-                                                            )}
-                                                            {link.multipleUrls && link.multipleUrls.length > 0 && (
-                                                                 <div className="space-y-2 px-2">
-                                                                      {link.multipleUrls.map((urlObj, idx) => (
-                                                                           <a
-                                                                                key={idx}
-                                                                                href={urlObj.url}
-                                                                                target="_blank"
-                                                                                rel="noopener noreferrer"
-                                                                                className="flex items-center text-cyan-500 hover:text-cyan-600 text-sm transition-colors"
-                                                                                aria-label={`Visit ${urlObj.name || urlObj.url}`}
-                                                                           >
-                                                                                <FiExternalLink className="mr-2 w-4 h-4" />
-                                                                                <span className="truncate">{urlObj.name || urlObj.url}</span>
-                                                                           </a>
-                                                                      ))}
-                                                                 </div>
-                                                            )}
-                                                       </motion.div>
-                                                  )}
-                                             </AnimatePresence>
-                                        </motion.div>
-                                   ))
+                                        </AnimatePresence>
+                                   </motion.div>
+                              ))
                               ) : (
                                    <div className="flex flex-col items-center justify-center h-40 text-gray-400">
                                         <p>No links found in this category</p>

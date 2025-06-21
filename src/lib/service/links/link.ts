@@ -28,7 +28,8 @@ const convertDoc = (doc: QueryDocumentSnapshot): Link => {
           nameUrl: data.nameUrl || "",
           category: data.category || "",
           description: data.description || "",
-          price: data.price || 0, // Include price
+          price: data.price || 0,
+          isPinned: data.isPinned || false, 
           deviceStats: data.deviceStats || {},
           browserStats: data.browserStats || {},
           geoStats: data.geoStats || {},

@@ -70,6 +70,7 @@ export interface Link {
      category?: string;
      description?: string;
      price?: number; 
+     isPinned?: boolean; // New property for pinned links
 
      // Statistik
      deviceStats?: {
