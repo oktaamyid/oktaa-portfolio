@@ -1,5 +1,5 @@
 import { getNowPlaying, getTopTracks } from '@/lib/spotify';
-import NowPlaying from '@/components/features/songs/nowPlaying';
+// import NowPlaying from '@/components/features/songs/nowPlaying';
 import TopTracks from '@/components/features/songs/topTrack';
 
 export const revalidate = 3600; // Cache selama 1 jam
@@ -7,7 +7,7 @@ export const revalidate = 3600; // Cache selama 1 jam
 export default async function SongsPage() {
      const [nowPlaying, topTracksShort, topTracksMedium, ] = await Promise.all([
           getNowPlaying(),
-          getTopTracks('short_term', 6), // 4 minggu terakhir
+          getTopTracks('short_term', 8), // 4 minggu terakhir
           getTopTracks('medium_term', 8), // 6 bulan terakhir  
           // getRecentlyPlayed(10) // 10 lagu terakhir yang diputar
      ]);
@@ -16,8 +16,8 @@ export default async function SongsPage() {
      const hasAnyData = nowPlaying || topTracksShort.length > 0 || topTracksMedium.length > 0;
 
      return (
-          <div className="max-w-5xl mx-auto px-4 py-12 space-y-16 mt-14">
-               <h1 className="text-3xl font-bold text-center">My Songs Journey</h1>
+          <div className="max-w-5xl mx-auto px-4 py-12 space-y-16">
+               {/* <h1 className="text-3xl font-bold text-center">My Songs Journey</h1> */}
 
                {!hasAnyData && (
                     <div className="text-center py-12">
@@ -28,11 +28,11 @@ export default async function SongsPage() {
                )}
 
                {/* Now Playing Section */}
-               {nowPlaying && (
+               {/* {nowPlaying && (
                     <div className="flex justify-center">
                          <NowPlaying track={nowPlaying} />
                     </div>
-               )}
+               )} */}
 
                {/* Top Tracks - Last Month */}
                {topTracksShort.length > 0 && (
