@@ -141,7 +141,7 @@ export default function Home() {
                             <motion.span
                                 animate={{ translateY: [0, -10, 0] }}
                                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                                className="absolute -top-12 left-1/3 -translate-x-1/2 md:-top-12 md:left-1/4 md:-translate-x-1/2 bg-[#61DAFB] dark:bg-[#61DAFB] text-black text-sm font-semibold px-4 py-1 rounded-full shadow-md z-20 ">React.js</motion.span>
+                                className="absolute -top-12 left-1/3 -translate-x-1/2 md:-top-12 md:left-1/4 md:-translate-x-1/2 bg-[#777BB4] dark:bg-[#777BB4] text-white text-sm font-semibold px-4 py-1 rounded-full shadow-md z-20 ">PHP</motion.span>
                             <motion.span
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
