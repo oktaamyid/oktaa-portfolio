@@ -9,8 +9,8 @@ export const SOCIAL_MEDIA = {
 };
 
 export const skillsData = [
-     { category: "Languages", skills: "JavaScript, HTML/CSS, PHP, Java" },
-     { category: "Frameworks", skills: "React.js (Next.js, CRA), Laravel, TailwindCSS" },
-     { category: "Databases", skills: "PostgreSQL, MySQL, Firebase" },
+     { category: "Languages", skills: "JavaScript, HTML/CSS, PHP, Java, Pawn, Python" },
+     { category: "Frameworks", skills: "Next.js, Laravel, TailwindCSS, Bootstrap" },
+     { category: "Databases", skills: "MySQL, Firebase" },
      // { category: "Relevant Skills", skills: "React Redux, React Hooks, REST API, GraphQL, UI Design" },
 ];
