@@ -225,8 +225,7 @@ export default function About() {
 
                          <motion.div variants={staggerContainer} className="relative space-y-12 pl-8">
                               {/* Vertical Line for Timeline */}
-                              <div className="absolute left-[30px] w-1 h-full top-1 bg-gradient-to-b 
-                    from-cyan-500 to-gray-500 dark:from-cyan-400 dark:to-gray-400 opacity-50"
+                              <div className="absolute left-[30px] w-1 h-full top-1 bg-gradient-to-b from-cyan-500 to-gray-500 dark:from-cyan-400 dark:to-gray-400 opacity-50"
                               />
 
                               {educations.length > 0 ? (
@@ -235,9 +234,9 @@ export default function About() {
                                              key={education.id}
                                              className="relative group"
                                              style={{ marginBottom: index < educations.length - 1 ? '3rem' : '0' }} >
-                                             
+
                                              {/* Circle for Timeline */}
-                                             <div className="w-6 h-6 bg-cyan-500 dark:bg-cyan-400 rounded-full absolute left-0 transform -translate-x-1/2 top-1 z-10 group-hover:scale-125 transition-transform duration-300"/>
+                                             <div className="w-6 h-6 bg-cyan-500 dark:bg-cyan-400 rounded-full absolute left-0 transform -translate-x-1/2 top-1 z-10 group-hover:scale-125 transition-transform duration-300" />
 
                                              <div className="pl-8">
                                                   <h3 className="text-xl font-semibold font-poppins text-gray-900 dark:text-white">
