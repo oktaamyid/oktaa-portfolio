@@ -89,13 +89,13 @@ export default function Footer() {
                                <img
                                      src="https://cdn.oktaa.my.id/banner-footer-light.svg"
                                      alt="Banner Footer Light"
-                                     className="w-full"
+                                     className="max-w-6xl"
                                />
                          ) : (
                                <img
                                      src="https://cdn.oktaa.my.id/banner-footer-dark.svg"
                                      alt="Banner Footer Dark"
-                                     className="w-full"
+                                     className="max-w-6xl"
                                />
                          )}
                   </div>
