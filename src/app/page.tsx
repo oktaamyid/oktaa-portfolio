@@ -296,13 +296,13 @@ export default function Home() {
                                                     activeProjectCard === project.id ? null : project.id
                                                 );
                                             }}
-                                            className="project-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden relative group shadow-md hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out cursor-pointer">
+                                            className="project-card bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden relative group shadow-sm hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out cursor-pointer">
                                             {/* Image Container */}
                                             <div className="relative h-40 overflow-hidden">
                                                 <img
                                                     src={project.image}
                                                     alt={project.title}
-                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                    className="w-full h-full object-cover transition-transform duration-500"
                                                 />
                                                 {/* Gradient Overlay - appears on hover or active */}
                                                 <motion.div
@@ -315,7 +315,7 @@ export default function Home() {
                                                         duration: 0.6,
                                                         ease: [0.4, 0, 0.2, 1]
                                                     }}
-                                                    className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+                                                    className="absolute inset-0 bg-gradient-to-t from-white/70 via-white/30 to-transparent dark:from-black/70 dark:via-black/30 dark:to-transparent"
                                                 />
                                                 
                                                 {/* Click indicator for mobile */}
