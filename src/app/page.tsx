@@ -15,6 +15,7 @@ export default function Home() {
 
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
+    const [activeProjectCard, setActiveProjectCard] = useState<string | null>(null);
 
     const isProjectsInView = useInView(projectsRef, { once: true, margin: "-100px" });
     const isMoreAboutInView = useInView(moreAboutRef, { once: true, margin: "-50px" });
@@ -85,7 +86,7 @@ export default function Home() {
                                 const screenshotUrl = `https://api.screenshotmachine.com?key=ae018e&url=${encodeURIComponent(project.link)}&dimension=1280x800`;
                                 return { ...project, image: screenshotUrl };
                             }
-                            return project; 
+                            return project;
                         })
                     ) as T[];
                 }
@@ -102,8 +103,21 @@ export default function Home() {
             ]);
             setLoading(false);
         };
-        
+
         loadAllData();
+
+        // Close active card when clicking outside
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (!target.closest('.project-card')) {
+                setActiveProjectCard(null);
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
     }, []);
 
     return (
@@ -233,36 +247,69 @@ export default function Home() {
                         </motion.h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {loading ? (
-                                <motion.div
-                                    variants={animateOnScroll}
-                                    className="col-span-1 md:col-span-2 lg:col-span-3 text-center"
-                                >
-                                    <p className="text-gray-600 dark:text-gray-300">Loading projects...</p>
-                                </motion.div>
+                                <>
+                                    {[...Array(6)].map((_, index) => (
+                                        <motion.div
+                                            key={index}
+                                            variants={animateOnScroll}
+                                            className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-md border border-gray-200 dark:border-gray-700 h-80"
+                                        >
+                                            {/* Image Skeleton */}
+                                            <div className="h-40 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
+                                            
+                                            {/* Content Skeleton */}
+                                            <div className="p-4 space-y-3 h-40 flex flex-col">
+                                                {/* Title Skeleton */}
+                                                <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
+                                                
+                                                {/* Description Skeleton */}
+                                                <div className="space-y-2 flex-1">
+                                                    <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
+                                                    <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
+                                                </div>
+                                                
+                                                {/* Technology Tags Skeleton */}
+                                                <div className="flex flex-wrap gap-2">
+                                                    <div className="h-6 w-16 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                                    <div className="h-6 w-20 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                                    <div className="h-6 w-14 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                                </div>
+                                                
+                                                {/* Button Skeleton */}
+                                                <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded animate-pulse mt-4"></div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </>
                             ) : (
                                 projects.map((project) => (
                                     <motion.div
                                         key={project.id}
                                         variants={animateOnScroll}
-                                        onClick={() => project.link ? window.open(project.link, "_blank") : null}
-                                        className={`${project.link ? 'cursor-pointer' : ''}`}
                                     >
                                         <motion.div
                                             initial="rest"
                                             whileHover="hover"
-                                            className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden relative group shadow-md hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out">
+                                            animate={activeProjectCard === project.id ? "active" : "rest"}
+                                            onClick={() => {
+                                                setActiveProjectCard(
+                                                    activeProjectCard === project.id ? null : project.id
+                                                );
+                                            }}
+                                            className="project-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden relative group shadow-md hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out cursor-pointer">
                                             {/* Image Container */}
                                             <div className="relative h-40 overflow-hidden">
                                                 <img
                                                     src={project.image}
                                                     alt={project.title}
-                                                    className="w-full h-full object-cover"
+                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                 />
-                                                {/* Gradient Overlay - appears on hover */}
+                                                {/* Gradient Overlay - appears on hover or active */}
                                                 <motion.div
                                                     variants={{
                                                         rest: { opacity: 0 },
-                                                        hover: { opacity: 1 }
+                                                        hover: { opacity: 1 },
+                                                        active: { opacity: 1 }
                                                     }}
                                                     transition={{
                                                         duration: 0.6,
@@ -270,6 +317,20 @@ export default function Home() {
                                                     }}
                                                     className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"
                                                 />
+                                                
+                                                {/* Click indicator for mobile */}
+                                                <motion.div
+                                                    variants={{
+                                                        rest: { opacity: 0, scale: 0.8 },
+                                                        hover: { opacity: 0, scale: 0.8 },
+                                                        active: { opacity: 0, scale: 0.8 }
+                                                    }}
+                                                    className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm rounded-full p-2 md:hidden"
+                                                >
+                                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </motion.div>
                                             </div>
 
                                             {/* Content Container */}
@@ -279,13 +340,16 @@ export default function Home() {
                                                     className="p-4 relative z-10 bg-white dark:bg-gray-900"
                                                     initial="rest"
                                                     whileHover="hover"
+                                                    animate={activeProjectCard === project.id ? "active" : "rest"}
                                                 >
                                                     <motion.div
                                                         variants={{
                                                             rest: { y: 0 },
                                                             hover: { y: -24 },
+                                                            active: { y: -24 }
                                                         }}
                                                         transition={{ duration: 0.5, ease: "easeInOut" }}
+                                                        className="-mb-3"
                                                     >
                                                         <h3 className="text-xl line-clamp-1 font-bold font-poppins text-gray-800 dark:text-white">
                                                             {project.title}
@@ -296,20 +360,47 @@ export default function Home() {
                                                     </motion.div>
                                                     <motion.div
                                                         variants={{
-                                                            rest: { opacity: 0, y: 9 }, // translate-y-2 (2 * 4px = 8px)
+                                                            rest: { opacity: 0, y: 9 },
                                                             hover: { opacity: 1, y: 0 },
+                                                            active: { opacity: 1, y: 0 }
                                                         }}
                                                         transition={{ duration: 0.7, ease: "easeInOut" }}
-                                                        className="flex flex-wrap gap-2"
+                                                        className="space-y-3"
                                                     >
-                                                        {project.technology.map((tech, index) => (
-                                                            <span
-                                                                key={index}
-                                                                className="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {project.technology.map((tech, index) => (
+                                                                <span
+                                                                    key={index}
+                                                                    className="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
+                                                                >
+                                                                    {tech}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                        {project.link && project.link !== "-" && (
+                                                            <a
+                                                                href={project.link}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                onClick={(e) => e.stopPropagation()}
+                                                                className="inline-flex items-center gap-2 text-sm text-cyan-500 hover:text-cyan-600 dark:text-cyan-400 dark:hover:text-cyan-300 transition-colors duration-200 font-medium bg-cyan-50 dark:bg-cyan-900/20 px-3 py-2 rounded-lg hover:bg-cyan-100 dark:hover:bg-cyan-900/30"
                                                             >
-                                                                {tech}
-                                                            </span>
-                                                        ))}
+                                                                <span>Live Demo</span>
+                                                                <svg 
+                                                                    className="w-4 h-4" 
+                                                                    fill="none" 
+                                                                    stroke="currentColor" 
+                                                                    viewBox="0 0 24 24"
+                                                                >
+                                                                    <path 
+                                                                        strokeLinecap="round" 
+                                                                        strokeLinejoin="round" 
+                                                                        strokeWidth={2} 
+                                                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
+                                                                    />
+                                                                </svg>
+                                                            </a>
+                                                        )}
                                                     </motion.div>
                                                 </motion.div>
                                             </div>
