@@ -82,12 +82,22 @@ export default function Home() {
                 if (collectionName === "projects") {
                     data = await Promise.all(
                         (data as Project[]).map(async (project) => {
-                            if (project.link && project.link !== "-") {
-                                const screenshotUrl = `https://api.screenshotmachine.com?key=ae018e&url=${encodeURIComponent(project.link)}&dimension=1280x800`;
-                                return { ...project, image: screenshotUrl };
+                            if (project.link && project.link !== "-" && (!project.image || project.image === "")) {
+                                try {
+                                    // Call our secure API route instead of exposing the API key
+                                    const response = await fetch(`/api/screenshot?url=${encodeURIComponent(project.link)}`);
+                                    if (response.ok) {
+                                        const data = await response.json();
+                                        project.image = data.screenshotUrl;
+                                    }
+                                } catch (error) {
+                                    console.error(`Error fetching screenshot for ${project.title}:`, error);
+                                    // Keep empty image if screenshot fails - will use alt text
+                                    project.image = "";
+                                }
                             }
                             return project;
-                        })
+                        })  
                     ) as T[];
                 }
 
@@ -299,11 +309,23 @@ export default function Home() {
                                             className="project-card bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden relative group shadow-sm hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out cursor-pointer">
                                             {/* Image Container */}
                                             <div className="relative h-40 overflow-hidden">
-                                                <img
-                                                    src={project.image}
-                                                    alt={project.title}
-                                                    className="w-full h-full object-cover transition-transform duration-500"
-                                                />
+                                                {project.image ? (
+                                                    <img
+                                                        src={project.image}
+                                                        alt={project.title}
+                                                        className="w-full h-full object-cover transition-transform duration-500"
+                                                        onError={(e) => {
+                                                            // Hide broken image and show fallback
+                                                            (e.target as HTMLImageElement).style.display = 'none';
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
+                                                        <svg className="w-16 h-16 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                    </div>
+                                                )}
                                                 {/* Gradient Overlay - appears on hover or active */}
                                                 <motion.div
                                                     variants={{
