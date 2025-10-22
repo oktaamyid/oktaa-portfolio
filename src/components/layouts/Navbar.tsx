@@ -33,7 +33,7 @@ export default function Navbar() {
      }
 
      return (
-          <nav className="w-full backdrop-blur-lg z-40 default-pattern">
+          <nav className="w-full backdrop-blur-lg z-40">
                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="relative flex items-center justify-between py-4">
                          <div className="text-2xl sm:text-3xl font-bold font-poppins text-gray-900 dark:text-white">

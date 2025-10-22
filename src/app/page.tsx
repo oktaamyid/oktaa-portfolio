@@ -139,7 +139,7 @@ export default function Home() {
                     animate="visible"
                     variants={staggerContainer}
                     id="home"
-                    className="py-12 md:min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 relative overflow-hidden default-pattern"
+                    className="py-12 md:min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 relative overflow-hidden"
                 >
                     <StarBackground />
                     <div className="text-center px-4 z-10 relative">
@@ -246,7 +246,7 @@ export default function Home() {
                     animate={isProjectsInView ? "visible" : "hidden"}
                     variants={staggerContainer}
                     id="projects"
-                    className="py-24 bg-gray-100 dark:bg-gray-900 relative overflow-hidden default-pattern"
+                    className="py-24 bg-gray-100 dark:bg-gray-900 relative overflow-hidden"
                 >
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-28">
                         <motion.h2

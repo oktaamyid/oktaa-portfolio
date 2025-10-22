@@ -5,7 +5,7 @@ import PublicTemplate from '@/components/layouts/MainLayout';
 export default function NotFound() {
      return (
           <PublicTemplate>
-               <div className="min-h-screen flex flex-col items-center justify-center  relative overflow-hidden default-pattern">
+               <div className="min-h-screen flex flex-col items-center justify-center  relative overflow-hidden">
                     <div className="text-center z-10">
                          <h1 className="text-9xl md:text-[12rem] font-extrabold font-poppins text-cyan-400 dark:text-cyan-300 mb-4">
                               404

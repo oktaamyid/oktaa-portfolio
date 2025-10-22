@@ -72,7 +72,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
      return (
           <html lang="en-ID" suppressHydrationWarning>
-               <body className={`${poppins.variable} bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 default-pattern`}>
+               <body className={`${poppins.variable} bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300`}>
                     {/* <CircleCursor bigSize={30} smallSize={10} blendMode="difference" /> */}
                     <ThemeProvider attribute="class" enableSystem={true} defaultTheme="system">
                          <Analytics />

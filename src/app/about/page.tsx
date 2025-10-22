@@ -71,7 +71,7 @@ export default function About() {
                     animate="visible"
                     variants={staggerContainer}
                     id="about"
-                    className="min-h-[40vh] py-20 bg-gray-100 dark:bg-gray-900 relative overflow-hidden default-pattern"
+                    className="min-h-[40vh] py-20 relative overflow-hidden"
                >
                     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-4">
                          <div className="text-start px-4 z-10 relative">
@@ -213,12 +213,12 @@ export default function About() {
                     viewport={{ once: true, margin: "-100px" }}
                     variants={staggerContainer}
                     id="education"
-                    className="py-16 relative overflow-hidden default-pattern"
+                    className="py-16 relative overflow-hidden"
                >
                     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                          <motion.h2
                               variants={fadeInUp}
-                              className="text-4xl md:text-5xl font-bold text-start font-poppins text-gray-900 dark:text-white mb-12"
+                              className="text-4xl md:text-5xl font-bold text-start font-poppins z-10 text-gray-900 dark:text-white mb-12"
                          >
                               Education
                          </motion.h2>
