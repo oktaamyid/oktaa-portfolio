@@ -10,7 +10,8 @@ export function useProjects() {
      useEffect(() => {
           const fetchProjects = async () => {
                try {
-                    const querySnapshot = await getDocs(collection(db, 'projects'));
+                    const projectsRef = collection(db, 'projects');
+                    const querySnapshot = await getDocs(projectsRef);
                     const projectsData = await Promise.all(
                          querySnapshot.docs.map(async (doc) => {
                               const project = { id: doc.id, ...doc.data() } as Project;
@@ -32,7 +33,7 @@ export function useProjects() {
                               return project;
                          })
                     );
-                    setProjects(projectsData);
+                    setProjects(projectsData.reverse());
                } catch (error) {
                     console.error('Error fetching projects:', error);
                } finally {

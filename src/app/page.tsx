@@ -1,12 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useInView, Variants } from 'framer-motion';
-import { Project } from '@/lib/types';
-import { db } from "@/lib/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
-import { ContentCard, ProjectCard } from '@/components/shared';
+import { ProjectCard, ContentCard } from '@/components/shared';
 import HomeLayout from './layout-home';
+import { useProjects } from '@/hooks/useProjects';
 import Parallax from '@/components/ui/Parallax';
 import ScrollParallax from '@/components/ui/ScrollParallax';
 import HeroFluid from '@/components/ui/HeroFluid';
@@ -16,8 +14,7 @@ export default function Home() {
     const projectsRef = useRef(null);
     const moreAboutRef = useRef(null);
 
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { projects, loading } = useProjects();
 
     const isProjectsInView = useInView(projectsRef, { once: true, margin: "-100px" });
     const isMoreAboutInView = useInView(moreAboutRef, { once: true, margin: "-50px" });
@@ -68,54 +65,6 @@ export default function Home() {
             },
         },
     };
-
-    useEffect(() => {
-
-        const fetchData = async <T,>(collectionName: string, setter: (data: T[]) => void) => {
-            try {
-                const querySnapshot = await getDocs(collection(db, collectionName));
-                let data = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                })) as T[];
-
-                if (collectionName === "projects") {
-                    data = await Promise.all(
-                        (data as Project[]).map(async (project) => {
-                            if (project.link && project.link !== "-" && (!project.image || project.image === "")) {
-                                try {
-                                    const response = await fetch(`/api/screenshot?url=${encodeURIComponent(project.link)}`);
-                                    if (response.ok) {
-                                        const data = await response.json();
-                                        project.image = data.screenshotUrl;
-                                    }
-                                } catch (error) {
-                                    console.error(`Error fetching screenshot for ${project.title}:`, error);
-                                    project.image = "";
-                                }
-                            }
-                            return project;
-                        })
-                    ) as T[];
-                }
-
-                setter(data);
-            } catch (error) {
-                console.error(`Error fetching ${collectionName}:`, error);
-            }
-        };
-
-        const loadAllData = async () => {
-            await Promise.all([
-                fetchData<Project>("projects", setProjects),
-            ]);
-            setLoading(false);
-        };
-
-        loadAllData();
-
-
-    }, []);
 
     return (
         <HomeLayout>
