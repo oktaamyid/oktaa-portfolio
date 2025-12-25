@@ -1,60 +1,80 @@
-import { getNowPlaying, getTopTracks } from '@/lib/spotify';
-// import NowPlaying from '@/components/features/songs/nowPlaying';
-import TopTracks from '@/components/features/songs/topTrack';
 
-export const revalidate = 3600; // Cache selama 1 jam
+import { getNowPlaying, getTopTracks } from '@/lib/spotify';
+import TopTracks from '@/components/features/songs/topTrack';
+import NowPlaying from '@/components/features/songs/nowPlaying';
+import ScrollParallax from '@/components/ui/ScrollParallax';
+
+export const revalidate = 3600; // Cache for 1 hour
 
 export default async function SongsPage() {
-     const [nowPlaying, topTracksShort, topTracksMedium, ] = await Promise.all([
+     const [nowPlaying, topTracksShort, topTracksMedium] = await Promise.all([
           getNowPlaying(),
-          getTopTracks('short_term', 8), // 4 minggu terakhir
-          getTopTracks('medium_term', 8), // 6 bulan terakhir  
-          // getRecentlyPlayed(10) // 10 lagu terakhir yang diputar
+          getTopTracks('short_term', 8), // Last 4 weeks
+          getTopTracks('medium_term', 8), // Last 6 months  
      ]);
 
-     // Check if we have data or if there are scope issues
      const hasAnyData = nowPlaying || topTracksShort.length > 0 || topTracksMedium.length > 0;
 
      return (
-          <div className="max-w-5xl mx-auto px-4 py-12 space-y-16">
-               {/* <h1 className="text-3xl font-bold text-center">My Songs Journey</h1> */}
+          <div className="min-h-screen pt-32 pb-24 bg-white text-black">
+               <NowPlaying track={nowPlaying} />
+               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-               {!hasAnyData && (
-                    <div className="text-center py-12">
-                         <p className="text-gray-600 dark:text-gray-400">
-                              Spotify data is currently unavailable. This might be due to API configuration or authorization scope issues.
-                         </p>
-                    </div>
-               )}
-
-               {/* Now Playing Section */}
-               {/* {nowPlaying && (
-                    <div className="flex justify-center">
-                         <NowPlaying track={nowPlaying} />
-                    </div>
-               )} */}
-
-               {/* Top Tracks - Last Month */}
-               {topTracksShort.length > 0 && (
-                    <div className="space-y-8">
+                    {/* Header Section */}
+                    <div className="flex flex-col md:flex-row items-end justify-between mb-24 pb-8 border-b border-black/10">
                          <div>
-                              <h2 className="text-2xl font-bold text-center">Top Tracks This Month</h2>
-                              <p className="text-center text-gray-600 dark:text-gray-400 mt-2">Based on last 4 weeks</p>
+                              <h1 className="text-6xl md:text-8xl font-black font-poppins uppercase leading-none tracking-tighter">
+                                   <ScrollParallax offset={20} axis="x" className="inline-block">
+                                        <span className="block text-zinc-300">Heavy</span>
+                                   </ScrollParallax>
+                                   <ScrollParallax offset={-20} axis="x" className="inline-block">
+                                        <span className="block text-black">Rotation</span>
+                                   </ScrollParallax>
+                              </h1>
                          </div>
-                         <TopTracks tracks={topTracksShort} />
+                         <div className="mt-8 md:mt-0 md:text-right">
+                              <p className="text-zinc-500 uppercase tracking-widest text-sm font-medium">
+                                   Sonic Journal<br />Every 4 Weeks
+                              </p>
+                         </div>
                     </div>
-               )}
 
-               {/* Top Tracks - Last 6 Months */}
-               {topTracksMedium.length > 0 && (
-                    <div className="space-y-8">
-                         <div>
-                              <h2 className="text-2xl font-bold text-center">All-Time Favorites</h2>
-                              <p className="text-center text-gray-600 dark:text-gray-400 mt-2">Based on last 6 months</p>
+                    {!hasAnyData && (
+                         <div className="text-center py-24 border border-dashed border-zinc-200 rounded-2xl">
+                              <p className="text-zinc-400 font-medium">
+                                   Spotify data is strictly for the vibes.<br />Currently unavailable.
+                              </p>
                          </div>
-                         <TopTracks tracks={topTracksMedium} />
-                    </div>
-               )}
+                    )}
+
+                    {/* Top Tracks - Last Month */}
+                    {topTracksShort.length > 0 && (
+                         <div className="mb-24">
+                              <div className="flex items-center gap-4 mb-12">
+                                   <div className="h-px bg-black/10 flex-1"></div>
+                                   <h2 className="text-sm font-bold uppercase tracking-widest text-black/40">
+                                        Current Mood (4 Weeks)
+                                   </h2>
+                                   <div className="h-px bg-black/10 flex-1"></div>
+                              </div>
+                              <TopTracks tracks={topTracksShort} />
+                         </div>
+                    )}
+
+                    {/* Top Tracks - Last 6 Months */}
+                    {topTracksMedium.length > 0 && (
+                         <div className="mb-12">
+                              <div className="flex items-center gap-4 mb-12">
+                                   <div className="h-px bg-black/10 flex-1"></div>
+                                   <h2 className="text-sm font-bold uppercase tracking-widest text-black/40">
+                                        All Time Classics (6 Months)
+                                   </h2>
+                                   <div className="h-px bg-black/10 flex-1"></div>
+                              </div>
+                              <TopTracks tracks={topTracksMedium} />
+                         </div>
+                    )}
+               </div>
           </div>
      );
 }

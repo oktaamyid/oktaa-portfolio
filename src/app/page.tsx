@@ -1,12 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, Variants } from 'framer-motion';
 import { Project } from '@/lib/types';
 import { db } from "@/lib/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import StarBackground from "@/components/ui/StarBackground"
-import PublicTemplate from '@/components/layouts/MainLayout';
+import { ContentCard, ProjectCard } from '@/components/shared';
+import HomeLayout from './layout-home';
+import Parallax from '@/components/ui/Parallax';
+import ScrollParallax from '@/components/ui/ScrollParallax';
+import HeroFluid from '@/components/ui/HeroFluid';
 
 export default function Home() {
     const pageRef = useRef(null);
@@ -15,13 +18,11 @@ export default function Home() {
 
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeProjectCard, setActiveProjectCard] = useState<string | null>(null);
 
     const isProjectsInView = useInView(projectsRef, { once: true, margin: "-100px" });
     const isMoreAboutInView = useInView(moreAboutRef, { once: true, margin: "-50px" });
 
-    // Animation variants that replicate the original GSAP animations
-    const animateOnScroll = {
+    const animateOnScroll: Variants = {
         hidden: { opacity: 0, y: 50 },
         visible: {
             opacity: 1,
@@ -33,7 +34,7 @@ export default function Home() {
         },
     };
 
-    const staggerContainer = {
+    const staggerContainer: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -43,8 +44,7 @@ export default function Home() {
         },
     };
 
-    // Hero animations to match original
-    const heroAnimation = {
+    const heroAnimation: Variants = {
         hidden: { opacity: 0, y: 30 },
         visible: {
             opacity: 1,
@@ -56,7 +56,7 @@ export default function Home() {
         },
     };
 
-    const heroDelayAnimation = {
+    const heroDelayAnimation: Variants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
             opacity: 1,
@@ -84,7 +84,6 @@ export default function Home() {
                         (data as Project[]).map(async (project) => {
                             if (project.link && project.link !== "-" && (!project.image || project.image === "")) {
                                 try {
-                                    // Call our secure API route instead of exposing the API key
                                     const response = await fetch(`/api/screenshot?url=${encodeURIComponent(project.link)}`);
                                     if (response.ok) {
                                         const data = await response.json();
@@ -92,12 +91,11 @@ export default function Home() {
                                     }
                                 } catch (error) {
                                     console.error(`Error fetching screenshot for ${project.title}:`, error);
-                                    // Keep empty image if screenshot fails - will use alt text
                                     project.image = "";
                                 }
                             }
                             return project;
-                        })  
+                        })
                     ) as T[];
                 }
 
@@ -116,22 +114,11 @@ export default function Home() {
 
         loadAllData();
 
-        // Close active card when clicking outside
-        const handleClickOutside = (event: MouseEvent) => {
-            const target = event.target as HTMLElement;
-            if (!target.closest('.project-card')) {
-                setActiveProjectCard(null);
-            }
-        };
 
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
     }, []);
 
     return (
-        <PublicTemplate>
+        <HomeLayout>
             <div ref={pageRef}>
                 {/* Hero Section */}
                 <motion.section
@@ -139,78 +126,47 @@ export default function Home() {
                     animate="visible"
                     variants={staggerContainer}
                     id="home"
-                    className="py-12 md:min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 relative overflow-hidden"
+                    className="min-h-[85vh] md:h-[calc(100vh-100px)] md:min-h-screen flex flex-col justify-end pb-20 md:pb-0 relative overflow-hidden bg-black"
                 >
-                    <StarBackground />
-                    <div className="text-center px-4 z-10 relative">
-                        <div className="relative w-72 md:w-80 h-72 md:h-80 mx-auto my-5">
-                            <img src="https://cdn.oktaa.my.id/apple-touch-icon.png" alt="Memoji" className="w-28 h-28 md:w-36 md:h-36 rounded-full shadow-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20" />
+                    {/* Background Fluid Shape */}
+                    <div className="absolute -top-1/2 inset-0 z-0">
+                        <HeroFluid />
+                    </div>
 
-                            <motion.div
-                                animate={{ rotate: -360 }}
-                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 md:w-56 h-44 md:h-56 border-2 border-dashed border-gray-400/30 rounded-full z-10 "
-                            />
-                            <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 md:w-96 h-72 md:h-96 border-2 border-dashed border-gray-400/30 rounded-full z-10"
-                            />
-                            <motion.div
-                                animate={{ rotate: -360 }}
-                                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[26rem] md:w-[34rem] h-[26rem] md:h-[34rem] border-2 border-dashed border-gray-400/30 rounded-full z-10"
-                            />
+                    <div className="max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 mx-auto w-full flex flex-col justify-end h-full">
 
-                            <motion.span
-                                animate={{ translateY: [0, -10, 0] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                                className="absolute -top-12 left-1/3 -translate-x-1/2 md:-top-12 md:left-1/4 md:-translate-x-1/2 bg-[#777BB4] dark:bg-[#777BB4] text-white text-sm font-semibold px-4 py-1 rounded-full shadow-md z-20 ">PHP</motion.span>
-                            <motion.span
-                                animate={{ scale: [1, 1.05, 1] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                                className="absolute top-1/4 right-48 md:top-1/4 md:right-80 bg-[#FF2D20] dark:bg-[#FF2D20] text-white text-sm font-semibold px-4 py-1 rounded-full shadow-md z-20"
-                            >
-                                Laravel
-                            </motion.span>
-                            <motion.span
-                                animate={{ translateX: [0, -4, 0] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                                className="absolute bottom-1/4 left-52 md:bottom-1/4 md:left-72 bg-black dark:bg-black text-white text-sm font-semibold px-4 py-1 rounded-full shadow-md z-20">Next.js</motion.span>
-                            <motion.span
-                                animate={{ scale: [1, 1.05, 1] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                                className="absolute bottom-0 left-1/2 md:bottom-4 md:left-1/2 md:-translate-x-1/2 bg-[#00758F] dark:bg-[#00758F] text-white text-sm font-semibold px-4 py-1 rounded-full shadow-md z-20"
-                            >
-                                MySQL
-                            </motion.span>
-                            <motion.span
-                                animate={{ translateX: [0, -10, 0] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                                className="absolute top-4 right-3 md:top-10 md:-right-8 bg-[#38B2AC] dark:bg-[#38B2AC] text-white text-sm font-semibold px-4 py-1 rounded-full shadow-md z-20"
-                            >
-                                TailwindCSS
-                            </motion.span>
-                            <motion.span
-                                animate={{ translateX: [0, -10, 0] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                                className="absolute bottom-14 left-4 md:bottom-1/4 md:-left-12 bg-[#009688] dark:bg-[#009688] text-white text-sm font-semibold px-4 py-1 rounded-full shadow-md z-20 ">Rest API</motion.span>
+                        {/* Intro Text Block - Positioned above the name */}
+                        <div className="max-w-xl md:pl-5 mb-12 md:mb-0 relative z-20">
+                            <Parallax speed={-15} className="relative z-20">
+                                <motion.p
+                                    variants={heroDelayAnimation}
+                                    className="text-xl md:text-3xl font-light text-zinc-200"
+                                >
+                                    I&apos;m a <span className="text-cyan-500 font-bold underline underline-offset-5">Full Stack Developer</span> passionate about crafting web solutions
+                                </motion.p>
+                            </Parallax>
                         </div>
 
-                        <motion.h1
-                            variants={heroAnimation}
-                            className="text-5xl md:text-7xl font-extrabold font-poppins text-start md:text-center text-gray-900 dark:text-white mb-6"
-                        >
-                            Hi, I&apos;m <span className="text-cyan-500 dark:text-cyan-400 bg-clip-text bg-gradient-to-r from-cyan-500 to-gray-500 dark:from-cyan-400 dark:to-gray-400">OKTAA</span>
-                        </motion.h1>
+                        {/* Massive Name Typography */}
+                        <Parallax speed={20} className="relative z-10 w-full mb-12 md:mb-0">
+                            <motion.h1
+                                variants={heroAnimation}
+                                className="font-bold uppercase text-white select-none mix-blend-overlay leading-[0.8] lg:leading-[1.1]"
+                            >
+                                {/* Mobile & Tablet: Stacked & Massive */}
+                                <div className="flex flex-col gap-2 md:gap-4 lg:hidden w-full">
+                                    <span className="text-[30vw] md:text-[25vw] tracking-tighter leading-[0.8]">HI!</span>
+                                    <span className="text-[30vw] md:text-[25vw] tracking-tighter leading-[0.8] -ml-2">OKTAA</span>
+                                </div>
 
-                        <motion.p
-                            variants={heroDelayAnimation}
-                            className="text-xl md:text-2xl text-gray-600 dark:text-gray-200 mb-8 max-w-2xl mx-auto text-start md:text-center"
-                        >
-                            I&apos;m a <span className="text-cyan-500 dark:text-cyan-400">Full Stack Developer</span> passionate about crafting web solutions
-                        </motion.p>
+                                {/* Desktop (Large Screens): Single Line */}
+                                <span className="hidden lg:block text-[16.9vw] tracking-tighter whitespace-nowrap">
+                                    Hi! OKTAA
+                                </span>
+                            </motion.h1>
+                        </Parallax>
                     </div>
+
                 </motion.section>
 
                 {/* More About Section */}
@@ -220,22 +176,55 @@ export default function Home() {
                     animate={isMoreAboutInView ? "visible" : "hidden"}
                     variants={staggerContainer}
                     id="more-about"
-                    className="border border-gray-300 bg-gray-200/50 dark:border-gray-800 dark:bg-gray-900 relative z-10"
+                    className="relative z-10 py-24 md:py-32 bg-black"
                 >
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:text-center">
-                        <motion.p
-                            variants={animateOnScroll}
-                            className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto"
-                        >
-                            Passionate about web development, programming, and exploring the latest technology trends. I specialize in creating dynamic and interactive websites while continuously learning new technologies.
-                        </motion.p>
-                        <motion.a
-                            variants={animateOnScroll}
-                            href="/about"
-                            className="inline-block bg-black dark:bg-white text-white dark:text-black py-3 px-10 rounded-md duration-300 shadow-lg hover:shadow-xl transform dark:hover:bg-white/80 hover:bg-black/80 transition-all ease-in-out"
-                        >
-                            About Me
-                        </motion.a>
+
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div className="flex flex-col md:flex-row gap-12 md:gap-24 items-start">
+                            {/* Left: Massive Typography Statement */}
+                            <div className="flex-1">
+                                <ScrollParallax axis="x" offset={-100} className="relative z-20">
+                                    <motion.h2
+                                        variants={animateOnScroll}
+                                        className="text-[12vw] md:text-[8vw] leading-[0.8] font-bold tracking-tighter text-white uppercase"
+                                    >
+                                        About
+                                        <span className="block text-zinc-800">Me<span className="text-white">.</span></span>
+                                    </motion.h2>
+                                </ScrollParallax>
+                            </div>
+
+                            {/* Right: Editorial Content */}
+                            <div className="flex-1 md:pt-4">
+                                <ScrollParallax axis="y" offset={50} className="relative z-10">
+                                    <motion.div variants={animateOnScroll} className="flex flex-col gap-8">
+                                        <p className="text-xl md:text-2xl font-light leading-relaxed text-zinc-300">
+                                            Passionate about web development and exploring the latest technology trends.
+                                            I specialize in creating <span className="text-white font-medium">dynamic experiences</span> that leave a lasting impact.
+                                        </p>
+
+                                        <div className="pt-4">
+                                            <button
+                                                className='group flex items-center gap-3 text-white transition-all duration-300 cursor-pointer'
+                                                onClick={() => window.location.href = '/about'}
+                                            >
+                                                <span className="uppercase tracking-widest text-sm font-semibold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 group-hover:after:origin-left group-hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-white">
+                                                    Read Full Bio
+                                                </span>
+                                                <svg
+                                                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-2"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                </ScrollParallax>
+                            </div>
+                        </div>
                     </div>
                 </motion.section>
 
@@ -246,194 +235,64 @@ export default function Home() {
                     animate={isProjectsInView ? "visible" : "hidden"}
                     variants={staggerContainer}
                     id="projects"
-                    className="py-24 bg-gray-100 dark:bg-gray-900 relative overflow-hidden"
+                    className="py-24 relative"
                 >
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-28">
-                        <motion.h2
-                            variants={animateOnScroll}
-                            className="text-4xl md:text-5xl font-bold text-center font-poppins text-gray-900 dark:text-white mb-12"
-                        >
-                            Featured Projects
-                        </motion.h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <ScrollParallax axis="x" offset={80}>
+                            <motion.h2
+                                variants={animateOnScroll}
+                                className="text-4xl md:text-5xl font-bold text-left font-poppins mb-12"
+                                style={{ color: 'rgb(var(--text))' }}
+                            >
+                                Featured Projects
+                            </motion.h2>
+                        </ScrollParallax>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                             {loading ? (
                                 <>
-                                    {[...Array(6)].map((_, index) => (
-                                        <motion.div
-                                            key={index}
-                                            variants={animateOnScroll}
-                                            className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-md border border-gray-200 dark:border-gray-700 h-80"
-                                        >
-                                            {/* Image Skeleton */}
-                                            <div className="h-40 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-                                            
-                                            {/* Content Skeleton */}
-                                            <div className="p-4 space-y-3 h-40 flex flex-col">
-                                                {/* Title Skeleton */}
-                                                <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
-                                                
-                                                {/* Description Skeleton */}
-                                                <div className="space-y-2 flex-1">
-                                                    <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
-                                                    <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
-                                                </div>
-                                                
-                                                {/* Technology Tags Skeleton */}
-                                                <div className="flex flex-wrap gap-2">
-                                                    <div className="h-6 w-16 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
-                                                    <div className="h-6 w-20 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
-                                                    <div className="h-6 w-14 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
-                                                </div>
-                                                
-                                                {/* Button Skeleton */}
-                                                <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded animate-pulse mt-4"></div>
-                                            </div>
-                                        </motion.div>
+                                    {[...Array(4)].map((_, index) => (
+                                        <ContentCard key={index} className="h-96 w-full animate-pulse bg-zinc-900/50" />
                                     ))}
                                 </>
                             ) : (
-                                projects.map((project) => (
-                                    <motion.div
+                                projects.slice(0, 4).map((project, index) => (
+                                    <ScrollParallax
                                         key={project.id}
-                                        variants={animateOnScroll}
+                                        axis="y"
+                                        offset={index % 2 === 0 ? 0 : 60}
+                                        className="h-full"
                                     >
-                                        <motion.div
-                                            initial="rest"
-                                            whileHover="hover"
-                                            animate={activeProjectCard === project.id ? "active" : "rest"}
-                                            onClick={() => {
-                                                setActiveProjectCard(
-                                                    activeProjectCard === project.id ? null : project.id
-                                                );
-                                            }}
-                                            className="project-card bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden relative group shadow-sm hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out cursor-pointer">
-                                            {/* Image Container */}
-                                            <div className="relative h-40 overflow-hidden">
-                                                {project.image ? (
-                                                    <img
-                                                        src={project.image}
-                                                        alt={project.title}
-                                                        className="w-full h-full object-cover transition-transform duration-500"
-                                                        onError={(e) => {
-                                                            // Hide broken image and show fallback
-                                                            (e.target as HTMLImageElement).style.display = 'none';
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
-                                                        <svg className="w-16 h-16 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                        </svg>
-                                                    </div>
-                                                )}
-                                                {/* Gradient Overlay - appears on hover or active */}
-                                                <motion.div
-                                                    variants={{
-                                                        rest: { opacity: 0 },
-                                                        hover: { opacity: 1 },
-                                                        active: { opacity: 1 }
-                                                    }}
-                                                    transition={{
-                                                        duration: 0.6,
-                                                        ease: [0.4, 0, 0.2, 1]
-                                                    }}
-                                                    className="absolute inset-0 bg-gradient-to-t from-white/70 via-white/30 to-transparent dark:from-black/70 dark:via-black/30 dark:to-transparent"
-                                                />
-                                                
-                                                {/* Click indicator for mobile */}
-                                                <motion.div
-                                                    variants={{
-                                                        rest: { opacity: 0, scale: 0.8 },
-                                                        hover: { opacity: 0, scale: 0.8 },
-                                                        active: { opacity: 0, scale: 0.8 }
-                                                    }}
-                                                    className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm rounded-full p-2 md:hidden"
-                                                >
-                                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                                    </svg>
-                                                </motion.div>
-                                            </div>
-
-                                            {/* Content Container */}
-                                            <div className="relative">
-                                                {/* Main Content */}
-                                                <motion.div
-                                                    className="p-4 relative z-10 bg-white dark:bg-gray-900"
-                                                    initial="rest"
-                                                    whileHover="hover"
-                                                    animate={activeProjectCard === project.id ? "active" : "rest"}
-                                                >
-                                                    <motion.div
-                                                        variants={{
-                                                            rest: { y: 0 },
-                                                            hover: { y: -24 },
-                                                            active: { y: -24 }
-                                                        }}
-                                                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                                                        className="-mb-3"
-                                                    >
-                                                        <h3 className="text-xl line-clamp-1 font-bold font-poppins text-gray-800 dark:text-white">
-                                                            {project.title}
-                                                        </h3>
-                                                        <p className="text-sm line-clamp-3 text-gray-600 dark:text-gray-300 mt-1">
-                                                            {project.description}
-                                                        </p>
-                                                    </motion.div>
-                                                    <motion.div
-                                                        variants={{
-                                                            rest: { opacity: 0, y: 9 },
-                                                            hover: { opacity: 1, y: 0 },
-                                                            active: { opacity: 1, y: 0 }
-                                                        }}
-                                                        transition={{ duration: 0.7, ease: "easeInOut" }}
-                                                        className="space-y-3"
-                                                    >
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {project.technology.map((tech, index) => (
-                                                                <span
-                                                                    key={index}
-                                                                    className="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
-                                                                >
-                                                                    {tech}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                        {project.link && project.link !== "-" && (
-                                                            <a
-                                                                href={project.link}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                onClick={(e) => e.stopPropagation()}
-                                                                className="inline-flex items-center gap-2 text-sm text-cyan-500 hover:text-cyan-600 dark:text-cyan-400 dark:hover:text-cyan-300 transition-colors duration-200 font-medium bg-cyan-50 dark:bg-cyan-900/20 px-3 py-2 rounded-lg hover:bg-cyan-100 dark:hover:bg-cyan-900/30"
-                                                            >
-                                                                <span>Live Demo</span>
-                                                                <svg 
-                                                                    className="w-4 h-4" 
-                                                                    fill="none" 
-                                                                    stroke="currentColor" 
-                                                                    viewBox="0 0 24 24"
-                                                                >
-                                                                    <path 
-                                                                        strokeLinecap="round" 
-                                                                        strokeLinejoin="round" 
-                                                                        strokeWidth={2} 
-                                                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
-                                                                    />
-                                                                </svg>
-                                                            </a>
-                                                        )}
-                                                    </motion.div>
-                                                </motion.div>
-                                            </div>
-                                        </motion.div>
-                                    </motion.div>
+                                        <ProjectCard
+                                            project={project}
+                                            index={index}
+                                        />
+                                    </ScrollParallax>
                                 ))
                             )}
+                        </div>
+
+                        {/* CTA Button */}
+                        <div className="flex justify-center mt-6">
+                            <button
+                                className='group flex items-center gap-3 text-black transition-all duration-300 cursor-pointer'
+                                onClick={() => window.location.href = '/projects'}
+                            >
+                                <span className="uppercase tracking-widest text-xl font-semibold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 group-hover:after:origin-left group-hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-black">
+                                    View All Projects
+                                </span>
+                                <svg
+                                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-2"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </motion.section>
             </div>
-        </PublicTemplate>
+        </HomeLayout>
     );
 }

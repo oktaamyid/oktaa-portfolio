@@ -1,15 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { FiExternalLink, FiGithub, FiLinkedin, FiInstagram, FiMail, FiGlobe, FiChevronDown, FiChevronUp, FiShare2 } from 'react-icons/fi';
 import { FaSpotify, FaTiktok } from 'react-icons/fa';
 import { TbPinned } from 'react-icons/tb';
 import { Profile, Link } from '@/lib/types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { onSnapshot, collection } from 'firebase/firestore';
-import { db } from '@/lib/firebaseConfig';
-import { getLinks, getProfile } from '@/lib/service';
+import { usePortalData } from "@/hooks/usePortalData";
 
 interface Category {
      id: string;
@@ -17,19 +15,16 @@ interface Category {
 }
 
 interface PortalClientProps {
-     initialProfile: Profile;
+     initialProfile: Profile | null;
      initialLinks: Link[];
 }
 
 const sortLinks = (links: Link[], sortSettings?: { type?: "field" | "manual"; field?: string; direction?: "asc" | "desc"; order?: string[] }): Link[] => {
      if (!sortSettings || sortSettings.type === "manual" || !sortSettings.field) {
-          // Sort by pinned first, then by creation date
           return [...links].sort((a, b) => {
-               // Pinned links always come first
                if (a.isPinned && !b.isPinned) return -1;
                if (!a.isPinned && b.isPinned) return 1;
 
-               // If both are pinned or both are not pinned, sort by creation date (newest first)
                const dateA = new Date(a.createdAt || '').getTime() || 0;
                const dateB = new Date(b.createdAt || '').getTime() || 0;
                return dateB - dateA;
@@ -37,11 +32,9 @@ const sortLinks = (links: Link[], sortSettings?: { type?: "field" | "manual"; fi
      }
 
      return [...links].sort((a, b) => {
-          // Always prioritize pinned links first
           if (a.isPinned && !b.isPinned) return -1;
           if (!a.isPinned && b.isPinned) return 1;
 
-          // Then apply custom sorting
           const { field, direction } = sortSettings;
           let valueA = a[field as keyof Link];
           let valueB = b[field as keyof Link];
@@ -79,15 +72,18 @@ const generateCategories = (links: Link[]): Category[] => {
 };
 
 export default function PortalClient({ initialProfile, initialLinks }: PortalClientProps) {
-     // Initialize state dengan initial data (NO LOADING STATE)
-     const [profile, setProfile] = useState<Profile>(initialProfile);
-     const [links, setLinks] = useState<Link[]>(initialLinks);
+     const { profile, links, loading } = usePortalData();
+
+     const activeProfile = profile || initialProfile;
+     const activeLinks = links.length > 0 ? links : initialLinks;
+
+     // Local state
      const [activeTab, setActiveTab] = useState<string>('all');
-     const [filteredLinks, setFilteredLinks] = useState<Link[]>(initialLinks);
-     const [categories, setCategories] = useState<Category[]>(generateCategories(initialLinks));
      const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
-     const filterLinksByCategory = useCallback((category: string, linksList = links) => {
+     const categories = useMemo(() => generateCategories(activeLinks), [activeLinks]);
+
+     const filterLinksByCategory = useCallback((category: string, linksList = activeLinks) => {
           let filtered: Link[] = [];
           if (category === 'all') {
                filtered = linksList;
@@ -98,55 +94,13 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
           }
 
           const sortSettings = category === 'all'
-               ? profile?.sortSettings
-               : profile?.categorySortSettings?.[category] || profile?.sortSettings || { field: "createdAt", direction: "desc" };
+               ? activeProfile?.sortSettings
+               : activeProfile?.categorySortSettings?.[category] || activeProfile?.sortSettings || { field: "createdAt", direction: "desc" };
 
-          setFilteredLinks(sortLinks(filtered, sortSettings));
-     }, [links, profile?.sortSettings, profile?.categorySortSettings]);
+          return sortLinks(filtered, sortSettings);
+     }, [activeLinks, activeProfile]);
 
-     // Setup real-time listeners
-     useEffect(() => {
-          const profileRef = collection(db, 'profiles');
-          const linksRef = collection(db, 'links');
-
-          const unsubscribeProfile = onSnapshot(profileRef, (snapshot) => {
-               snapshot.docChanges().forEach((change) => {
-                    if (change.type === 'modified' || change.type === 'added') {
-                         getProfile().then(profileData => {
-                              if (profileData) {
-                                   setProfile(profileData);
-                              }
-                         }).catch(error => {
-                              console.error("Error updating profile:", error);
-                         });
-                    }
-               });
-          }, (error) => {
-               console.error("Profile listener error:", error);
-          });
-
-          const unsubscribeLinks = onSnapshot(linksRef, (snapshot) => {
-               snapshot.docChanges().forEach((change) => {
-                    if (change.type === 'modified' || change.type === 'added' || change.type === 'removed') {
-                         getLinks().then(linksData => {
-                              const portalLinks = linksData.filter(link => link.showToPortal);
-                              setLinks(portalLinks);
-                              setCategories(generateCategories(portalLinks));
-                              filterLinksByCategory(activeTab, portalLinks);
-                         }).catch(error => {
-                              console.error("Error updating links:", error);
-                         });
-                    }
-               });
-          }, (error) => {
-               console.error("Links listener error:", error);
-          });
-
-          return () => {
-               unsubscribeProfile();
-               unsubscribeLinks();
-          };
-     }, [activeTab, filterLinksByCategory]);
+     const filteredLinks = useMemo(() => filterLinksByCategory(activeTab), [activeTab, filterLinksByCategory]);
 
      // Handle URL hash changes
      useEffect(() => {
@@ -157,7 +111,6 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
                     const categoryExists = categories.some(cat => cat.id === normalizedHash);
                     if (categoryExists) {
                          setActiveTab(normalizedHash);
-                         filterLinksByCategory(normalizedHash);
                     }
                }
           };
@@ -165,17 +118,10 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
           handleHashChange();
           window.addEventListener('hashchange', handleHashChange);
           return () => window.removeEventListener('hashchange', handleHashChange);
-     }, [categories, filterLinksByCategory]);
-
-     // Update filtered links when profile or activeTab changes
-     useEffect(() => {
-          filterLinksByCategory(activeTab);
-     }, [activeTab, filterLinksByCategory]);
+     }, [categories]); // filterLinksByCategory removed as it's now handled by useMemo
 
      const handleTabChange = (tabId: string) => {
           setActiveTab(tabId);
-          filterLinksByCategory(tabId);
-
           if (tabId === 'all') {
                history.pushState(null, '', window.location.pathname);
           } else {
@@ -210,212 +156,195 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
      };
 
      const socialLinks = [
-          { icon: <FiGithub className="w-5 h-5" />, url: profile?.socialMedia?.github, visible: !!profile?.socialMedia?.github, label: 'GitHub' },
-          { icon: <FiLinkedin className="w-5 h-5" />, url: profile?.socialMedia?.linkedin, visible: !!profile?.socialMedia?.linkedin, label: 'LinkedIn' },
-          { icon: <FiInstagram className="w-5 h-5" />, url: profile?.socialMedia?.instagram, visible: !!profile?.socialMedia?.instagram, label: 'Instagram' },
-          { icon: <FaSpotify className="w-5 h-5" />, url: profile?.socialMedia?.spotify, visible: !!profile?.socialMedia?.spotify, label: 'Spotify' },
-          { icon: <FaTiktok className="w-5 h-5" />, url: profile?.socialMedia?.tiktok, visible: !!profile?.socialMedia?.tiktok, label: 'Tiktok' },
-          { icon: <FiMail className="w-5 h-5" />, url: profile?.socialMedia?.mail ? `mailto:${profile.socialMedia.mail}` : '', visible: !!profile?.socialMedia?.mail, label: 'Email' },
-          { icon: <FiGlobe className="w-5 h-5" />, url: profile?.website, visible: !!profile?.website, label: 'Website' }
+          { icon: <FiGithub className="w-5 h-5" />, url: activeProfile?.socialMedia?.github, visible: !!activeProfile?.socialMedia?.github, label: 'GitHub' },
+          { icon: <FiLinkedin className="w-5 h-5" />, url: activeProfile?.socialMedia?.linkedin, visible: !!activeProfile?.socialMedia?.linkedin, label: 'LinkedIn' },
+          { icon: <FiInstagram className="w-5 h-5" />, url: activeProfile?.socialMedia?.instagram, visible: !!activeProfile?.socialMedia?.instagram, label: 'Instagram' },
+          { icon: <FaSpotify className="w-5 h-5" />, url: activeProfile?.socialMedia?.spotify, visible: !!activeProfile?.socialMedia?.spotify, label: 'Spotify' },
+          { icon: <FaTiktok className="w-5 h-5" />, url: activeProfile?.socialMedia?.tiktok, visible: !!activeProfile?.socialMedia?.tiktok, label: 'Tiktok' },
+          { icon: <FiMail className="w-5 h-5" />, url: activeProfile?.socialMedia?.mail ? `mailto:${activeProfile.socialMedia.mail}` : '', visible: !!activeProfile?.socialMedia?.mail, label: 'Email' },
+          { icon: <FiGlobe className="w-5 h-5" />, url: activeProfile?.website, visible: !!activeProfile?.website, label: 'Website' }
      ].filter(link => link.visible);
 
      return (
-          <div className="flex flex-col min-h-screen items-center justify-center">
+          <div className="flex flex-col min-h-screen items-center justify-center bg-black text-white selection:bg-cyan-500/30">
                <h1 className="sr-only">
-                    Tautan penting milik Firtiansyah Okta | OKTAA~ Portal | Discover links to connect with Firtiansyah Okta.
-                    {profile?.name ? `Tautan Penting Milik ${profile.name}` : (profile?.username ? `Tautan Penting Milik @${profile.username}` : 'Kumpulan Tautan Penting')}
+                    {activeProfile?.username ? `Tautan Penting Milik @${activeProfile.username}` : 'Portal Link'}
                </h1>
 
-               <div className="w-full md:max-w-xl overflow-hidden shadow-lg flex flex-col flex-grow mx-auto">
-                    <div className="relative h-40 bg-cover object-cover bg-center bg-[url('https://cdn.oktaa.my.id/banner-1200-160.svg')] flex items-center justify-center">
-                         {profile?.profilePicture && (
-                              <div className="absolute -bottom-10">
-                                   <div className="flex relative w-20 h-20 rounded-full border-4 items-center justify-center border-gray-700 overflow-hidden">
+               <div className="w-full md:max-w-xl overflow-hidden shadow-2xl flex flex-col grow mx-auto bg-black">
+                    <div className="relative h-48 bg-cover object-cover bg-center bg-[url('https://cdn.oktaa.my.id/banner-1200-160.svg')] flex items-center justify-center">
+                         <div className="absolute inset-0 bg-black/40 backdrop-blur-xs" />
+
+                         {activeProfile?.profilePicture && (
+                              <div className="absolute -bottom-12 z-10">
+                                   <div className="flex relative w-24 h-24 rounded-full border-4 items-center justify-center border-black overflow-hidden shadow-2xl">
                                         <Image
-                                             src={profile.profilePicture}
-                                             alt={profile.name || "Profile"}
-                                             width={80}
-                                             height={80}
+                                             src={activeProfile.profilePicture}
+                                             alt={activeProfile.name || "Profile"}
+                                             width={96}
+                                             height={96}
                                              className="object-cover rounded-full"
                                              priority
                                         />
                                    </div>
                               </div>
                          )}
-                         <button onClick={handleShare} aria-label='Share' className="absolute top-3 right-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all">
-                              <FiShare2 className="w-4 h-4 text-black" />
+                         <button onClick={handleShare} aria-label='Share' className="absolute top-4 right-4 bg-black/30 hover:bg-black/50 backdrop-blur-md rounded-full p-2.5 transition-all text-white border border-white/10">
+                              <FiShare2 className="w-4 h-4" />
                          </button>
                     </div>
 
-                    <div className="pt-12 pb-5">
-                         <div className="text-center mb-6">
-                              <h1 className="text-xl font-bold text-white">@{profile?.username}</h1>
-                              <p className="text-gray-500 text-sm my-1">{profile?.name}</p>
-                              {profile?.bio && (
-                                   <p className="text-gray-400 mt-1 text-sm">{profile.bio}</p>
+                    <div className="pt-16 pb-8 px-6">
+                         <div className="text-center mb-8">
+                              <h1 className="text-2xl font-bold text-white tracking-tight">@{activeProfile?.username}</h1>
+                              <p className="text-zinc-400 text-sm mt-1 mb-2 font-medium tracking-wide">{activeProfile?.name}</p>
+                              {activeProfile?.bio && (
+                                   <p className="text-zinc-500 text-sm leading-relaxed max-w-sm mx-auto">{activeProfile.bio}</p>
                               )}
                          </div>
 
-                         <div className="mb-6">
-                              <div className="flex p-1 overflow-x-auto pb-3 gap-1">
+                         <div className="mb-8">
+                              <div className="flex justify-center flex-wrap gap-2">
                                    {categories.map((category) => (
                                         <button
                                              key={category.id}
                                              onClick={() => handleTabChange(category.id)}
-                                             className={`flex min-w-12 items-center justify-center shrink-0 px-5 py-2 mx-1 md:px-4 md:py-2 md:mx-1 rounded-full transition-all duration-100 text-sm font-semibold capitalize ${activeTab === category.id
-                                                  ? 'bg-white text-black'
-                                                  : 'border border-gray-400 text-gray-400 hover:border-white hover:text-white'
+                                             className={`px-4 py-1.5 rounded-full transition-all duration-300 text-xs font-semibold uppercase tracking-wider ${activeTab === category.id
+                                                  ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]'
+                                                  : 'bg-zinc-900 text-zinc-500 hover:text-white border border-zinc-800 hover:border-zinc-700'
                                                   }`}
                                         >
-                                             <span>{category.name}</span>
+                                             {category.name}
                                         </button>
                                    ))}
                               </div>
                          </div>
 
-                         <div className="space-y-3 mb-6 min-h-56 px-3">
+                         <div className="space-y-3 mb-8 min-h-56">
                               {filteredLinks.length > 0 ? (filteredLinks.map((link, index) => (
                                    <motion.div
                                         key={link.id}
-                                        initial={{ opacity: 0, x: -20, scale: 0.95 }}
-                                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                                        transition={{ delay: index * 0.05, type: "spring", stiffness: 100 }}
-                                        className="relative border border-gray-700 rounded-lg px-4 py-3 md:py-5 hover:shadow-md hover:border-gray-500 transition-all duration-300 group overflow-hidden shimmer-effect"
-                                        role="button"
-                                        tabIndex={0}
-                                        onKeyDown={(e) => {
-                                             if (e.key === 'Enter' || e.key === ' ') {
-                                                  e.preventDefault();
-                                                  if (link.useMultipleUrls) {
-                                                       toggleCard(link.id);
-                                                  } else {
-                                                       window.open(link.originalUrl, '_blank', 'noopener,noreferrer');
-                                                  }
-                                             }
-                                        }}                                   >
-                                        {link.useMultipleUrls ? (
-                                             <div
-                                                  className="flex items-center justify-between relative z-10 cursor-pointer"
-                                                  onClick={() => toggleCard(link.id)}
-                                                  aria-expanded={expandedCard === link.id}
-                                                  aria-label={`Expand ${link.nameUrl || link.shortUrl} details`}
-                                             >
-                                                  <div className="flex items-center gap-2">
-                                                       {link.isPinned && (
-                                                            <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-full p-1 backdrop-blur-sm">
-                                                                 <TbPinned className="w-3 h-3 text-yellow-400" />
-                                                            </div>
-                                                       )}
-                                                       <div className="flex flex-col">
-                                                            <span className="text-white text-base font-medium truncate">
-                                                                 {link.nameUrl || link.shortUrl}
-                                                            </span>
-                                                       </div>
-                                                  </div>
-                                                  <motion.div
-                                                       animate={{ rotate: expandedCard === link.id ? 180 : 0 }}
-                                                       transition={{ duration: 0.3 }}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: index * 0.05, ease: "easeOut" }}
+                                        className="relative group"
+                                   >
+                                        <div
+                                             className="relative overflow-hidden bg-zinc-900/40 border border-white/5 rounded-xl transition-all duration-300 hover:bg-zinc-900/80 hover:border-white/20 hover:shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+                                        >
+                                             {link.useMultipleUrls ? (
+                                                  <div
+                                                       className="flex items-center justify-between p-4 cursor-pointer"
+                                                       onClick={() => toggleCard(link.id)}
+                                                       role="button"
+                                                       tabIndex={0}
                                                   >
-                                                       {expandedCard === link.id ? (
-                                                            <FiChevronUp className="text-gray-400 group-hover:text-white w-5 h-5" />
-                                                       ) : (
-                                                            <FiChevronDown className="text-gray-400 group-hover:text-white w-5 h-5" />
-                                                       )}
-                                                  </motion.div>
-                                             </div>
-                                        ) : (
-                                             <a
-                                                  href={link.originalUrl}
-                                                  target="_blank"
-                                                  rel="noopener noreferrer"
-                                                  className="flex items-center justify-between relative z-10"
-                                                  aria-label={`Visit ${link.nameUrl || link.shortUrl}`}
-                                             >
-                                                  <div className="flex items-center gap-2">
-                                                       {link.isPinned && (
-                                                            <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-full p-1 backdrop-blur-sm rotate-45">
-                                                                 <TbPinned className="w-3 h-3 text-yellow-400" />
+                                                       <div className="flex items-center gap-4">
+                                                            {link.isPinned && (
+                                                                 <div className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 backdrop-blur-sm">
+                                                                      <TbPinned className="w-4 h-4" />
+                                                                 </div>
+                                                            )}
+                                                            <div className="flex flex-col">
+                                                                 <span className="text-white font-medium text-sm tracking-wide">
+                                                                      {link.nameUrl || link.shortUrl}
+                                                                 </span>
                                                             </div>
-                                                       )}
-                                                       <div className="flex flex-col">
-                                                            <span className="text-white text-base font-medium truncate">
-                                                                 {link.nameUrl || link.shortUrl}
-                                                            </span>
-                                                            <span className="text-gray-400 text-sm mt-1">
-                                                                 {link.description || ""}
-                                                            </span>
                                                        </div>
+                                                       <motion.div
+                                                            animate={{ rotate: expandedCard === link.id ? 180 : 0 }}
+                                                            transition={{ duration: 0.3 }}
+                                                       >
+                                                            <FiChevronDown className="text-zinc-500 group-hover:text-white transition-colors" />
+                                                       </motion.div>
                                                   </div>
-                                                  <FiExternalLink className="text-gray-400 group-hover:text-white w-5 h-5" />
-                                             </a>
-                                        )}
-                                        <AnimatePresence>
-                                             {expandedCard === link.id && link.useMultipleUrls && (
-                                                  <motion.div
-                                                       initial={{ height: 0, opacity: 0 }}
-                                                       animate={{ height: "auto", opacity: 1 }}
-                                                       exit={{ height: 0, opacity: 0 }}
-                                                       transition={{ duration: 0.3, ease: "easeInOut" }}
-                                                       className="mt-3 border-t border-gray-600/50 pt-3"
+                                             ) : (
+                                                  <a
+                                                       href={link.originalUrl}
+                                                       target="_blank"
+                                                       rel="noopener noreferrer"
+                                                       className="flex items-center justify-between p-4"
                                                   >
-                                                       {link.description && (
-                                                            <p className="text-gray-300 text-sm mb-3 px-2">{link.description}</p>
-                                                       )}
-                                                       {link.price !== undefined && link.price > 0 && (
-                                                            <p className="text-white font-normal mb-3 px-2">
-                                                                 Harga: <span className='font-bold'>Rp {link.price.toLocaleString('id-ID')}</span>
-                                                            </p>
-                                                       )}
-                                                       {link.multipleUrls && link.multipleUrls.length > 0 && (
-                                                            <div className="space-y-2 px-2">
-                                                                 {link.multipleUrls.map((urlObj, idx) => (
-                                                                      <a
-                                                                           key={idx}
-                                                                           href={urlObj.url}
-                                                                           target="_blank"
-                                                                           rel="noopener noreferrer"
-                                                                           className="flex items-center text-cyan-500 hover:text-cyan-600 text-sm transition-colors"
-                                                                           aria-label={`Visit ${urlObj.name || urlObj.url}`}
-                                                                      >
-                                                                           <FiExternalLink className="mr-2 w-4 h-4" />
-                                                                           <span className="truncate">{urlObj.name || urlObj.url}</span>
-                                                                      </a>
-                                                                 ))}
+                                                       <div className="flex items-center gap-4 min-w-0">
+                                                            {link.isPinned && (
+                                                                 <div className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 backdrop-blur-sm">
+                                                                      <TbPinned className="w-4 h-4" />
+                                                                 </div>
+                                                            )}
+                                                            <div className="flex flex-col min-w-0">
+                                                                 <span className="text-white font-medium text-sm tracking-wide truncate pr-2">
+                                                                      {link.nameUrl || link.shortUrl}
+                                                                 </span>
+                                                                 {link.description && (
+                                                                      <span className="text-zinc-500 text-xs mt-0.5 truncate">
+                                                                           {link.description}
+                                                                      </span>
+                                                                 )}
                                                             </div>
-                                                       )}
-                                                  </motion.div>
+                                                       </div>
+                                                       <FiExternalLink className="shrink-0 text-zinc-600 group-hover:text-white transition-colors w-4 h-4" />
+                                                  </a>
                                              )}
-                                        </AnimatePresence>
+
+                                             <AnimatePresence>
+                                                  {expandedCard === link.id && link.useMultipleUrls && (
+                                                       <motion.div
+                                                            initial={{ height: 0, opacity: 0 }}
+                                                            animate={{ height: "auto", opacity: 1 }}
+                                                            exit={{ height: 0, opacity: 0 }}
+                                                            transition={{ duration: 0.3 }}
+                                                            className="border-t border-white/5 bg-black/20"
+                                                       >
+                                                            <div className="p-4 pt-3">
+                                                                 {link.description && (
+                                                                      <p className="text-zinc-400 text-xs mb-4 leading-relaxed">{link.description}</p>
+                                                                 )}
+                                                                 {link.price !== undefined && link.price > 0 && (
+                                                                      <p className="text-zinc-300 text-xs mb-3">
+                                                                           Price: <span className='font-bold text-white'>Rp {link.price.toLocaleString('id-ID')}</span>
+                                                                      </p>
+                                                                 )}
+                                                                 {link.multipleUrls && link.multipleUrls.length > 0 && (
+                                                                      <div className="flex flex-col gap-2">
+                                                                           {link.multipleUrls.map((urlObj, idx) => (
+                                                                                <a
+                                                                                     key={idx}
+                                                                                     href={urlObj.url}
+                                                                                     target="_blank"
+                                                                                     rel="noopener noreferrer"
+                                                                                     className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-zinc-300 hover:text-white transition-all group/sub border border-white/5 hover:border-white/10"
+                                                                                >
+                                                                                     <span className="truncate mr-2">{urlObj.name || urlObj.url}</span>
+                                                                                     <FiExternalLink className="w-3 h-3 text-zinc-600 group-hover/sub:text-white" />
+                                                                                </a>
+                                                                           ))}
+                                                                      </div>
+                                                                 )}
+                                                            </div>
+                                                       </motion.div>
+                                                  )}
+                                             </AnimatePresence>
+                                        </div>
                                    </motion.div>
                               ))
                               ) : (
-                                   <div className="flex flex-col items-center justify-center h-40 text-gray-400">
-                                        <p>No links found in this category</p>
+                                   <div className="flex flex-col items-center justify-center py-12 text-zinc-600">
+                                        <p className="text-sm">No links found in this category</p>
                                    </div>
                               )}
                          </div>
 
                          {socialLinks.length > 0 && (
-                              <div className="flex justify-center space-x-5 mb-5">
+                              <div className="flex justify-center gap-6 mb-8">
                                    {socialLinks.map((social, index) => (
                                         <motion.a
                                              key={index}
                                              href={social.url}
                                              target="_blank"
                                              rel="noopener noreferrer"
-                                             initial={{ opacity: 0, y: 20 }}
-                                             animate={{
-                                                  opacity: 1,
-                                                  y: 0,
-                                                  transition: { delay: 0.5 + index * 0.1 }
-                                             }}
-                                             whileHover={{
-                                                  scale: 1.2,
-                                                  rotate: [0, -10, 10, 0],
-                                                  transition: { duration: 0.3 }
-                                             }}
-                                             className="text-gray-400 hover:text-white transition-colors"
-                                             aria-label={`Social link ${index}`}
+                                             whileHover={{ y: -3, scale: 1.1 }}
+                                             className="text-zinc-600 hover:text-white transition-colors"
+                                             aria-label={social.label}
                                         >
                                              {social.icon}
                                         </motion.a>
@@ -424,8 +353,8 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
                          )}
 
                          <div className="flex flex-col items-center">
-                              <p className="text-gray-500 text-xs font-semibold">
-                                   Copyright {new Date().getFullYear()} - oktaa.my.id
+                              <p className="text-zinc-700 text-[10px] uppercase tracking-widest font-medium">
+                                   © {new Date().getFullYear()} oktaa.my.id
                               </p>
                          </div>
                     </div>

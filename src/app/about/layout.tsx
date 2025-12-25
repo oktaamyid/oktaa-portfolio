@@ -1,13 +1,15 @@
-import React from "react";
-import { metadata } from './metadata';
-import PublicTemplate from '@/components/layouts/MainLayout';
+"use client";
 
-export { metadata };
+import { Navigation, Footer } from '@/components/shared';
 
 export default function AboutLayout({ children }: { children: React.ReactNode }) {
      return (
-          <PublicTemplate>
-               {children}
-          </PublicTemplate>
+          <>
+               <Navigation />
+               <main className="min-h-screen pt-28">
+                    {children}
+               </main>
+               <Footer />
+          </>
      )
 }

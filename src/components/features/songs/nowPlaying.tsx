@@ -1,26 +1,28 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
-import { FaPlay, FaPause } from 'react-icons/fa';
+import { FaPlay, FaPause, FaSpotify } from 'react-icons/fa';
 import { SpotifyTrack } from '@/lib/spotify';
+import Magnetic from '@/components/ui/Magnetic';
+import { useNowPlaying } from '@/hooks/useNowPlaying';
 
 interface NowPlayingProps {
      track: SpotifyTrack | null;
 }
 
-export default function NowPlaying({ track }: NowPlayingProps) {
-     const [isPlaying, setIsPlaying] = useState(false);
-     const [progress, setProgress] = useState(0);
+export default function NowPlaying({ track: initialTrack }: NowPlayingProps) {
+     const { track, isPlaying } = useNowPlaying(initialTrack);
+
+
+     /* Re-implementing local progress state and animation ref */
+     const [progress, setProgress] = useState(0); // This needs useState import
      const animationRef = useRef<number | null>(null);
      const duration = track?.duration_ms ?? 0;
 
-     const togglePlay = () => {
-          setIsPlaying(!isPlaying);
-     };
-
+     // Simulated progress bar for visual effect
      useEffect(() => {
           if (!isPlaying) {
-               cancelAnimationFrame(animationRef.current!);
+               if (animationRef.current) cancelAnimationFrame(animationRef.current);
                return;
           }
 
@@ -35,91 +37,68 @@ export default function NowPlaying({ track }: NowPlayingProps) {
                if (newProgress < durationMs) {
                     animationRef.current = requestAnimationFrame(updateProgress);
                } else {
-                    setIsPlaying(false);
-                    setProgress(0);
+                    // When song ends visually, we rely on the next poll to update the track
+                    // But we can reset temporarily
+                    // setIsPlaying(false); 
+                    // setProgress(0);
                }
           };
 
           animationRef.current = requestAnimationFrame(updateProgress);
 
           return () => {
-               cancelAnimationFrame(animationRef.current!);
+               if (animationRef.current) cancelAnimationFrame(animationRef.current);
           };
      }, [isPlaying, duration, progress]);
 
-     useEffect(() => {
-          // Reset progress when track changes
-          setProgress(0);
-          setIsPlaying(true);
-     }, [track]);
 
-     if (!track) {
-          return (
-               <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border-2 border-dashed border-gray-600 aspect-video w-full max-w-xs flex flex-col items-center justify-center p-6 text-center mx-auto">
-                    <h2 className="text-xl font-bold text-white mb-2">Now Playing</h2>
-                    <p className="text-gray-400">No active track</p>
-               </div>
-          );
+     if (!track || !track.is_playing) {
+          return null;
      }
 
-     // Format milliseconds to minutes:seconds
-     const formatTime = (ms: number) => {
-          const seconds = Math.floor(ms / 1000);
-          const mins = Math.floor(seconds / 60);
-          const secs = seconds % 60;
-          return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-     };
-
      return (
-          <div className="relative aspect-square w-full max-w-xs mx-auto overflow-hidden rounded-lg bg-gray-900">
-               {/* Album art */}
-               <div className="relative w-full h-full">
-                    <Image
-                         src={track?.album?.images?.[0]?.url ?? '/default-album.png'}
-                         alt={track?.name ?? 'Unknown Track'}
-                         fill
-                         className="object-cover"
-                         priority
-                    />
-               </div>
+          <div className="fixed bottom-6 right-6 z-50 md:bottom-12 md:right-12">
+               <Magnetic strength={0.2}>
+                    <div className="flex items-center gap-4 bg-white/80 p-3 pr-6 rounded-full border border-black/10 shadow-xl backdrop-blur-md transition-all hover:scale-105 hover:bg-white">
+                         {/* Rotating Album Art */}
+                         <div className="relative w-10 h-10 md:w-12 md:h-12 shrink-0 overflow-hidden rounded-full border border-black/5">
+                              {track.album?.images?.[0]?.url ? (
+                                   <Image
+                                        src={track.album.images[0].url}
+                                        alt={track.name}
+                                        fill
+                                        className={`object-cover ${isPlaying ? 'animate-spin-slow' : ''}`}
+                                   />
+                              ) : (
+                                   <div className="w-full h-full bg-zinc-100 flex items-center justify-center">
+                                        <FaSpotify className="text-zinc-300" />
+                                   </div>
+                              )}
 
-               {/* Overlay and info */}
-               <div className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-                    <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                         {isPlaying ? 'PLAYING' : 'PAUSED'}
-                    </div>
-
-                    <div className="transform transition-transform duration-300 group-hover:-translate-y-1">
-                         <h3 className="text-white font-bold text-lg line-clamp-1">{track?.name || 'Unknown Track'}</h3>
-                         <p className="text-gray-300 text-sm line-clamp-1">
-                              {track?.artists?.map((artist: { name: string }) => artist.name).join(', ') ?? 'Unknown Artist'}
-                         </p>
-                    </div>
-
-                    {/* Progress bar and time */}
-                    <div className="mt-2 flex items-center gap-2">
-                         <span className="text-xs text-gray-400">
-                              {formatTime(progress)}
-                         </span>
-                         <div className="flex-1 bg-gray-700 rounded-full h-1">
-                              <div
-                                   className="bg-green-500 h-1 rounded-full"
-                                   style={{ width: `${duration ? (progress / duration) * 100 : 0}%` }}
-                              />
+                              {/* Center Hole for "Vinyl" look */}
+                              <div className="absolute inset-0 m-auto w-3 h-3 bg-white rounded-full border border-black/5" />
                          </div>
-                         <span className="text-xs text-gray-400">
-                              {formatTime(duration)}
-                         </span>
-                    </div>
 
-                    {/* Play/Pause button */}
-                    <button
-                         onClick={togglePlay}
-                         className="absolute right-3 bottom-3 bg-green-600 hover:bg-green-500 text-white rounded-full p-3 transition-all transform hover:scale-110"
-                    >
-                         {isPlaying ? <FaPause className="w-3 h-3" /> : <FaPlay className="w-3 h-3" />}
-                    </button>
-               </div>
+                         {/* Info */}
+                         <div className="flex flex-col">
+                              <div className="flex items-center gap-2">
+                                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                   <span className="text-xs font-bold uppercase tracking-widest text-zinc-400">Now Playing</span>
+                              </div>
+                              <h3 className="text-sm font-bold text-black leading-tight max-w-37.5 truncate">
+                                   {track.name}
+                              </h3>
+                              <p className="text-xs text-zinc-500 max-w-37.5 truncate">
+                                   {track.artists.map(a => a.name).join(', ')}
+                              </p>
+                         </div>
+
+                         {/* Play Icon (Visual Only) */}
+                         <div className="ml-2 w-8 h-8 flex items-center justify-center rounded-full bg-black text-white">
+                              <FaSpotify className="w-4 h-4" />
+                         </div>
+                    </div>
+               </Magnetic>
           </div>
      );
 }

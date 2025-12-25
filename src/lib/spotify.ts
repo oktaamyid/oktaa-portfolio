@@ -19,6 +19,7 @@ export interface SpotifyTrack {
      external_urls: {
           spotify: string;
      };
+     is_playing?: boolean;
 }
 
 interface SpotifyNowPlayingResponse {
@@ -80,7 +81,13 @@ export async function getNowPlaying(): Promise<SpotifyTrack | null> {
           const response = await spotifyApi.getMyCurrentPlayingTrack();
           const data = response.body as SpotifyNowPlayingResponse;
 
-          return data?.item?.type === 'track' ? data.item : null;
+          if (data?.item?.type === 'track') {
+               return {
+                    ...data.item,
+                    is_playing: data.is_playing
+               };
+          }
+          return null;
      } catch (error: unknown) {
           console.error('Error getting now playing:', error);
           // Jika scope tidak cukup, return null agar tidak crash

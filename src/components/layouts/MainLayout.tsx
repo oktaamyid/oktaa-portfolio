@@ -1,10 +1,9 @@
-import Navbar from './Navbar';
-import Footer from './Footer';
+import { Navigation, Footer } from '@/components/shared';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
      return (
           <>
-               <Navbar />
+               <Navigation />
                <main>{children}</main>
                <Footer />
           </>

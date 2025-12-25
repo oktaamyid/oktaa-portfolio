@@ -1,15 +1,16 @@
-import { Poppins } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react"
-import { ThemeProvider } from 'next-themes';
+
+
 // import CircleCursor from "@/components/ui/CircleCursor";
 
-const poppins = Poppins({
+const outfit = Outfit({
      variable: "--font-poppins",
      subsets: ["latin"],
-     weight: ["400", "500", "600", "700", "800", "900"],
+     weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -51,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
                     },
                ],
                type: "website",
-               
+
           },
           twitter: {
                card: "summary_large_image",
@@ -72,12 +73,18 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
      return (
           <html lang="en-ID" suppressHydrationWarning>
-               <body className={`${poppins.variable} bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300`}>
+               <head>
+                    {/* Preconnect to external domains for better performance */}
+                    <link rel="preconnect" href="https://fonts.googleapis.com" />
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                    <link rel="preconnect" href="https://cdn.oktaa.my.id" />
+                    <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
+                    <link rel="dns-prefetch" href="https://api.screenshotmachine.com" />
+               </head>
+               <body className={`${outfit.variable} antialiased`}>
                     {/* <CircleCursor bigSize={30} smallSize={10} blendMode="difference" /> */}
-                    <ThemeProvider attribute="class" enableSystem={true} defaultTheme="system">
-                         <Analytics />
-                         {children}
-                    </ThemeProvider>
+                    <Analytics />
+                    {children}
                </body>
           </html>
      );
