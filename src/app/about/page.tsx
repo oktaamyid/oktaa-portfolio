@@ -16,8 +16,6 @@ export default function About() {
      const [hoveredExp, setHoveredExp] = useState<string | null>(null);
      const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-
      return (
           <div ref={containerRef} className="relative w-full overflow-hidden bg-black">
 
