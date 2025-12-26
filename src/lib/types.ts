@@ -14,6 +14,7 @@ export interface Project {
      title: string;
      image: string;
      description: string;
+     description_id?: string; // Optional: Indonesian description
      link: string;
      technology: string[];
 }

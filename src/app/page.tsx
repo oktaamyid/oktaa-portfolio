@@ -8,12 +8,14 @@ import { useProjects } from '@/hooks/useProjects';
 import Parallax from '@/components/ui/Parallax';
 import ScrollParallax from '@/components/ui/ScrollParallax';
 import HeroFluid from '@/components/ui/HeroFluid';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Home() {
     const pageRef = useRef(null);
     const projectsRef = useRef(null);
     const moreAboutRef = useRef(null);
 
+    const { language, t } = useLanguage();
     const { projects, loading } = useProjects();
 
     const isProjectsInView = useInView(projectsRef, { once: true, margin: "-100px" });
@@ -91,7 +93,11 @@ export default function Home() {
                                     variants={heroDelayAnimation}
                                     className="text-xl md:text-3xl font-light text-zinc-200"
                                 >
-                                    I&apos;m a <span className="text-white font-bold">Full Stack Developer</span> passionate about crafting web solutions
+                                    {language === 'en' ? (
+                                        <>I&apos;m a <span className="text-white font-bold">Full Stack Developer</span> passionate about crafting web solutions</>
+                                    ) : (
+                                        <>Saya seorang <span className="text-white font-bold">Full Stack Developer</span> yang bersemangat menciptakan solusi web</>
+                                    )}
                                 </motion.p>
                             </Parallax>
                         </div>
@@ -104,13 +110,13 @@ export default function Home() {
                             >
                                 {/* Mobile & Tablet: Stacked & Massive */}
                                 <div className="flex flex-col gap-2 md:gap-4 lg:hidden w-full">
-                                    <span className="text-[30vw] md:text-[25vw] tracking-tighter leading-[0.8]">HI!</span>
+                                    <span className="text-[30vw] md:text-[25vw] tracking-tighter leading-[0.8]">{t("HI!", "HALO!")}</span>
                                     <span className="text-[30vw] md:text-[25vw] tracking-tighter leading-[0.8] -ml-2">OKTAA</span>
                                 </div>
 
                                 {/* Desktop (Large Screens): Single Line */}
                                 <span className="hidden lg:block text-[16.9vw] tracking-tighter whitespace-nowrap">
-                                    Hi! OKTAA.
+                                    {t("Hi! OKTAA.", "Hi! OKTAA.")}
                                 </span>
                             </motion.h1>
                         </Parallax>
@@ -137,8 +143,8 @@ export default function Home() {
                                         variants={animateOnScroll}
                                         className="text-[12vw] md:text-[8vw] leading-[0.8] font-bold tracking-tighter text-white uppercase"
                                     >
-                                        About
-                                        <span className="block text-zinc-800">Me<span className="text-white">.</span></span>
+                                        {t("About", "Tentang")}
+                                        <span className="block text-zinc-800">{t("Me", "Saya")}<span className="text-white">.</span></span>
                                     </motion.h2>
                                 </ScrollParallax>
                             </div>
@@ -148,8 +154,17 @@ export default function Home() {
                                 <ScrollParallax axis="y" offset={50} className="relative z-10">
                                     <motion.div variants={animateOnScroll} className="flex flex-col gap-8">
                                         <p className="text-xl md:text-2xl font-light leading-relaxed text-zinc-300">
-                                            Passionate about web development and exploring the latest technology trends.
-                                            I specialize in creating <span className="text-white font-medium">dynamic experiences</span> that leave a lasting impact.
+                                            {language === 'en' ? (
+                                                <>
+                                                    Passionate about web development and exploring the latest technology trends.
+                                                    I specialize in creating <span className="text-white font-medium">dynamic experiences</span> that leave a lasting impact.
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Bersemangat tentang pengembangan web dan mengeksplorasi tren teknologi terbaru.
+                                                    Saya berspesialisasi dalam menciptakan <span className="text-white font-medium">pengalaman dinamis</span> yang memberikan dampak abadi.
+                                                </>
+                                            )}
                                         </p>
 
                                         <div className="pt-4">
@@ -158,7 +173,7 @@ export default function Home() {
                                                 onClick={() => window.location.href = '/about'}
                                             >
                                                 <span className="uppercase tracking-widest text-sm font-semibold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 group-hover:after:origin-left group-hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-white">
-                                                    Read Full Bio
+                                                    {t("Read Full Bio", "Baca Bio Lengkap")}
                                                 </span>
                                                 <svg
                                                     className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-2"
@@ -193,7 +208,7 @@ export default function Home() {
                                 className="text-4xl md:text-5xl font-bold text-left font-poppins mb-12"
                                 style={{ color: 'rgb(var(--text))' }}
                             >
-                                Featured Projects
+                                {t("Featured Projects", "Proyek Unggulan")}
                             </motion.h2>
                         </ScrollParallax>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -227,7 +242,7 @@ export default function Home() {
                                 onClick={() => window.location.href = '/projects'}
                             >
                                 <span className="uppercase tracking-widest text-xl font-semibold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 group-hover:after:origin-left group-hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-black">
-                                    View All Projects
+                                    {t("View All Projects", "Lihat Semua Proyek")}
                                 </span>
                                 <svg
                                     className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-2"

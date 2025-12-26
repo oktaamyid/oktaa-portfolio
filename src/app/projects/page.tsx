@@ -7,9 +7,11 @@ import ScrollParallax from '@/components/ui/ScrollParallax';
 import Ripple from '@/components/ui/Ripple';
 import Magnetic from '@/components/ui/Magnetic';
 import { useProjects } from '@/hooks/useProjects';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function ProjectsPage() {
      const { projects, loading } = useProjects();
+     const { t } = useLanguage();
      const [filter, setFilter] = useState<string>('all');
 
      const allTechnologies = Array.from(
@@ -30,10 +32,10 @@ export default function ProjectsPage() {
                          <div>
                               <h1 className="text-6xl md:text-8xl font-black font-poppins uppercase leading-none tracking-tighter">
                                    <ScrollParallax offset={20} axis="x" className="inline-block">
-                                        <span className="block text-zinc-300">Selected</span>
+                                        <span className="block text-zinc-300">{t("Selected", "Karya")}</span>
                                    </ScrollParallax>
                                    <ScrollParallax offset={-20} axis="x" className="inline-block">
-                                        <span className="block text-black">Works.</span>
+                                        <span className="block text-black">{t("Works.", "Terpilih.")}</span>
                                    </ScrollParallax>
                               </h1>
                          </div>
@@ -54,7 +56,7 @@ export default function ProjectsPage() {
                                         : 'bg-transparent text-black border-black hover:text-white'
                                         }`}
                               >
-                                   All
+                                   {t("All", "Semua")}
                                    {filter !== 'all' && <Ripple color='black' className='z-20 mix-blend-difference' />}
                               </button>
                          </Magnetic>

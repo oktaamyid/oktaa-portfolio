@@ -8,10 +8,11 @@ import { Profile } from '@/lib/types';
 import { db } from "@/lib/firebaseConfig";
 import { collection, QueryDocumentSnapshot, DocumentData, getDocs } from 'firebase/firestore';
 import Magnetic from '../ui/Magnetic';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 
 export function Footer() {
-
+     const { t } = useLanguage();
      const [profile, setProfile] = useState<Profile[]>([]);
 
      useEffect(() => {
@@ -82,11 +83,11 @@ export function Footer() {
      ];
 
      const menuLinks = [
-          { name: 'HOME', href: '/' },
-          { name: 'ABOUT', href: '/about' },
-          { name: 'PROJECTS', href: '/projects' },
-          { name: 'SONGS', href: '/songs' },
-          { name: 'PORTAL', href: '/portal', target: '_blank' },
+          { name: t('HOME', 'BERANDA'), href: '/' },
+          { name: t('ABOUT', 'TENTANG'), href: '/about' },
+          { name: t('PROJECTS', 'PROYEK'), href: '/projects' },
+          { name: t('SONGS', 'LAGU'), href: '/songs' },
+          { name: t('PORTAL', 'PORTAL'), href: '/portal', target: '_blank' },
      ];
 
      return (
@@ -102,7 +103,7 @@ export function Footer() {
                               <h3
                                    className="text-3xl md:text-5xl font-semibold font-poppins uppercase leading-tight text-center md:text-left"
                               >
-                                   Let&apos;s Build Something Amazing Together!
+                                   {t("Let's Build Something Amazing Together!", "Mari Membangun Sesuatu yang Luar Biasa Bersama!")}
                               </h3>
                               {/* Social Icons */}
                               <div className="flex gap-4 justify-center md:justify-start">
@@ -133,7 +134,7 @@ export function Footer() {
                               {/* Copyright Only (Simplified) */}
                               <div className="flex flex-col gap-2 text-sm font-light text-zinc-500">
                                    <p className="text-xs font-bold">
-                                        © {new Date().getFullYear()} OKTAA. All Rights Reserved.
+                                        © {new Date().getFullYear()} OKTAA. {t("All Rights Reserved.", "Hak Cipta Dilindungi.")}
                                    </p>
                               </div>
                          </div>

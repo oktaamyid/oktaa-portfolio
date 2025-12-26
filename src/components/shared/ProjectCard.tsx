@@ -5,6 +5,7 @@ import { Project } from '@/lib/types';
 import Magnetic from '../ui/Magnetic';
 import Ripple from '../ui/Ripple';
 import ScrollParallax from '../ui/ScrollParallax';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ProjectCardProps {
     project: Project;
@@ -12,6 +13,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
+    const { language } = useLanguage();
 
     return (
         <motion.div
@@ -56,7 +58,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
 
                 {/* Description */}
                 <p className="text-sm md:text-base text-black line-clamp-3 leading-relaxed">
-                    {project.description}
+                    {language === 'id' ? (project.description_id || project.description) : project.description}
                 </p>
             </div>
 

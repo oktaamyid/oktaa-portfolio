@@ -67,6 +67,7 @@ export async function generateMetadata(): Promise<Metadata> {
      };
 }
 
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import ScrollToTop from "@/components/shared/ScrollToTop";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -81,10 +82,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <link rel="dns-prefetch" href="https://api.screenshotmachine.com" />
                </head>
                <body className={`${outfit.variable} antialiased`}>
-                    {/* <CircleCursor bigSize={30} smallSize={10} blendMode="difference" /> */}
-                    <Analytics />
-                    {children}
-                    <ScrollToTop />
+                    <LanguageProvider>
+                         {/* <CircleCursor bigSize={30} smallSize={10} blendMode="difference" /> */}
+                         <Analytics />
+                         {children}
+                         <ScrollToTop />
+                    </LanguageProvider>
                </body>
           </html>
      );

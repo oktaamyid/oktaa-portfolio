@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Magnetic from '../ui/Magnetic';
 import { cn } from "@/lib/utils";
 import Ripple from "../ui/Ripple";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NavLink {
      href: string;
@@ -26,6 +27,7 @@ export function Navigation() {
      const pathname = usePathname();
      const [isActive, setIsActive] = useState(false);
      const [mounted, setMounted] = useState(false);
+     const { language, toggleLanguage, t } = useLanguage();
 
      useEffect(() => {
           setMounted(true);
@@ -84,44 +86,58 @@ export function Navigation() {
                               </div>
 
                               <div className="flex flex-col gap-4 items-center">
-                                   {navLinks.map((link, index) => (
-                                        <motion.div
-                                             key={link.href}
-                                             initial={{ opacity: 0, y: 50 }}
-                                             animate={{
-                                                  opacity: 1,
-                                                  y: 0,
-                                                  transition: { delay: 0.5 + (index * 0.1) }
-                                             }}
-                                             exit={{ opacity: 0, y: 50 }}
-                                        >
-                                             <Link href={link.href} target={link.target}>
-                                                  <motion.div
-                                                       whileHover={{ scale: 1.1, x: 20 }}
-                                                       className={cn(
-                                                            "text-5xl md:text-7xl font-bold uppercase tracking-tighter cursor-pointer relative group",
-                                                            pathname === link.href ? "text-white" : "text-zinc-500 hover:text-white"
-                                                       )}
-                                                  >
-                                                       <span className="relative z-10">{link.label}</span>
+                                   {navLinks.map((link, index) => {
+                                        const label = link.label === 'Home' ? t('Home', 'Beranda') :
+                                             link.label === 'About' ? t('About', 'Tentang') :
+                                                  link.label === 'Projects' ? t('Projects', 'Proyek') :
+                                                       link.label === 'Songs' ? t('Songs', 'Lagu') :
+                                                            link.label;
+                                        return (
+                                             <motion.div
+                                                  key={link.href}
+                                                  initial={{ opacity: 0, y: 50 }}
+                                                  animate={{
+                                                       opacity: 1,
+                                                       y: 0,
+                                                       transition: { delay: 0.5 + (index * 0.1) }
+                                                  }}
+                                                  exit={{ opacity: 0, y: 50 }}
+                                             >
+                                                  <Link href={link.href} target={link.target}>
+                                                       <motion.div
+                                                            whileHover={{ scale: 1.1, x: 20 }}
+                                                            className={cn(
+                                                                 "text-5xl md:text-7xl font-bold uppercase tracking-tighter cursor-pointer relative group",
+                                                                 pathname === link.href ? "text-white" : "text-zinc-500 hover:text-white"
+                                                            )}
+                                                       >
+                                                            <span className="relative z-10">{label}</span>
 
-                                                       {/* Hover Underline */}
-                                                       <span
-                                                            className="absolute -bottom-2 left-0 w-full h-0.75 bg-white origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100"
-                                                       />
-                                                  </motion.div>
-                                             </Link>
-                                        </motion.div>
-                                   ))}
+                                                            {/* Hover Underline */}
+                                                            <span
+                                                                 className="absolute -bottom-2 left-0 w-full h-0.75 bg-white origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100"
+                                                            />
+                                                       </motion.div>
+                                                  </Link>
+                                             </motion.div>
+                                        )
+                                   })}
                               </div>
 
                               {/* Footer Info in Menu */}
                               <motion.div
                                    initial={{ opacity: 0 }}
                                    animate={{ opacity: 1, transition: { delay: 1 } }}
-                                   className="absolute bottom-10 left-10 md:left-20 text-zinc-500 text-sm font-light uppercase tracking-widest"
+                                   className="absolute bottom-10 left-10 md:left-20 flex gap-6 items-center"
                               >
-                                   <p>oktaamyid © {new Date().getFullYear()}</p>
+                                   <button
+                                        onClick={toggleLanguage}
+                                        className="text-white font-bold text-xl uppercase tracking-widest relative group after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 hover:after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-white"
+                                   >
+                                        {language === "en" ? "ID" : "EN"}
+                                   </button>
+                                   <div className="w-px h-4 bg-zinc-600"></div>
+                                   <p className="text-zinc-500 text-sm font-light uppercase tracking-widest">oktaamyid © {new Date().getFullYear()}</p>
                               </motion.div>
                          </motion.div>
                     )}

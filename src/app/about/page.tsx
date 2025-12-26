@@ -9,9 +9,11 @@ import ScrollParallax from '@/components/ui/ScrollParallax';
 import Magnetic from '@/components/ui/Magnetic';
 import Ripple from '@/components/ui/Ripple';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function About() {
      const containerRef = useRef<HTMLDivElement>(null);
+     const { language, t } = useLanguage();
      const { educations, experiences } = useAboutData();
      const [hoveredExp, setHoveredExp] = useState<string | null>(null);
      const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +28,7 @@ export default function About() {
                     <div className="absolute top-1/4 left-0 w-full z-0 select-none overflow-hidden pointer-events-none">
                          <ScrollParallax offset={-150} axis="x">
                               <h1 className="text-[20vw] font-black text-black/5 leading-none whitespace-nowrap font-poppins">
-                                   PROFILE
+                                   {t("PROFILE", "PROFIL")}
                               </h1>
                          </ScrollParallax>
                     </div>
@@ -40,10 +42,10 @@ export default function About() {
                                    <ScrollParallax offset={20}>
                                         <div className="mb-6">
                                              <h2 className="text-sm font-bold tracking-[0.2em] text-black mb-4 uppercase">
-                                                  Who I Am
+                                                  {t("Who I Am", "Siapa Saya")}
                                              </h2>
                                              <h1 className="text-5xl md:text-7xl font-bold font-poppins leading-tight">
-                                                  I&apos;m <span className="text-black font-extrabold">OKTAA</span>
+                                                  {t("I'm", "Saya")} <span className="text-black font-extrabold">OKTAA</span>
                                                   <br />
                                                   <span className="text-3xl md:text-5xl text-black font-light">
                                                        Full Stack Developer
@@ -58,7 +60,7 @@ export default function About() {
                                                        className="group/btn relative overflow-hidden cursor-pointer flex items-center gap-2 bg-black text-white px-6 py-2 rounded-full transition-all duration-300 border border-white/10"
                                                   >
                                                        <span className="relative z-10 flex items-center gap-2">
-                                                            Let&apos;s Connect <ArrowUpRight className="w-4 h-4" />
+                                                            {t("Let's Connect", "Mari Terhubung")} <ArrowUpRight className="w-4 h-4" />
                                                        </span>
                                                        <Ripple color="white" className="z-20 mix-blend-difference" size={200} />
                                                   </button>
@@ -69,7 +71,7 @@ export default function About() {
                                                        className="group/btn relative overflow-hidden cursor-pointer flex items-center gap-2 bg-white text-black px-6 py-2 rounded-full transition-all duration-300 border border-black/10 hover:border-black/30"
                                                   >
                                                        <span className="relative z-10 flex items-center gap-2">
-                                                            View CV <ArrowDownRight className="w-4 h-4" />
+                                                            {t("View CV", "Lihat CV")} <ArrowDownRight className="w-4 h-4" />
                                                        </span>
                                                        <Ripple color="black" className="z-20 mix-blend-difference" size={200} />
                                                   </button>
@@ -84,7 +86,15 @@ export default function About() {
                                    <ScrollParallax offset={50}>
                                         <div className="md:pl-8 py-4">
                                              <p className="text-lg md:text-xl text-black leading-relaxed font-light">
-                                                  Hi there! You can call me <span className="font-semibold">Okta</span> or <span className="font-semibold">Firtiansyah Okta</span>. I&apos;m a student with degree in Informatics Engineering and a passionate about web development, programming, and exploring the latest technology trends. I specialize in creating dynamic and interactive websites while continuously learning new technologies. I also have experience with or am familiar with technology such as <span className='text-orange-500'>Laravel</span>, <span className='text-blue-500'>Next.js</span>, and more. Let&apos;s connect and collaborate on some exciting projects together!
+                                                  {language === 'en' ? (
+                                                       <>
+                                                            Hi there! You can call me <span className="font-semibold">Okta</span> or <span className="font-semibold">Firtiansyah Okta</span>. I&apos;m a student with degree in Informatics Engineering and a passionate about web development, programming, and exploring the latest technology trends. I specialize in creating dynamic and interactive websites while continuously learning new technologies. I also have experience with or am familiar with technology such as <span className='text-orange-500'>Laravel</span>, <span className='text-blue-500'>Next.js</span>, and more. Let&apos;s connect and collaborate on some exciting projects together!
+                                                       </>
+                                                  ) : (
+                                                       <>
+                                                            Halo! Kalian bisa memanggil saya <span className="font-semibold">Okta</span> atau <span className="font-semibold">Firtiansyah Okta</span>. Saya seorang mahasiswa jurusan Teknik Informatika dan bersemangat tentang pengembangan web, pemrograman, dan menjelajahi tren teknologi terbaru. Saya mengkhususkan diri dalam membuat situs web yang dinamis dan interaktif sambil terus mempelajari teknologi baru. Saya juga memiliki pengalaman atau akrab dengan teknologi seperti <span className='text-orange-500'>Laravel</span>, <span className='text-blue-500'>Next.js</span>, dan lainnya. Mari terhubung dan berkolaborasi dalam beberapa proyek menarik bersama!
+                                                       </>
+                                                  )}
                                              </p>
                                         </div>
                                    </ScrollParallax>
@@ -104,14 +114,14 @@ export default function About() {
                               <h2 className="text-5xl md:text-7xl font-black font-poppins uppercase leading-none">
 
                                    <ScrollParallax offset={50} axis="x">
-                                        Professional<br />
+                                        {t("Professional", "Perjalanan")}<br />
                                    </ScrollParallax>
                                    <ScrollParallax offset={-50} axis="x">
-                                        <span className="text-zinc-500">Journey</span>
+                                        <span className="text-zinc-500">{t("Journey", "Karir")}</span>
                                    </ScrollParallax>
                               </h2>
                               <div className="hidden md:block text-right">
-                                   <p className="text-zinc-500 text-sm tracking-widest uppercase">Experience &<br />Education</p>
+                                   <p className="text-zinc-500 text-sm tracking-widest uppercase">{t("Experience &", "Pengalaman &")}<br />{t("Education", "Pendidikan")}</p>
                               </div>
                          </div>
 
@@ -171,7 +181,7 @@ export default function About() {
                          {/* Education Header */}
                          <div className="mt-32 mb-12 flex items-center gap-4">
                               <div className="h-px flex-1 bg-white/20" />
-                              <h3 className="text-2xl font-bold uppercase tracking-widest text-zinc-500">Education</h3>
+                              <h3 className="text-2xl font-bold uppercase tracking-widest text-zinc-500">{t("Education", "Pendidikan")}</h3>
                               <div className="h-px flex-1 bg-white/20" />
                          </div>
 
