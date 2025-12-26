@@ -11,6 +11,7 @@ import Ripple from "../ui/Ripple";
 interface NavLink {
      href: string;
      label: string;
+     target?: string;
 }
 
 const navLinks: NavLink[] = [
@@ -18,7 +19,7 @@ const navLinks: NavLink[] = [
      { href: '/about', label: 'About' },
      { href: '/projects', label: 'Projects' },
      { href: '/songs', label: 'Songs' },
-     { href: '/portal', label: 'Portal' },
+     { href: '/portal', label: 'Portal', target: '_blank' },
 ];
 
 export function Navigation() {
@@ -94,7 +95,7 @@ export function Navigation() {
                                              }}
                                              exit={{ opacity: 0, y: 50 }}
                                         >
-                                             <Link href={link.href}>
+                                             <Link href={link.href} target={link.target}>
                                                   <motion.div
                                                        whileHover={{ scale: 1.1, x: 20 }}
                                                        className={cn(

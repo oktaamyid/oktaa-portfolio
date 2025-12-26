@@ -33,7 +33,7 @@ export default function ProjectsPage() {
                                         <span className="block text-zinc-300">Selected</span>
                                    </ScrollParallax>
                                    <ScrollParallax offset={-20} axis="x" className="inline-block">
-                                        <span className="block text-black">Works</span>
+                                        <span className="block text-black">Works.</span>
                                    </ScrollParallax>
                               </h1>
                          </div>

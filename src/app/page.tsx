@@ -85,19 +85,19 @@ export default function Home() {
                     <div className="max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 mx-auto w-full flex flex-col justify-end h-full">
 
                         {/* Intro Text Block - Positioned above the name */}
-                        <div className="max-w-xl md:pl-5 mb-12 md:mb-0 relative z-20">
-                            <Parallax speed={-15} className="relative z-20">
+                        <div className="max-w-xl md:pl-5 mb-12 md:mb-0 relative">
+                            <Parallax speed={-15} className="relative">
                                 <motion.p
                                     variants={heroDelayAnimation}
                                     className="text-xl md:text-3xl font-light text-zinc-200"
                                 >
-                                    I&apos;m a <span className="text-cyan-500 font-bold underline underline-offset-5">Full Stack Developer</span> passionate about crafting web solutions
+                                    I&apos;m a <span className="text-white font-bold">Full Stack Developer</span> passionate about crafting web solutions
                                 </motion.p>
                             </Parallax>
                         </div>
 
                         {/* Massive Name Typography */}
-                        <Parallax speed={20} className="relative z-10 w-full mb-12 md:mb-0">
+                        <Parallax speed={20} className="relative z-50 w-full mb-12 md:mb-0">
                             <motion.h1
                                 variants={heroAnimation}
                                 className="font-bold uppercase text-white select-none mix-blend-overlay leading-[0.8] lg:leading-[1.1]"
@@ -110,7 +110,7 @@ export default function Home() {
 
                                 {/* Desktop (Large Screens): Single Line */}
                                 <span className="hidden lg:block text-[16.9vw] tracking-tighter whitespace-nowrap">
-                                    Hi! OKTAA
+                                    Hi! OKTAA.
                                 </span>
                             </motion.h1>
                         </Parallax>

@@ -43,7 +43,7 @@ export default function About() {
                                                   Who I Am
                                              </h2>
                                              <h1 className="text-5xl md:text-7xl font-bold font-poppins leading-tight">
-                                                  I&apos;m <span className="text-black">OKTAA</span>
+                                                  I&apos;m <span className="text-black font-extrabold">OKTAA</span>
                                                   <br />
                                                   <span className="text-3xl md:text-5xl text-black font-light">
                                                        Full Stack Developer
@@ -84,7 +84,7 @@ export default function About() {
                                    <ScrollParallax offset={50}>
                                         <div className="md:pl-8 py-4">
                                              <p className="text-lg md:text-xl text-black leading-relaxed font-light">
-                                                  Hi there! I&apos;m a student at STT Terpadu Nurul Fikri with a passionate about web development, programming, and exploring the latest technology trends. I specialize in creating dynamic and interactive websites while continuously learning new technologies. Let&apos;s connect and collaborate on some exciting projects together!
+                                                  Hi there! You can call me <span className="font-semibold">Okta</span> or <span className="font-semibold">Firtiansyah Okta</span>. I&apos;m a student with degree in Informatics Engineering and a passionate about web development, programming, and exploring the latest technology trends. I specialize in creating dynamic and interactive websites while continuously learning new technologies. I also have experience with or am familiar with technology such as <span className='text-orange-500'>Laravel</span>, <span className='text-blue-500'>Next.js</span>, and more. Let&apos;s connect and collaborate on some exciting projects together!
                                              </p>
                                         </div>
                                    </ScrollParallax>

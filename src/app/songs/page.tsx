@@ -28,13 +28,13 @@ export default async function SongsPage() {
                                         <span className="block text-zinc-300">Heavy</span>
                                    </ScrollParallax>
                                    <ScrollParallax offset={-20} axis="x" className="inline-block">
-                                        <span className="block text-black">Rotation</span>
+                                        <span className="block text-black">Rotation.</span>
                                    </ScrollParallax>
                               </h1>
                          </div>
                          <div className="mt-8 md:mt-0 md:text-right">
                               <p className="text-zinc-500 uppercase tracking-widest text-sm font-medium">
-                                   Sonic Journal<br />Every 4 Weeks
+                                   CURRENT JAMS <br /> ON REPEAT∞
                               </p>
                          </div>
                     </div>
