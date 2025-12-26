@@ -32,10 +32,10 @@ export default function ProjectsPage() {
                          <div>
                               <h1 className="text-6xl md:text-8xl font-black font-poppins uppercase leading-none tracking-tighter">
                                    <ScrollParallax offset={20} axis="x" className="inline-block">
-                                        <span className="block text-zinc-300">{t("Selected", "Karya")}</span>
+                                        <span className="block text-zinc-300">{t("Project", "Proyek")}</span>
                                    </ScrollParallax>
                                    <ScrollParallax offset={-20} axis="x" className="inline-block">
-                                        <span className="block text-black">{t("Works.", "Terpilih.")}</span>
+                                        <span className="block text-black">{t("Showcase.", "Pameran.")}</span>
                                    </ScrollParallax>
                               </h1>
                          </div>
