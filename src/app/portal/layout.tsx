@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
                     description: description,
                     images: [
                          {
-                              url: 'https://cdn.oktaa.my.id/og-banner.png',
+                              url: 'https://cdn.oktaa.my.id/og-banner%3Dv2.png',
                               alt: 'Banner showcasing Firtiansyah Okta',
                          },
                     ],
@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
                     card: 'summary_large_image',
                     title: `@${profile.username} | Oktaa Portal`,
                     description: description,
-                    images: ['https://cdn.oktaa.my.id/og-banner.png'],
+                    images: ['https://cdn.oktaa.my.id/og-banner%3Dv2.png'],
                },
                keywords: [
                     "Firtiansyah Okta Portfolio Website",

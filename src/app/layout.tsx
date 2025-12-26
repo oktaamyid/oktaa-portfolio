@@ -4,9 +4,6 @@ import { Metadata } from "next";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react"
 
-
-// import CircleCursor from "@/components/ui/CircleCursor";
-
 const outfit = Outfit({
      variable: "--font-poppins",
      subsets: ["latin"],
@@ -45,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
                siteName: "Firtiansyah Okta Resama",
                images: [
                     {
-                         url: "https://cdn.oktaa.my.id/og-banner.png",
+                         url: "https://cdn.oktaa.my.id/og-banner%3Dv2.png",
                          width: 1200,
                          height: 630,
                          alt: "Firtiansyah Okta Resama Portfolio",
@@ -58,7 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
                card: "summary_large_image",
                title: "Halo. OKTAA~ | Full-stack Engineer & Tech Enthusiast",
                description,
-               images: ["https://cdn.oktaa.my.id/og-banner.png"],
+               images: ["https://cdn.oktaa.my.id/og-banner%3Dv2.png"],
           },
           robots: {
                index: true,

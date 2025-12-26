@@ -8,7 +8,7 @@ export const metadata: Metadata = {
           description: "Discover Firtiansyah Okta's musical journey - a curated collection of songs, stories, and inspiration.",
           images: [
                {
-                    url: "https://cdn.oktaa.my.id/og-banner.png",
+                    url: "https://cdn.oktaa.my.id/og-banner%3Dv2.png",
                     alt: "Banner showcasing Firtiansyah Okta's music journey",
                },
           ],
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
           card: "summary_large_image",
           title: "Explore Songs and Stories | Firtiansyah Okta",
           description: "Discover Firtiansyah Okta's musical journey - a curated collection of songs, stories, and inspiration.",
-          images: ["https://cdn.oktaa.my.id/og-banner.png"],
+          images: ["https://cdn.oktaa.my.id/og-banner%3Dv2.png"],
      },
      robots: {
           index: true,

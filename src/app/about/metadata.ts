@@ -8,7 +8,7 @@ export const metadata: Metadata = {
           description: 'Learn more about Firtiansyah Okta, his journey, and the inspiration behind his work.',
           images: [
                {
-                    url: 'https://cdn.oktaa.my.id/og-banner.png',
+                    url: 'https://cdn.oktaa.my.id/og-banner%3Dv2.png',
                     alt: 'Banner showcasing Firtiansyah Okta',
                },
           ],
@@ -17,14 +17,14 @@ export const metadata: Metadata = {
           card: 'summary_large_image',
           title: 'About Me. OKTAA~ | Full-stack Engineer & Tech Enthusiast',
           description: 'Learn more about Firtiansyah Okta, his journey, and the inspiration behind his work.',
-          images: ['https://cdn.oktaa.my.id/og-banner.png'],
+          images: ['https://cdn.oktaa.my.id/og-banner%3Dv2.png'],
      },
      robots: {
           index: true,
           follow: true,
      },
      alternates: {
-          canonical: 'https://hi.oktaa.my.id/about',   
+          canonical: 'https://hi.oktaa.my.id/about',
      },
      icons: {
           icon: 'https://cdn.oktaa.my.id/favicon.ico',
