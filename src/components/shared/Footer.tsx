@@ -83,10 +83,10 @@ export function Footer() {
 
      const menuLinks = [
           { name: 'HOME', href: '/' },
-          { name: 'PROJECTS', href: '/projects' },
           { name: 'ABOUT', href: '/about' },
+          { name: 'PROJECTS', href: '/projects' },
           { name: 'SONGS', href: '/songs' },
-          { name: 'PORTAL', href: '/portal' },
+          { name: 'PORTAL', href: '/portal', target: '_blank' },
      ];
 
      return (
@@ -150,6 +150,7 @@ export function Footer() {
                                         <Link
                                              key={link.name}
                                              href={link.href}
+                                             target={link.target}
                                              className="text-lg md:text-2xl font-light relative uppercase tracking-wider inline-block text-zinc-400 hover:text-white transition-colors duration-300 after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 hover:after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-white"
                                         >
                                              {link.name}

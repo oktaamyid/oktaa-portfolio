@@ -67,6 +67,8 @@ export async function generateMetadata(): Promise<Metadata> {
      };
 }
 
+import ScrollToTop from "@/components/shared/ScrollToTop";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
      return (
           <html lang="en-ID" suppressHydrationWarning>
@@ -82,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     {/* <CircleCursor bigSize={30} smallSize={10} blendMode="difference" /> */}
                     <Analytics />
                     {children}
+                    <ScrollToTop />
                </body>
           </html>
      );
