@@ -31,8 +31,8 @@ export async function generateMetadata(): Promise<Metadata> {
           metadataBase: new URL(baseUrl),
           title: "Hi! OKTAA. | Full-stack Engineer & Tech Enthusiast",
           icons: {
-               icon: "https://cdn.oktaa.my.id/favicon.ico",
-               apple: "https://cdn.oktaa.my.id/apple-touch-icon.png"
+               icon: "https://cdn.oktaa.my.id/faviconv2.ico",
+               apple: "https://cdn.oktaa.my.id/apple-touch-iconv2.png"
           },
           description,
           keywords: [
