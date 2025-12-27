@@ -36,19 +36,31 @@ export default function TopTracks({ tracks }: TopTracksProps) {
           >
                <div className="flex flex-col">
                     {tracks.map((track, index) => (
-                         <a
+                         <motion.a
                               key={track.id}
                               href={track.external_urls.spotify}
                               target="_blank"
                               rel="noopener noreferrer"
+                              initial="initial"
+                              whileHover="hover"
+                              whileTap="hover"
+                              whileFocus="hover"
                               className="group relative flex items-center justify-between py-6 transition-colors duration-300"
                               onMouseEnter={() => setActiveTrack(track)}
                          >
                               {/* Animated Dividers */}
                               {/* Base Grey Line */}
                               <div className="absolute bottom-0 left-0 w-full h-px bg-black/10" />
-                              {/* Hover Black Sliding Line (Slide Through Effect) */}
-                              <div className="absolute bottom-0 left-0 w-full h-0.5 z-10 bg-black origin-right scale-x-0 transition-transform duration-500 ease-out group-hover:origin-left group-hover:scale-x-100" />
+
+                              {/* Framer Motion Sliding Line */}
+                              <motion.span
+                                   variants={{
+                                        initial: { scaleX: 0, originX: 1 },
+                                        hover: { scaleX: 1, originX: 0 }
+                                   }}
+                                   transition={{ duration: 0.5, ease: "easeOut", originX: { duration: 0 } }}
+                                   className="absolute bottom-0 left-0 w-full h-0.5 z-10 bg-black"
+                              />
 
 
                               {/* Left: Index & Info */}
@@ -58,16 +70,26 @@ export default function TopTracks({ tracks }: TopTracksProps) {
                                    </span>
 
                                    <div className="flex flex-col">
-                                        <h3 className={cn(
-                                             "text-xl md:text-3xl font-bold text-black uppercase tracking-tight transition-transform duration-700 ease-[cubic-bezier(0.2,1,0.2,1)]", // Custom fluid ease
-                                             "group-hover:translate-x-6", // Slightly deeper slide
-                                             "font-poppins"
-                                        )}>
+                                        <motion.h3
+                                             variants={{
+                                                  initial: { x: 0 },
+                                                  hover: { x: 24 } // 24px = translate-x-6
+                                             }}
+                                             transition={{ duration: 0.2, ease: "easeOut" }}
+                                             className="text-xl md:text-3xl font-bold text-black uppercase tracking-tight font-poppins"
+                                        >
                                              {track.name}
-                                        </h3>
-                                        <p className="text-zinc-500 text-sm md:text-base transition-transform duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] group-hover:translate-x-6">
+                                        </motion.h3>
+                                        <motion.p
+                                             variants={{
+                                                  initial: { x: 0 },  
+                                                  hover: { x: 24 }
+                                             }}
+                                             transition={{ duration: 0.2, ease: "easeOut" }}
+                                             className="text-zinc-500 text-sm md:text-base"
+                                        >
                                              {track.artists.map(artist => artist.name).join(', ')}
-                                        </p>
+                                        </motion.p>
                                    </div>
                               </div>
 
@@ -89,7 +111,7 @@ export default function TopTracks({ tracks }: TopTracksProps) {
                                         />
                                    )}
                               </div>
-                         </a>
+                         </motion.a>
                     ))}
                </div>
 

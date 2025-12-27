@@ -26,7 +26,7 @@ export default function SongsContent({ nowPlaying, topTracksShort, topTracksMedi
                          <div>
                               <h1 className="text-6xl md:text-8xl font-black font-poppins uppercase leading-none tracking-tighter">
                                    <ScrollParallax offset={20} axis="x" className="inline-block">
-                                        <span className="block text-zinc-300">{t("Heavy", "Musik")}</span>
+                                        <span className="block text-black font-serif italic font-light tracking-normal">{t("Heavy", "Musik")}</span>
                                    </ScrollParallax>
                                    <ScrollParallax offset={-20} axis="x" className="inline-block">
                                         <span className="block text-black">{t("Rotation.", "Favorit.")}</span>

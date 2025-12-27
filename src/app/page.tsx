@@ -110,13 +110,14 @@ export default function Home() {
                             >
                                 {/* Mobile & Tablet: Stacked & Massive */}
                                 <div className="flex flex-col gap-2 md:gap-4 lg:hidden w-full">
-                                    <span className="text-[30vw] md:text-[25vw] tracking-tighter leading-[0.8]">{t("HI!", "HALO!")}</span>
-                                    <span className="text-[30vw] md:text-[25vw] tracking-tighter leading-[0.8] -ml-2">OKTAA</span>
+                                    <span className="text-[30vw] md:text-[25vw] tracking-tighter leading-[0.8] font-serif italic font-light text-white">{t("HI!", "HALO!")}</span>
+                                    <span className="text-[30vw] md:text-[25vw] tracking-tighter leading-[0.8] -ml-2 font-poppins font-black text-white">OKTAA</span>
                                 </div>
 
                                 {/* Desktop (Large Screens): Single Line */}
                                 <span className="hidden lg:block text-[16.9vw] tracking-tighter whitespace-nowrap">
-                                    {t("Hi! OKTAA.", "Hi! OKTAA.")}
+                                    <span className="font-serif italic font-light text-zinc-300 pr-8">{t("Hi!", "Halo!")}</span>
+                                    <span className="font-poppins font-black text-white">OKTAA.</span>
                                 </span>
                             </motion.h1>
                         </Parallax>
@@ -141,10 +142,10 @@ export default function Home() {
                                 <ScrollParallax axis="x" offset={-100} className="relative z-20">
                                     <motion.h2
                                         variants={animateOnScroll}
-                                        className="text-[12vw] md:text-[8vw] leading-[0.8] font-bold tracking-tighter text-white uppercase"
+                                        className="text-[12vw] md:text-[8vw] leading-[0.8] tracking-tighter uppercase"
                                     >
-                                        {t("About", "Tentang")}
-                                        <span className="block text-zinc-800">{t("Me", "Saya")}<span className="text-white">.</span></span>
+                                        <span className="font-serif italic font-light text-zinc-300 block mb-2">{t("About", "Tentang")}</span>
+                                        <span className="block text-white font-poppins font-black">{t("Me.", "Saya.")}</span>
                                     </motion.h2>
                                 </ScrollParallax>
                             </div>
@@ -168,12 +169,24 @@ export default function Home() {
                                         </p>
 
                                         <div className="pt-4">
-                                            <button
+                                            <motion.button
                                                 className='group flex items-center gap-3 text-white transition-all duration-300 cursor-pointer'
                                                 onClick={() => window.location.href = '/about'}
+                                                initial="initial"
+                                                whileHover="hover"
+                                                whileTap="hover"
+                                                whileFocus="hover"
                                             >
-                                                <span className="uppercase tracking-widest text-sm font-semibold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 group-hover:after:origin-left group-hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-white">
+                                                <span className="uppercase tracking-widest text-sm font-semibold relative">
                                                     {t("Read Full Bio", "Baca Bio Lengkap")}
+                                                    <motion.span
+                                                        variants={{
+                                                            initial: { scaleX: 0, originX: 1 },
+                                                            hover: { scaleX: 1, originX: 0 }
+                                                        }}
+                                                        transition={{ duration: 0.5, ease: "easeOut", originX: { duration: 0 } }}
+                                                        className="absolute -bottom-1 left-0 w-full h-0.5 bg-white"
+                                                    />
                                                 </span>
                                                 <svg
                                                     className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-2"
@@ -183,7 +196,7 @@ export default function Home() {
                                                 >
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                                 </svg>
-                                            </button>
+                                            </motion.button>
                                         </div>
                                     </motion.div>
                                 </ScrollParallax>
@@ -205,10 +218,10 @@ export default function Home() {
                         <ScrollParallax axis="x" offset={80}>
                             <motion.h2
                                 variants={animateOnScroll}
-                                className="text-4xl md:text-5xl font-bold text-left font-poppins mb-12"
-                                style={{ color: 'rgb(var(--text))' }}
+                                className="text-4xl md:text-5xl text-left mb-12 flex flex-col gap-1"
                             >
-                                {t("Featured Projects", "Proyek Unggulan")}
+                                <span className="font-serif italic font-light text-zinc-500">{t("Featured", "Proyek")}</span>
+                                <span className="font-poppins font-black text-black">{t("Projects.", "Unggulan.")}</span>
                             </motion.h2>
                         </ScrollParallax>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -237,12 +250,24 @@ export default function Home() {
 
                         {/* CTA Button */}
                         <div className="flex justify-center mt-6">
-                            <button
+                            <motion.button
                                 className='group flex items-center gap-3 text-black transition-all duration-300 cursor-pointer'
                                 onClick={() => window.location.href = '/projects'}
+                                initial="initial"
+                                whileHover="hover"
+                                whileTap="hover"
+                                whileFocus="hover"
                             >
-                                <span className="uppercase tracking-widest text-xl font-semibold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 group-hover:after:origin-left group-hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-black">
+                                <span className="uppercase tracking-widest text-xl font-semibold relative">
                                     {t("View All Projects", "Lihat Semua Proyek")}
+                                    <motion.span
+                                        variants={{
+                                            initial: { scaleX: 0, originX: 1 },
+                                            hover: { scaleX: 1, originX: 0 }
+                                        }}
+                                        transition={{ duration: 0.5, ease: "easeOut", originX: { duration: 0 } }}
+                                        className="absolute -bottom-1 left-0 w-full h-0.5 bg-black"
+                                    />
                                 </span>
                                 <svg
                                     className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-2"
@@ -252,7 +277,7 @@ export default function Home() {
                                 >
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                 </svg>
-                            </button>
+                            </motion.button>
                         </div>
                     </div>
                 </motion.section>

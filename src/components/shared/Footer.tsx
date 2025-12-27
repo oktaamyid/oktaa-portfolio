@@ -4,6 +4,7 @@
 import Link from 'next/link';
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Profile } from '@/lib/types';
 import { db } from "@/lib/firebaseConfig";
 import { collection, QueryDocumentSnapshot, DocumentData, getDocs } from 'firebase/firestore';
@@ -80,6 +81,16 @@ export function Footer() {
                     </svg>
                )
           },
+          {
+               name: 'Portal',
+               href: '/portal',
+               enabled: true,
+               icon: (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+               )
+          },
      ];
 
      const menuLinks = [
@@ -87,7 +98,6 @@ export function Footer() {
           { name: t('ABOUT', 'TENTANG'), href: '/about' },
           { name: t('PROJECTS', 'PROYEK'), href: '/projects' },
           { name: t('SONGS', 'LAGU'), href: '/songs' },
-          { name: t('PORTAL', 'PORTAL'), href: '/portal', target: '_blank' },
      ];
 
      return (
@@ -101,7 +111,7 @@ export function Footer() {
                          {/* Left Section - CTA */}
                          <div className="flex flex-col gap-6 max-w-lg items-center md:items-start">
                               <h3
-                                   className="text-3xl md:text-5xl font-semibold font-poppins uppercase leading-tight text-center md:text-left"
+                                   className="text-3xl md:text-5xl font-bold font-poppins uppercase leading-snug text-center md:text-left"
                               >
                                    {t("Let's Build Something Amazing Together!", "Mari Membangun Sesuatu yang Luar Biasa Bersama!")}
                               </h3>
@@ -134,7 +144,7 @@ export function Footer() {
                               {/* Copyright Only (Simplified) */}
                               <div className="flex flex-col gap-2 text-sm font-light text-zinc-500">
                                    <p className="text-xs font-bold">
-                                        © {new Date().getFullYear()} OKTAA. {t("All Rights Reserved.", "Hak Cipta Dilindungi.")}
+                                        © {new Date().getFullYear()} OKTAAMYID. {t("All Rights Reserved.", "Hak Cipta Dilindungi.")}
                                    </p>
                               </div>
                          </div>
@@ -151,10 +161,24 @@ export function Footer() {
                                         <Link
                                              key={link.name}
                                              href={link.href}
-                                             target={link.target}
-                                             className="text-lg md:text-2xl font-light relative uppercase tracking-wider inline-block text-zinc-400 hover:text-white transition-colors duration-300 after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 hover:after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-white"
                                         >
-                                             {link.name}
+                                             <motion.span
+                                                  initial="initial"
+                                                  whileHover="hover"
+                                                  whileTap="hover"
+                                                  whileFocus="hover"
+                                                  className="text-lg md:text-2xl font-light relative uppercase tracking-wider inline-block text-zinc-400 hover:text-white transition-colors duration-300"
+                                             >
+                                                  {link.name}
+                                                  <motion.span
+                                                       variants={{
+                                                            initial: { scaleX: 0, originX: 1 },
+                                                            hover: { scaleX: 1, originX: 0 }
+                                                       }}
+                                                       transition={{ duration: 0.5, ease: "easeOut", originX: { duration: 0 } }}
+                                                       className="absolute -bottom-1 left-0 w-full h-0.5 bg-white"
+                                                  />
+                                             </motion.span>
                                         </Link>
                                    ))}
                               </nav>
@@ -164,7 +188,7 @@ export function Footer() {
 
                {/* Banner Image with Glassmorphism Effect */}
                <div
-                    className="mx-auto w-full relative z-10 flex justify-center items-center md:pt-10 -bottom-2"
+                    className="mx-auto w-full relative z-10 flex justify-center items-center md:pt-10 -bottom-2 px-6"
                >
                     <img
                          src="https://cdn.oktaa.my.id/banner-footer-dark.svg"

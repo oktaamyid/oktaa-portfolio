@@ -20,7 +20,6 @@ const navLinks: NavLink[] = [
      { href: '/about', label: 'About' },
      { href: '/projects', label: 'Projects' },
      { href: '/songs', label: 'Songs' },
-     { href: '/portal', label: 'Portal', target: '_blank' },
 ];
 
 export function Navigation() {
@@ -122,22 +121,58 @@ export function Navigation() {
                                              </motion.div>
                                         )
                                    })}
+
                               </div>
 
-                              {/* Footer Info in Menu */}
+                              {/* Footer Info in Menu (Bottom Left) */}
                               <motion.div
                                    initial={{ opacity: 0 }}
                                    animate={{ opacity: 1, transition: { delay: 1 } }}
                                    className="absolute bottom-10 left-10 md:left-20 flex gap-6 items-center"
                               >
-                                   <button
+                                   <motion.button
                                         onClick={toggleLanguage}
-                                        className="text-white font-bold text-xl uppercase tracking-widest relative group after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 hover:after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-500 after:ease-out after:bg-white"
+                                        initial="initial"
+                                        whileHover="hover"
+                                        whileTap="hover"
+                                        whileFocus="hover"
+                                        className="text-white font-bold text-xl uppercase tracking-widest relative"
                                    >
-                                        {language === "en" ? "ID" : "EN"}
-                                   </button>
+                                        <span className="relative z-10">{language === "en" ? "ID" : "EN"}</span>
+                                        <motion.span
+                                             variants={{
+                                                  initial: { scaleX: 0, originX: 1 },
+                                                  hover: { scaleX: 1, originX: 0 }
+                                             }}
+                                             transition={{ duration: 0.5, ease: "easeOut", originX: { duration: 0 } }}
+                                             className="absolute -bottom-1 left-0 w-full h-0.5 bg-white"
+                                        />
+                                   </motion.button>
                                    <div className="w-px h-4 bg-zinc-600"></div>
                                    <p className="text-zinc-500 text-sm font-light uppercase tracking-widest">oktaamyid © {new Date().getFullYear()}</p>
+                              </motion.div>
+
+                              {/* Portal Link (Bottom Right) */}
+                              <motion.div
+                                   initial={{ opacity: 0 }}
+                                   animate={{ opacity: 1, transition: { delay: 1 } }}
+                                   className="absolute bottom-10 right-10 md:right-20"
+                              >
+                                   <Link href="/portal" target="_blank">
+                                        <Magnetic strength={0.2}>
+                                             <motion.button
+                                                  whileHover={{ scale: 1.05 }}
+                                                  className="flex items-center gap-3 group cursor-pointer"
+                                             >
+                                                  <span className="text-white font-bold text-xl uppercase tracking-widest group-hover:text-zinc-300 transition-colors">Portal</span>
+                                                  <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:border-white transition-all duration-300">
+                                                       <svg className="w-4 h-4 text-white group-hover:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                                       </svg>
+                                                  </div>
+                                             </motion.button>
+                                        </Magnetic>
+                                   </Link>
                               </motion.div>
                          </motion.div>
                     )}

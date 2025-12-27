@@ -1,10 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Project } from '@/lib/types';
-import Magnetic from '../ui/Magnetic';
-import Ripple from '../ui/Ripple';
-import ScrollParallax from '../ui/ScrollParallax';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ProjectCardProps {
@@ -14,137 +12,139 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
     const { language } = useLanguage();
+    const [isExpanded, setIsExpanded] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end start"]
+    });
+    const yParallax = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+    const hasLink = project.link && project.link !== '-';
 
     return (
         <motion.div
+            ref={ref}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            whileHover={hasLink ? "hover" : undefined}
             viewport={{ once: true }}
             transition={{
                 duration: 0.5,
                 delay: index * 0.1,
                 ease: 'easeOut'
             }}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-xl cursor-pointer transition-all outline-1 duration-300 border border-white/10"
-            onClick={() => project.link && project.link !== '-' && window.open(project.link, '_blank')}
+            className={`group relative flex flex-col justify-between overflow-hidden bg-white border border-black/10 transition-colors duration-500 ${hasLink ? 'cursor-pointer hover:border-black' : 'cursor-default opacity-80'}`}
+            onClick={() => hasLink && window.open(project.link, '_blank')}
         >
-            {/* 1. Header & Text Content */}
-            <div className="p-6 md:p-8 flex flex-col gap-4">
-                {/* Top Badges Row */}
-                <div className="flex items-center justify-between">
-                    {/* Left: Primary Tech Pill */}
-                    <Magnetic strength={0.4}>
-                        <span
-                            className="text-xs font-bold px-3 py-1.5 border rounded-lg uppercase tracking-wider"
+            {/* 1. Top Image Section (Sharp) */}
+            <div className="relative w-full aspect-4/3 overflow-hidden border-b border-black/10 bg-zinc-50">
+                {project.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <div className="w-full h-full relative">
+                        <motion.div
+                            style={{ y: yParallax }}
+                            className="absolute top-0 -left-[20%] w-[140%] h-full flex items-center justify-center"
                         >
-                            {project.technology[0] || 'PROJECT'}
-                        </span>
-                    </Magnetic>
-
-                    {/* Right: Status/Year Pill */}
-                    <Magnetic strength={0.4}>
-                        <span
-                            className="text-xs font-medium px-3 py-1.5 border rounded-lg text-black"
-                        >
-                            {project.link && project.link !== '-' ? '2025' : 'In Dev'}
-                        </span>
-                    </Magnetic>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-2xl md:text-3xl font-bold text-black leading-tight duration-300">
-                    {project.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm md:text-base text-black line-clamp-3 leading-relaxed">
-                    {language === 'id' ? (project.description_id || project.description) : project.description}
-                </p>
+                            <motion.img
+                                variants={hasLink ? { hover: { scale: 1.05 } } : undefined}
+                                transition={{ duration: 0.7, ease: "easeOut" }}
+                                src={project.image}
+                                alt={project.title}
+                                className={`w-full h-auto object-contain drop-shadow-2xl ${!hasLink && 'grayscale-[0.5]'}`}
+                                loading="lazy"
+                                onError={(e) => {
+                                    (e.target as HTMLImageElement).style.display = 'none';
+                                }}
+                            />
+                        </motion.div>
+                    </div>
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-zinc-50">
+                        <svg className="w-12 h-12 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                )}
+                {/* Overlay */}
+                <div className={`absolute inset-0 transition-colors duration-300 ${hasLink ? 'bg-black/0 group-hover:bg-black/5' : 'bg-black/0'}`} />
             </div>
 
-            {/* 2. Bottom Image Section */}
-            <div className="relative w-full px-6 pb-6 md:px-8 md:pb-4 mt-auto">
-                <div className="relative overflow-hidden rounded-2xl aspect-16/10 w-full">
-                    {project.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                            src={project.image}
-                            alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            loading="lazy"
-                            onError={(e) => {
-                                (e.target as HTMLImageElement).style.display = 'none';
-                            }}
-                        />
-                    ) : (
-                        <div
-                            className="w-full h-full flex items-center justify-center bg-slate-900"
-                        >
-                            <svg
-                                className="w-16 h-16 text-slate-800"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+            {/* 2. Text Content (Sharp & Minimal) */}
+            <div className="p-6 md:p-8 flex flex-col gap-6">
+                <div className="flex flex-col gap-2">
+                    {/* Meta Info */}
+                    <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-zinc-500">
+                        <span>{project.technology[0] || 'PROJECT'}</span>
+                        <span>{hasLink ? '2025' : 'IN DEV'}</span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className={`text-2xl md:text-3xl font-bold font-poppins text-black leading-none uppercase tracking-tight transition-colors ${hasLink ? 'group-hover:text-zinc-600' : ''}`}>
+                        {project.title}
+                    </h3>
+                </div>
+
+                {/* Description - with Expansion */}
+                <div onClick={(e) => e.stopPropagation()}>
+                    <motion.div
+                        initial={false}
+                        animate={{ height: "auto" }}
+                        className="relative"
+                    >
+                        {(() => {
+                            const description = language === 'id' ? (project.description_id || project.description) : project.description;
+                            const isLongText = description.length > 160;
+
+                            return (
+                                <>
+                                    <p className={`text-sm text-zinc-600 leading-relaxed ${isExpanded || !isLongText ? '' : 'line-clamp-2'}`}>
+                                        {description}
+                                    </p>
+                                    {isLongText && (
+                                        <button
+                                            onClick={() => setIsExpanded(!isExpanded)}
+                                            className="text-xs font-bold uppercase tracking-wider mt-2 border-b border-black/20 hover:border-black transition-colors"
+                                        >
+                                            {isExpanded ? (language === 'id' ? 'Tutup' : 'Close') : (language === 'id' ? 'Baca Selengkapnya' : 'Read More')}
+                                        </button>
+                                    )}
+                                </>
+                            );
+                        })()}
+                    </motion.div>
+                </div>
+
+                {/* Bottom Action (Arrow) */}
+                <div className="pt-4 border-t border-black/10 flex justify-between items-center mt-auto">
+                    <div className="flex items-center gap-0.5 text-xs font-bold font-mono text-black uppercase overflow-hidden">
+                        <span>DEV.</span>
+                        <div className="relative h-4 w-6 overflow-hidden">
+                            <motion.div
+                                variants={hasLink ? {
+                                    initial: { y: 0 },
+                                    hover: { y: "-50%" }
+                                } : undefined}
+                                transition={{ duration: 0.5, ease: [0.83, 0, 0.17, 1] }}
+                                className="flex flex-col h-8"
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1}
-                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                />
-                            </svg>
+                                <span className={`h-4 flex items-center ${hasLink ? 'text-zinc-400' : 'text-zinc-300'}`}>0{index + 1}</span>
+                                <span className="h-4 flex items-center text-black">0{index + 1}</span>
+                            </motion.div>
                         </div>
-                    )}
-
-                    {/* Subtle Overlay to unify images */}
-                    <div className="absolute inset-0 bg-slate-950/10 group-hover:bg-transparent transition-colors duration-300 footer-overlay" />
+                    </div>
+                    <div className={`w-8 h-8 rounded-full border border-black/10 flex items-center justify-center transition-all duration-300 ${hasLink ? 'group-hover:bg-black group-hover:text-white' : 'bg-zinc-50/50 text-zinc-300'}`}>
+                        {hasLink ? (
+                            <svg className="w-4 h-4 transform group-hover:rotate-45 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M5 19L19 5M5 5h14v14" />
+                            </svg>
+                        ) : (
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        )}
+                    </div>
                 </div>
             </div>
-
-            {/* Hover: Subtle Glow Border */}
-            <div
-                className="absolute inset-0 rounded-3xl pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-
-            />
-
-            <div className="flex flex-col px-6">
-                <div className="flex justify-between items-center px-2 pb-4">
-                    <h4 className="text-lg font-semibold font-poppins text-black">
-                        DEV.<span className="font-semibold text-blue-500">0{index + 1}</span>
-                    </h4>
-                    <Magnetic strength={0.3}>
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                if (project.link && project.link !== '-') window.open(project.link, '_blank');
-                            }}
-                            className="group/btn relative overflow-hidden cursor-pointer flex items-center gap-2 bg-black text-white px-6 py-2 rounded-full transition-all duration-300 border border-white/10"
-                        >
-                            <span className="uppercase tracking-widest text-xs font-semibold relative z-10">LIHAT</span>
-                            <div className="relative w-3 h-3 overflow-hidden ml-1 z-10">
-                                <svg
-                                    className="w-3 h-3 absolute inset-0 transition-transform duration-300 group-hover/btn:-translate-y-full group-hover/btn:translate-x-full"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19L19 5M5 5h14v14" />
-                                </svg>
-                                <svg
-                                    className="w-3 h-3 absolute inset-0 -translate-x-full translate-y-full transition-transform duration-300 group-hover/btn:translate-x-0 group-hover/btn:translate-y-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19L19 5M5 5h14v14" />
-                                </svg>
-                            </div>
-                            <Ripple className="z-20 mix-blend-difference" color="white" size={150} />
-                        </button>
-                    </Magnetic>
-                </div>
-            </div>
-
         </motion.div>
     );
 }              

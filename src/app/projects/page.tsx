@@ -32,12 +32,17 @@ export default function ProjectsPage() {
                          <div>
                               <h1 className="text-6xl md:text-8xl font-black font-poppins uppercase leading-none tracking-tighter">
                                    <ScrollParallax offset={20} axis="x" className="inline-block">
-                                        <span className="block text-zinc-300">{t("Project", "Proyek")}</span>
+                                        <span className="block text-black font-serif italic font-light tracking-normal">{t("Featured", "Proyek")}</span>
                                    </ScrollParallax>
                                    <ScrollParallax offset={-20} axis="x" className="inline-block">
-                                        <span className="block text-black">{t("Showcase.", "Pameran.")}</span>
+                                        <span className="block text-black">{t("Projects.", "Unggulan.")}</span>
                                    </ScrollParallax>
                               </h1>
+                         </div>
+                         <div className="mt-8 md:mt-0 md:text-right">
+                              <p className="text-zinc-500 uppercase tracking-widest text-sm font-medium">
+                                   {t("RECENT WORKS", "KARYA TERBARU")} <br /> {t("PORTFOLIO", "PORTOFOLIO")}
+                              </p>
                          </div>
                     </div>
 
@@ -52,7 +57,7 @@ export default function ProjectsPage() {
                               <button
                                    onClick={() => setFilter('all')}
                                    className={`px-4 py-2 rounded-full text-sm cursor-pointer font-bold uppercase tracking-wider transition-all duration-300 border relative overflow-hidden ${filter === 'all'
-                                        ? 'bg-cyan-500 text-white'
+                                        ? 'bg-black border-black text-white'
                                         : 'bg-transparent text-black border-black hover:text-white'
                                         }`}
                               >
@@ -67,7 +72,7 @@ export default function ProjectsPage() {
                                         key={tech}
                                         onClick={() => setFilter(tech)}
                                         className={`px-4 py-2 rounded-full cursor-pointer text-sm font-bold uppercase tracking-wider transition-all duration-300 border relative overflow-hidden ${filter === tech
-                                             ? 'bg-cyan-500 text-white'
+                                             ? 'bg-black border-black text-white'
                                              : 'bg-transparent text-black border-black hover:text-white'
                                              }`}
                                    >
@@ -79,7 +84,7 @@ export default function ProjectsPage() {
                     </motion.div>
 
                     {/* Projects Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                          {loading ? (
                               // Loading Skeletons
                               [...Array(4)].map((_, index) => (

@@ -1,4 +1,4 @@
-import { Outfit } from "next/font/google";
+import { Outfit, Playfair_Display, Lora } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
 import React from "react";
@@ -10,12 +10,26 @@ const outfit = Outfit({
      weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
+const playfair = Playfair_Display({
+     variable: "--font-serif",
+     subsets: ["latin"],
+     weight: ["400", "500", "600", "700", "800", "900"],
+     style: ["normal", "italic"],
+});
+
+const lora = Lora({
+     variable: "--font-lora",
+     subsets: ["latin"],
+     weight: ["400", "500", "600", "700"],
+     style: ["normal", "italic"],
+});
+
 export async function generateMetadata(): Promise<Metadata> {
      const baseUrl = "https://hi.oktaa.my.id";
      const description = "Firtiansyah Okta Resama, Web Developer & Programmer from Indonesia. Passionate about creating impactful websites and staying ahead in tech trends";
      return {
           metadataBase: new URL(baseUrl),
-          title: "Halo. OKTAA~ | Full-stack Engineer & Tech Enthusiast",
+          title: "Hi! OKTAA. | Full-stack Engineer & Tech Enthusiast",
           icons: {
                icon: "https://cdn.oktaa.my.id/favicon.ico",
                apple: "https://cdn.oktaa.my.id/apple-touch-icon.png"
@@ -81,7 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
                     <link rel="dns-prefetch" href="https://api.screenshotmachine.com" />
                </head>
-               <body className={`${outfit.variable} antialiased`}>
+               <body className={`${outfit.variable} ${playfair.variable} ${lora.variable} antialiased`}>
                     <LanguageProvider>
                          {/* <CircleCursor bigSize={30} smallSize={10} blendMode="difference" /> */}
                          <Analytics />

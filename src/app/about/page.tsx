@@ -40,17 +40,16 @@ export default function About() {
                               {/* Left: Heading */}
                               <div className="flex-1">
                                    <ScrollParallax offset={20}>
-                                        <div className="mb-6">
-                                             <h2 className="text-sm font-bold tracking-[0.2em] text-black mb-4 uppercase">
+                                        <div className="mb-6 flex flex-col gap-2">
+                                             <h2 className="text-xl md:text-2xl font-serif italic text-black/70 mb-2">
                                                   {t("Who I Am", "Siapa Saya")}
                                              </h2>
-                                             <h1 className="text-5xl md:text-7xl font-bold font-poppins leading-tight">
-                                                  {t("I'm", "Saya")} <span className="text-black font-extrabold">OKTAA</span>
-                                                  <br />
-                                                  <span className="text-3xl md:text-5xl text-black font-light">
-                                                       Full Stack Developer
-                                                  </span>
+                                             <h1 className="text-7xl md:text-9xl font-black font-poppins leading-[0.85] tracking-tighter">
+                                                  {t("I'm", "Saya")} <br /><span className="text-black block">OKTAA</span>
                                              </h1>
+                                             <span className="text-xl md:text-3xl text-black font-light tracking-widest uppercase mt-4 block">
+                                                  Full Stack Developer
+                                             </span>
                                         </div>
 
                                         <div className="flex gap-4">
@@ -65,7 +64,7 @@ export default function About() {
                                                        <Ripple color="white" className="z-20 mix-blend-difference" size={200} />
                                                   </button>
                                              </Magnetic>
-                                             <Magnetic strength={0.2}>
+                                             {/* <Magnetic strength={0.2}>
                                                   <button
                                                        onClick={() => setIsModalOpen(true)}
                                                        className="group/btn relative overflow-hidden cursor-pointer flex items-center gap-2 bg-white text-black px-6 py-2 rounded-full transition-all duration-300 border border-black/10 hover:border-black/30"
@@ -75,7 +74,7 @@ export default function About() {
                                                        </span>
                                                        <Ripple color="black" className="z-20 mix-blend-difference" size={200} />
                                                   </button>
-                                             </Magnetic>
+                                             </Magnetic> */}
 
                                         </div>
                                    </ScrollParallax>
@@ -85,14 +84,14 @@ export default function About() {
                               <div className="flex-1 max-w-lg relative">
                                    <ScrollParallax offset={50}>
                                         <div className="md:pl-8 py-4">
-                                             <p className="text-lg md:text-xl text-black leading-relaxed font-light">
+                                             <p className="text-lg md:text-xl text-black leading-relaxed font-poppins font-">
                                                   {language === 'en' ? (
                                                        <>
-                                                            Hi there! You can call me <span className="font-semibold">Okta</span> or <span className="font-semibold">Firtiansyah Okta</span>. I&apos;m a student with degree in Informatics Engineering and a passionate about web development, programming, and exploring the latest technology trends. I specialize in creating dynamic and interactive websites while continuously learning new technologies. I also have experience with or am familiar with technology such as <span className='text-orange-500'>Laravel</span>, <span className='text-blue-500'>Next.js</span>, and more. Let&apos;s connect and collaborate on some exciting projects together!
+                                                            Hi there! You can call me <span className="italic font-bold">Okta</span> or <span className="italic font-bold">Firtiansyah Okta</span>. I&apos;m a student with degree in Informatics Engineering and a passionate about web development, programming, and exploring the latest technology trends. I specialize in creating dynamic and interactive websites while continuously learning new technologies. I also have experience with or am familiar with technology such as <span className='text-orange-500 not-italic'>Laravel</span>, <span className='text-blue-500 not-italic'>Next.js</span>, and more. Let&apos;s connect and collaborate on some exciting projects together!
                                                        </>
                                                   ) : (
                                                        <>
-                                                            Halo! Kalian bisa memanggil saya <span className="font-semibold">Okta</span> atau <span className="font-semibold">Firtiansyah Okta</span>. Saya seorang mahasiswa jurusan Teknik Informatika dan bersemangat tentang pengembangan web, pemrograman, dan menjelajahi tren teknologi terbaru. Saya mengkhususkan diri dalam membuat situs web yang dinamis dan interaktif sambil terus mempelajari teknologi baru. Saya juga memiliki pengalaman atau akrab dengan teknologi seperti <span className='text-orange-500'>Laravel</span>, <span className='text-blue-500'>Next.js</span>, dan lainnya. Mari terhubung dan berkolaborasi dalam beberapa proyek menarik bersama!
+                                                            Halo! Kalian bisa memanggil saya <span className="italic font-bold">Okta</span> atau <span className="italic font-bold">Firtiansyah Okta</span>. Saya seorang mahasiswa jurusan Teknik Informatika dan bersemangat tentang pengembangan web, pemrograman, dan menjelajahi tren teknologi terbaru. Saya mengkhususkan diri dalam membuat situs web yang dinamis dan interaktif sambil terus mempelajari teknologi baru. Saya juga memiliki pengalaman atau akrab dengan teknologi seperti <span className='text-orange-500 not-italic'>Laravel</span>, <span className='text-blue-500 not-italic'>Next.js</span>, dan lainnya. Mari terhubung dan berkolaborasi dalam beberapa proyek menarik bersama!
                                                        </>
                                                   )}
                                              </p>
