@@ -172,8 +172,11 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
                </h1>
 
                <div className="w-full md:max-w-xl overflow-hidden shadow-2xl flex flex-col grow mx-auto bg-black">
-                    <div className="relative h-48 bg-cover object-cover bg-center bg-[url('https://cdn.oktaa.my.id/banner-1200-160.svg')] flex items-center justify-center">
-                         <div className="absolute inset-0 bg-black/40 backdrop-blur-xs" />
+                    <div
+                         className="relative h-48 bg-cover object-cover bg-center flex items-center justify-center"
+                         style={{ backgroundImage: "url('https://cdn.oktaa.my.id/og-banner%3Dv2.png')" }}
+                    >
+                         <div className="absolute inset-0 bg-black/50" />
 
                          {activeProfile?.profilePicture && (
                               <div className="absolute -bottom-12 z-10">
@@ -204,12 +207,12 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
                          </div>
 
                          <div className="mb-8">
-                              <div className="flex justify-center flex-wrap gap-2">
+                              <div className="flex overflow-x-auto gap-2 pb-2 no-scrollbar px-1">
                                    {categories.map((category) => (
                                         <button
                                              key={category.id}
                                              onClick={() => handleTabChange(category.id)}
-                                             className={`px-4 py-1.5 rounded-full transition-all duration-300 text-xs font-semibold uppercase tracking-wider ${activeTab === category.id
+                                             className={`shrink-0 px-4 py-1.5 rounded-full transition-all duration-300 text-xs font-semibold uppercase tracking-wider whitespace-nowrap ${activeTab === category.id
                                                   ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]'
                                                   : 'bg-zinc-900 text-zinc-500 hover:text-white border border-zinc-800 hover:border-zinc-700'
                                                   }`}
@@ -354,7 +357,7 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
 
                          <div className="flex flex-col items-center">
                               <p className="text-zinc-700 text-[10px] uppercase tracking-widest font-medium">
-                                   © {new Date().getFullYear()} oktaa.my.id
+                                   © {new Date().getFullYear()} oktaamyid
                               </p>
                          </div>
                     </div>
