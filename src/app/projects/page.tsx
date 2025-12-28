@@ -14,20 +14,19 @@ export default function ProjectsPage() {
      const { t } = useLanguage();
      const [filter, setFilter] = useState<string>('all');
 
-     const allTechnologies = Array.from(
-          new Set(projects.flatMap((project) => project.technology))
-     );
+     const projectTypes = ['Website', 'Mobile', 'Other'];
 
      const filteredProjects =
           filter === 'all'
                ? projects
-               : projects.filter((project) => project.technology.includes(filter));
+               : projects.filter((project) => project.type === filter);
 
      return (
           <div className="min-h-screen pt-32 pb-24 bg-white text-black">
                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* Header Section */}
+                    {/* ... (keep header section same) */}
                     <div className="flex flex-col md:flex-row items-end justify-between mb-24 pb-8 border-b border-black/10">
                          <div>
                               <h1 className="text-6xl md:text-8xl font-black font-poppins uppercase leading-none tracking-tighter">
@@ -65,19 +64,19 @@ export default function ProjectsPage() {
                                    {filter !== 'all' && <Ripple color='black' className='z-20 mix-blend-difference' />}
                               </button>
                          </Magnetic>
-                         {allTechnologies.slice(0, 6).map((tech) => (
-                              <Magnetic strength={0.4} key={tech}>
+                         {projectTypes.map((type) => (
+                              <Magnetic strength={0.4} key={type}>
 
                                    <button
-                                        key={tech}
-                                        onClick={() => setFilter(tech)}
-                                        className={`px-4 py-2 rounded-full cursor-pointer text-sm font-bold uppercase tracking-wider transition-all duration-300 border relative overflow-hidden ${filter === tech
+                                        key={type}
+                                        onClick={() => setFilter(type)}
+                                        className={`px-4 py-2 rounded-full cursor-pointer text-sm font-bold uppercase tracking-wider transition-all duration-300 border relative overflow-hidden ${filter === type
                                              ? 'bg-black border-black text-white'
                                              : 'bg-transparent text-black border-black hover:text-white'
                                              }`}
                                    >
-                                        {tech}
-                                        {filter !== tech && <Ripple color='black' className='z-20 mix-blend-difference' />}
+                                        {type}
+                                        {filter !== type && <Ripple color='black' className='z-20 mix-blend-difference' />}
                                    </button>
                               </Magnetic>
                          ))}

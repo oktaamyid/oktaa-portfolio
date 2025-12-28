@@ -4,6 +4,7 @@ export interface Experience {
      role: string;
      year: string;
      description: string;
+     description_id?: string;
      logo: string;
      link: string;
      techStack: string[];
@@ -12,6 +13,8 @@ export interface Experience {
 export interface Project {
      id: string;
      title: string;
+     type: 'Website' | 'Mobile' | 'Other'; // Added type
+     year: string; // Added year
      image: string;
      description: string;
      description_id?: string; // Optional: Indonesian description

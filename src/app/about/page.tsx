@@ -158,8 +158,11 @@ export default function About() {
                                                        exit={{ height: 0, opacity: 0, marginTop: 0 }}
                                                        className="overflow-hidden"
                                                   >
-                                                       <div className="flex justify-end items-end">
-                                                            <div className="w-full md:w-64 flex flex-wrap content-end gap-2">
+                                                       <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+                                                            <p className="w-full text-base text-zinc-400 leading-relaxed text-left">
+                                                                 {language === 'id' ? (exp.description_id || exp.description) : exp.description}
+                                                            </p>
+                                                            <div className="w-full md:w-auto min-w-50 flex flex-wrap justify-start md:justify-end content-end gap-2">
                                                                  {exp.techStack?.map(tech => (
                                                                       <span key={tech} className="px-3 py-1 rounded-full border border-white/20 text-xs text-zinc-300 uppercase tracking-wider">
                                                                            {tech}

@@ -74,8 +74,8 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                 <div className="flex flex-col gap-2">
                     {/* Meta Info */}
                     <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-zinc-500">
-                        <span>{project.technology[0] || 'PROJECT'}</span>
-                        <span>{hasLink ? '2025' : 'IN DEV'}</span>
+                        <span>{project.type || 'PROJECT'}</span>
+                        <span>{hasLink ? project.year : 'IN DEV'}</span>
                     </div>
 
                     {/* Title */}
