@@ -75,7 +75,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                     {/* Meta Info */}
                     <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-zinc-500">
                         <span>{project.type || 'PROJECT'}</span>
-                        <span>{hasLink ? project.year : 'IN DEV'}</span>
+                        <span>{project.year || 'IN DEV'}</span>
                     </div>
 
                     {/* Title */}
@@ -86,7 +86,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
 
                 {/* Description - with Expansion */}
                 <div onClick={(e) => e.stopPropagation()}>
-                    <motion.div
+                    <motion.div 
                         initial={false}
                         animate={{ height: "auto" }}
                         className="relative"

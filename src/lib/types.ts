@@ -13,11 +13,11 @@ export interface Experience {
 export interface Project {
      id: string;
      title: string;
-     type: 'Website' | 'Mobile' | 'Other'; // Added type
-     year: string; // Added year
+     type: 'Website' | 'Mobile' | 'Other'; 
+     year: string; 
      image: string;
      description: string;
-     description_id?: string; // Optional: Indonesian description
+     description_id?: string; 
      link: string;
      technology: string[];
 }
