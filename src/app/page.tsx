@@ -116,7 +116,7 @@ export default function Home() {
 
                                 {/* Desktop (Large Screens): Single Line */}
                                 <span className="hidden lg:block text-[16.9vw] tracking-tighter whitespace-nowrap">
-                                    <span className="font-serif italic font-light text-zinc-300 pr-8">{t("Hi!", "Halo!")}</span>
+                                    <span className="font-serif italic font-light text-zinc-300 pr-8">{t("Hi!", "Hi!")}</span>
                                     <span className="font-poppins font-black text-white">OKTAA.</span>
                                 </span>
                             </motion.h1>

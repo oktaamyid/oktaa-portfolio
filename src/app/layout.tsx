@@ -86,7 +86,7 @@ import ScrollToTop from "@/components/shared/ScrollToTop";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
      return (
-          <html lang="en-ID" suppressHydrationWarning>
+          <html lang="en" suppressHydrationWarning>
                <head>
                     {/* Preconnect to external domains for better performance */}
                     <link rel="preconnect" href="https://fonts.googleapis.com" />
