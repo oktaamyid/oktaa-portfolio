@@ -82,6 +82,20 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                     <h3 className={`text-2xl md:text-3xl font-bold font-poppins text-black leading-none uppercase tracking-tight transition-colors ${hasLink ? 'group-hover:text-zinc-600' : ''}`}>
                         {project.title}
                     </h3>
+                    
+                    {/* Tech Stack Tags */}
+                    {project.technology && project.technology.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                            {project.technology.map((tech, index) => (
+                                <span 
+                                    key={`${tech}-${index}`} 
+                                    className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-widest text-zinc-600 bg-zinc-100 border border-zinc-200 rounded-full"
+                                >
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Description - with Expansion */}

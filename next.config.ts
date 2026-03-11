@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
                     protocol: 'https',
                     hostname: 'zbcld3vq1ntclyw4.public.blob.vercel-storage.com',
                     pathname: '**'
+               },
+               {
+                    protocol: 'https',
+                    hostname: 'lastfm.freetls.fastly.net',
+                    pathname: '**'
                }
           ]
      },

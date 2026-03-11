@@ -101,14 +101,18 @@ export default function TopTracks({ tracks }: TopTracksProps) {
                               </div>
 
                               {/* Mobile Only: Visible Thumbnail (Hidden on Desktop) */}
-                              <div className="md:hidden absolute right-4 opacity-100 w-12 h-12 rounded overflow-hidden">
-                                   {track.album.images[0]?.url && (
+                              <div className="md:hidden absolute right-4 opacity-100 w-12 h-12 rounded overflow-hidden bg-zinc-100 flex items-center justify-center">
+                                   {track.album.images[0]?.url ? (
                                         <Image
                                              src={track.album.images[0].url}
                                              alt={track.name}
                                              fill
                                              className="object-cover"
                                         />
+                                   ) : (
+                                        <svg className="w-6 h-6 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                        </svg>
                                    )}
                               </div>
                          </motion.a>
@@ -131,15 +135,22 @@ export default function TopTracks({ tracks }: TopTracksProps) {
                     className="pointer-events-none fixed z-50 hidden md:block w-75 h-75 overflow-hidden rounded-xl shadow-2xl"
                >
                     {/* Render current active track image */}
-                    {activeTrack && activeTrack.album.images[0]?.url && (
-                         <div className="relative w-full h-full bg-black">
-                              <Image
-                                   src={activeTrack.album.images[0].url}
-                                   alt={activeTrack.name}
-                                   fill
-                                   className="object-cover"
-                                   priority // Load fast for hover
-                              />
+                    {activeTrack && (
+                         <div className="relative w-full h-full bg-zinc-900 flex items-center justify-center">
+                              {activeTrack.album.images[0]?.url ? (
+                                   <Image
+                                        src={activeTrack.album.images[0].url}
+                                        alt={activeTrack.name}
+                                        fill
+                                        className="object-cover"
+                                        priority // Load fast for hover
+                                   />
+                              ) : (
+                                   <svg className="w-16 h-16 text-zinc-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                   </svg>
+                              )}
+                              
                               {/* Overlay Info */}
                               <div className="absolute bottom-0 left-0 w-full p-4 bg-linear-to-t from-black/80 to-transparent text-white">
                                    <p className="text-xs font-bold uppercase tracking-widest text-zinc-400">Now Hovering</p>

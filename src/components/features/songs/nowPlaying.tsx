@@ -57,7 +57,7 @@ export default function NowPlaying({ track: initialTrack }: NowPlayingProps) {
      }
 
      return (
-          <div className="fixed bottom-6 right-6 z-50 md:bottom-12 md:right-12">
+          <div className="fixed bottom-6 right-6 z-40 md:bottom-12 md:right-12">
                <Magnetic strength={0.2}>
                     <div className="flex items-center gap-4 bg-white/80 p-3 pr-6 rounded-full border border-black/10 shadow-xl backdrop-blur-md transition-all hover:scale-105 hover:bg-white">
                          {/* Rotating Album Art */}
