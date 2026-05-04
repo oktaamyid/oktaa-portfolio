@@ -1,8 +1,15 @@
 import { Outfit, Playfair_Display, Lora } from "next/font/google";
 import "./globals.css";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react"
+
+export const viewport: Viewport = {
+     themeColor: "#000000",
+     width: "device-width",
+     initialScale: 1,
+     maximumScale: 5,
+};
 
 const outfit = Outfit({
      variable: "--font-poppins",

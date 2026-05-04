@@ -115,7 +115,7 @@ export default function Home() {
                                 </div>
 
                                 {/* Desktop (Large Screens): Single Line */}
-                                <span className="hidden lg:block text-[16.9vw] tracking-tighter whitespace-nowrap">
+                                <span className="hidden lg:block text-[16.9vw] xl:text-[216px] 2xl:text-[280px] tracking-tighter whitespace-nowrap">
                                     <span className="font-serif italic font-light text-zinc-300 pr-8">{t("Hi!", "Hi!")}</span>
                                     <span className="font-poppins font-black text-white">OKTAA.</span>
                                 </span>
@@ -232,7 +232,7 @@ export default function Home() {
                                     ))}
                                 </>
                             ) : (
-                                projects.slice(0, 4).map((project, index) => (
+                                projects.slice(0, 4).map((project: import('@/lib/types').Project, index: number) => (
                                     <ScrollParallax
                                         key={project.id}
                                         axis="y"
