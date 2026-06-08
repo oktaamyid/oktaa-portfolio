@@ -1,10 +1,10 @@
-import { db } from "../../firebaseConfig";
+import { dbLite as db } from "../../firebaseConfig";
 import {
      collection,
      getDocs,
      QueryDocumentSnapshot,
      Timestamp,
-} from "firebase/firestore";
+} from "firebase/firestore/lite";
 import { Link } from "@/lib/types";
 import { format } from 'date-fns';
 

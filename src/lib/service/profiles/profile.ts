@@ -1,8 +1,8 @@
-import { db } from "../../firebaseConfig";
+import { dbLite as db } from "../../firebaseConfig";
 import { 
      doc, 
      getDoc 
-} from "firebase/firestore";
+} from "firebase/firestore/lite";
 
 import { Profile } from "@/lib/types";
 

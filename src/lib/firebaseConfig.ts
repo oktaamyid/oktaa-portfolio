@@ -1,6 +1,7 @@
 // src/lib/firebaseConfig.ts
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getFirestore as getFirestoreLite } from "firebase/firestore/lite";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -18,9 +19,10 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 // Inisialisasi Firestore
 const db = getFirestore(app);
+const dbLite = getFirestoreLite(app);
 
 // Inisialisasi Analytics (hanya di browser)
-let analytics;
+let analytics: any;
 if (typeof window !== "undefined") {
   isSupported().then((supported) => {
     if (supported) {
@@ -29,4 +31,4 @@ if (typeof window !== "undefined") {
   });
 }
 
-export { db, analytics };
+export { db, dbLite, analytics };

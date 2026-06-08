@@ -29,9 +29,9 @@ export default async function PortalPage() {
                     initialProfile={serializedProfile}
                     initialLinks={serializedLinks}
                />
-          );     } catch (error) {
+          );     } catch (error: any) {
           console.error("Error fetching portal data:", error);
           
-          return <ErrorFallback />;
+          return <div>Error: {error?.message || "Unknown error"} <pre>{error?.stack || ""}</pre></div>;
      }
 }
