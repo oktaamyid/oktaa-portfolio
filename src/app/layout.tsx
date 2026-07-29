@@ -101,6 +101,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <link rel="preconnect" href="https://cdn.oktaa.my.id" />
                     <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
                     <link rel="dns-prefetch" href="https://api.screenshotmachine.com" />
+                    <script
+                         type="application/ld+json"
+                         dangerouslySetInnerHTML={{
+                              __html: JSON.stringify({
+                                   "@context": "https://schema.org",
+                                   "@type": "WebSite",
+                                   "name": "Hi! OKTAA.",
+                                   "alternateName": "Firtiansyah Okta Resama Portfolio",
+                                   "url": "https://hi.oktaa.my.id",
+                                   "author": {
+                                        "@type": "Person",
+                                        "name": "Firtiansyah Okta Resama",
+                                        "alternateName": "OKTAA",
+                                        "url": "https://hi.oktaa.my.id",
+                                        "jobTitle": "Full-stack Engineer & Tech Enthusiast"
+                                   }
+                              })
+                         }}
+                    />
                </head>
                <body className={`${outfit.variable} ${playfair.variable} ${lora.variable} antialiased`}>
                     <LanguageProvider>
