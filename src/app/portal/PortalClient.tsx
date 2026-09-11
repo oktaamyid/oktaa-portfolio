@@ -202,7 +202,7 @@ export default function PortalClient({ initialProfile, initialLinks }: PortalCli
                               <h1 className="text-2xl font-bold text-white tracking-tight">@{activeProfile?.username}</h1>
                               <p className="text-zinc-400 text-sm mt-1 mb-2 font-medium tracking-wide">{activeProfile?.name}</p>
                               {activeProfile?.bio && (
-                                   <p className="text-zinc-500 text-sm leading-relaxed max-w-sm mx-auto">{activeProfile.bio}</p>
+                                   <p className="text-zinc-500 text-sm leading-relaxed max-w-sm mx-auto mb-4">{activeProfile.bio}</p>
                               )}
                          </div>
 

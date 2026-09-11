@@ -8,3 +8,5 @@ ignoredBuiltDependencies:
   - protobufjs
   - sharp
   - unrs-resolver
+overrides:
+  'brace-expansion@>=5.0.0': '>=5.0.9'
