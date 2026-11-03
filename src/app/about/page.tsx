@@ -48,7 +48,7 @@ export default function About() {
                                                   {t("I'm", "Saya")} <br /><span className="text-black block">OKTAA</span>
                                              </h1>
                                              <span className="text-xl md:text-3xl text-black font-light tracking-widest uppercase mt-4 block">
-                                                  Full Stack Developer
+                                                  AI Engineer & Full-Stack Developer
                                              </span>
                                         </div>
 
@@ -87,11 +87,11 @@ export default function About() {
                                              <p className="text-lg md:text-xl text-black leading-relaxed font-poppins font-">
                                                   {language === 'en' ? (
                                                        <>
-                                                            Hi there! You can call me <span className="italic font-bold">Okta</span> or <span className="italic font-bold">Tayen</span>. I&apos;m a student with degree in Informatics Engineering and a passionate about web development, programming, and exploring the latest technology trends. I specialize in creating dynamic and interactive websites while continuously learning new technologies. I also have experience with or am familiar with technology such as <span className='text-orange-500 not-italic'>Laravel</span>, <span className='text-blue-500 not-italic'>Next.js</span>, and more. Let&apos;s connect and collaborate on some exciting projects together!
+                                                            Hi! You can call me <span className="italic font-bold">Okta</span> or <span className="italic font-bold">Tayen</span>. I&apos;m an Informatics Engineering student and an <span className="font-bold">AI Engineer & Full-Stack Developer</span>. I build intelligent web systems with <span className='text-blue-500 not-italic font-semibold'>Next.js</span> and <span className='text-orange-500 not-italic font-semibold'>Laravel</span>, integrate AI/LLM models via <span className='text-emerald-600 not-italic font-semibold'>FastAPI</span> & <span className='text-yellow-600 not-italic font-semibold'>Python</span>, and manage homelab DevOps with <span className='text-sky-600 not-italic font-semibold'>Docker</span> and CI/CD. Open for collaborations—let&apos;s connect!
                                                        </>
                                                   ) : (
                                                        <>
-                                                            Halo! Kalian bisa memanggil saya <span className="italic font-bold">Okta</span> atau <span className="italic font-bold">Tayen</span>. Saya seorang mahasiswa jurusan Teknik Informatika dan bersemangat tentang pengembangan web, pemrograman, dan menjelajahi tren teknologi terbaru. Saya mengkhususkan diri dalam membuat situs web yang dinamis dan interaktif sambil terus mempelajari teknologi baru. Saya juga memiliki pengalaman atau akrab dengan teknologi seperti <span className='text-orange-500 not-italic'>Laravel</span>, <span className='text-blue-500 not-italic'>Next.js</span>, dan lainnya. Mari terhubung dan berkolaborasi dalam beberapa proyek menarik bersama!
+                                                            Halo! Kalian bisa memanggil saya <span className="italic font-bold">Okta</span> atau <span className="italic font-bold">Tayen</span>. Saya mahasiswa Teknik Informatika sekaligus <span className="font-bold">AI Engineer & Full-Stack Developer</span>. Saya fokus membangun aplikasi web cerdas menggunakan <span className='text-blue-500 not-italic font-semibold'>Next.js</span> dan <span className='text-orange-500 not-italic font-semibold'>Laravel</span>, mengintegrasikan AI/LLM lewat <span className='text-emerald-600 not-italic font-semibold'>FastAPI</span> & <span className='text-yellow-600 not-italic font-semibold'>Python</span>, serta mengelola DevOps homelab dengan <span className='text-sky-600 not-italic font-semibold'>Docker</span> dan CI/CD. Terbuka untuk kolaborasi—mari terhubung!
                                                        </>
                                                   )}
                                              </p>

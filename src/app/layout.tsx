@@ -33,10 +33,10 @@ const lora = Lora({
 
 export async function generateMetadata(): Promise<Metadata> {
      const baseUrl = "https://hi.oktaa.my.id";
-     const description = "Firtiansyah Okta Resama, Web Developer & Programmer from Indonesia. Passionate about creating impactful websites and staying ahead in tech trends";
+     const description = "Firtiansyah Okta Resama, AI Engineer & Full-Stack Developer. Passionate about intelligent web systems, modern engineering, and DevOps infrastructure.";
      return {
           metadataBase: new URL(baseUrl),
-          title: "Hi! OKTAA. | Full-stack Engineer & Tech Enthusiast",
+          title: "Hi! OKTAA. | AI Engineer & Full-Stack Developer",
           icons: {
                icon: "https://cdn.oktaa.my.id/faviconv2.ico",
                apple: "https://cdn.oktaa.my.id/apple-touch-iconv2.png"
@@ -57,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
           authors: [{ name: "Firtiansyah Okta Resama", url: baseUrl }],
 
           openGraph: {
-               title: "Halo. OKTAA~ | Full-stack Engineer & Tech Enthusiast",
+               title: "Halo. OKTAA~ | AI Engineer & Full-Stack Developer",
                description,
                url: baseUrl,
                siteName: "Firtiansyah Okta Resama",
@@ -74,7 +74,7 @@ export async function generateMetadata(): Promise<Metadata> {
           },
           twitter: {
                card: "summary_large_image",
-               title: "Halo. OKTAA~ | Full-stack Engineer & Tech Enthusiast",
+               title: "Halo. OKTAA~ | AI Engineer & Full-Stack Developer",
                description,
                images: ["https://cdn.oktaa.my.id/og-banner%3Dv2.png"],
           },

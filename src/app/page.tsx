@@ -94,9 +94,9 @@ export default function Home() {
                                     className="text-xl md:text-3xl font-light text-zinc-200"
                                 >
                                     {language === 'en' ? (
-                                        <>I&apos;m a <span className="text-white font-bold">Full Stack Developer</span> passionate about crafting web solutions</>
+                                        <>I&apos;m an <span className="text-white font-bold">AI Engineer & Full-Stack Developer</span> passionate about crafting intelligent web systems & resilient infrastructure</>
                                     ) : (
-                                        <>Saya seorang <span className="text-white font-bold">Full Stack Developer</span> yang bersemangat menciptakan solusi web</>
+                                        <>Saya seorang <span className="text-white font-bold">AI Engineer & Full-Stack Developer</span> yang bersemangat menciptakan sistem web cerdas & infrastruktur andal</>
                                     )}
                                 </motion.p>
                             </Parallax>
