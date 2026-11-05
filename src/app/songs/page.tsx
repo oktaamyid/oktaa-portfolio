@@ -1,7 +1,7 @@
 import { getNowPlaying, getTopTracks } from '@/lib/spotify';
 import SongsContent from '@/components/features/songs/SongsContent';
 
-export const revalidate = 3600; // Cache for 1 hour
+export const dynamic = 'force-dynamic';
 
 export default async function SongsPage() {
      const [nowPlaying, topTracksShort, topTracksMedium] = await Promise.all([

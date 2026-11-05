@@ -19,7 +19,7 @@ export interface SpotifyTrack {
      is_playing?: boolean;
 }
 
-// Mendapatkan token generic dari Spotify (Tidak butuh akun Premium)
+// Mendapatkan token generic dari Spotify (jika akun developer memiliki subscription aktif)
 async function getSpotifyGenericToken() {
      if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET) return null;
 
@@ -35,7 +35,7 @@ async function getSpotifyGenericToken() {
                next: { revalidate: 3500 } // Cache token hampir 1 jam
           });
           const data = await response.json();
-          return data.access_token;
+          return data.access_token || null;
      } catch (e) {
           console.error("Failed to get spotify generic token", e);
           return null;
@@ -49,11 +49,40 @@ async function getSpotifyCover(trackName: string, artistName: string, token: str
           const response = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`, {
                headers: { Authorization: `Bearer ${token}` }
           });
+          if (!response.ok) return null;
           const data = await response.json();
           const spotifyTrack = data.tracks?.items?.[0];
 
           if (spotifyTrack?.album?.images?.length > 0) {
                return spotifyTrack.album.images;
+          }
+          return null;
+     } catch (e) {
+          return null;
+     }
+}
+
+// Mencari album cover di iTunes (Gratis, tanpa auth, resolusi tinggi)
+async function getItunesCover(trackName: string, artistName: string): Promise<{ url: string }[] | null> {
+     try {
+          const cleanTrack = trackName.replace(/\s*[\(\[].*?[\)\]]/g, '').trim();
+          const cleanArtist = artistName.replace(/\s*[\(\[].*?[\)\]]/g, '').trim();
+          const query = encodeURIComponent(`${cleanTrack} ${cleanArtist}`);
+
+          const response = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`, {
+               next: { revalidate: 86400 } // Cache 24 jam
+          });
+
+          if (!response.ok) return null;
+          const data = await response.json();
+          const item = data.results?.[0];
+
+          if (item?.artworkUrl100) {
+               const highResUrl = item.artworkUrl100.replace('100x100bb', '600x600bb');
+               return [
+                    { url: highResUrl },
+                    { url: item.artworkUrl100 }
+               ];
           }
           return null;
      } catch (e) {
@@ -67,7 +96,7 @@ function mapLastfmTrack(track: any): SpotifyTrack {
           ? track.image.map((img: any) => ({ url: img['#text'] })).reverse()
           : [];
 
-     // Hapus gambar bintang default Last.fm
+     // Hapus gambar bintang default Last.fm dan string kosong
      images = images.filter((i: any) => i.url && i.url.length > 0 && !i.url.includes('2a96cbd8b46e442fc41c2b86b821562f.png'));
 
      const artistName = typeof track.artist === 'string'
@@ -90,23 +119,34 @@ function mapLastfmTrack(track: any): SpotifyTrack {
                spotify: track.url || `https://open.spotify.com/search/${encodeURIComponent(`${track.name} ${artistName}`)}`,
           },
           is_playing: track['@attr']?.nowplaying === 'true'
-     }
+     };
 }
 
-// Fungsi helper untuk memperkaya track Last.fm dengan gambar dari Spotify
-async function enrichTracksWithSpotifyImages(tracks: SpotifyTrack[]): Promise<SpotifyTrack[]> {
+// Fungsi helper untuk memperkaya track dengan cover image berkualitas tinggi
+async function enrichTracksWithImages(tracks: SpotifyTrack[]): Promise<SpotifyTrack[]> {
      const token = await getSpotifyGenericToken();
-     if (!token) return tracks;
 
      const enrichedTracks = await Promise.all(tracks.map(async (track) => {
-          // Jika gambar kosong, cari di Spotify
+          // Jika gambar kosong atau tidak ada
           if (!track.album.images || track.album.images.length === 0) {
-               const spotifyImages = await getSpotifyCover(track.name, track.artists[0].name, token);
-               if (spotifyImages) {
+               // 1. Coba iTunes terlebih dahulu (andal, tanpa auth, resolusi 600x600)
+               const itunesImages = await getItunesCover(track.name, track.artists[0]?.name || '');
+               if (itunesImages && itunesImages.length > 0) {
                     return {
                          ...track,
-                         album: { ...track.album, images: spotifyImages }
+                         album: { ...track.album, images: itunesImages }
                     };
+               }
+
+               // 2. Fallback ke Spotify jika token tersedia
+               if (token) {
+                    const spotifyImages = await getSpotifyCover(track.name, track.artists[0]?.name || '', token);
+                    if (spotifyImages && spotifyImages.length > 0) {
+                         return {
+                              ...track,
+                              album: { ...track.album, images: spotifyImages }
+                         };
+                    }
                }
           }
           return track;
@@ -133,7 +173,7 @@ export async function getNowPlaying(): Promise<SpotifyTrack | null> {
           }
 
           let mappedTrack = mapLastfmTrack(track);
-          const enrichedResp = await enrichTracksWithSpotifyImages([mappedTrack]);
+          const enrichedResp = await enrichTracksWithImages([mappedTrack]);
           return enrichedResp[0];
      } catch (e) {
           console.error("Last.fm now playing error:", e);
@@ -165,7 +205,7 @@ export async function getTopTracks(
           // tslint:disable-next-line: no-explicit-any
           let mappedTracks = tracks.map((track: any) => mapLastfmTrack(track));
 
-          return await enrichTracksWithSpotifyImages(mappedTracks);
+          return await enrichTracksWithImages(mappedTracks);
      } catch (e) {
           console.error("Last.fm top tracks error:", e);
           return [];
@@ -187,7 +227,7 @@ export async function getRecentlyPlayed(limit: number = 10): Promise<SpotifyTrac
           // tslint:disable-next-line: no-explicit-any
           let mappedTracks = tracks.map((track: any) => mapLastfmTrack(track));
 
-          return await enrichTracksWithSpotifyImages(mappedTracks);
+          return await enrichTracksWithImages(mappedTracks);
      } catch (e) {
           console.error("Last.fm recently played error:", e);
           return [];
